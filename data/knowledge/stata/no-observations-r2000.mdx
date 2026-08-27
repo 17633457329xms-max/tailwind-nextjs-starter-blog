@@ -1,0 +1,78 @@
+---
+title: Stata回归提示no observations r(2000)怎么排查
+date: '2026-08-27'
+lastmod: '2026-08-27'
+summary: 从if筛选、缺失值、字符串转换、固定效应单例组和模型限制排查Stata no observations r(2000)报错。
+category: stata
+tags: ['Stata no observations', 'r(2000)', '缺失值', '回归报错']
+stage: ['数据', '实证']
+difficulty: 入门
+---
+
+`no observations r(2000)`表示命令经过筛选、缺失值删除和模型限制后，没有留下可估计样本。不要反复改回归命令碰运气，应从原始行数到最终估计样本逐层计数。
+
+## 先检查if和in条件
+
+```stata
+count
+count if sample_flag == 1
+tab sample_flag, missing
+```
+
+字符串与数值比较错误、年份范围写反、逻辑条件使用不当，都可能让筛选结果为零。复杂条件可以逐段增加并记录每一步剩余样本。
+
+## 检查模型变量缺失
+
+Stata回归会删除任一模型变量缺失的观察：
+
+```stata
+misstable summarize y x control1 control2
+egen model_missing = rowmiss(y x control1 control2)
+tab model_missing
+count if model_missing == 0
+```
+
+每个变量单独缺失不多，也可能因为缺失分布不重合而没有完整案例。
+
+## 检查类型转换造成的新缺失
+
+使用`destring, force`或日期转换后，原非空字符可能变成缺失。转换前后应比较非缺失数量和异常字符。具体方法见[Stata提示type mismatch r(109)](/stata/type-mismatch-r109)。
+
+## 固定效应和单例组
+
+高维固定效应命令可能删除只有一个观察的组，或在吸收固定效应后没有剩余变化：
+
+```stata
+bysort firm_id: generate group_n = _N
+tab group_n
+bysort firm_id: egen sd_x = sd(x)
+count if sd_x > 0 & !missing(sd_x)
+```
+
+如果核心变量在企业内完全不变，企业固定效应模型无法利用它估计系数。应重新判断[固定效应模型怎么选](/methods/fixed-effects-model-selection)，而不是随意删除固定效应。
+
+## 滞后、差分和时间序列算子
+
+`L.x`、`D.x`会使每个面板的首期或时间不连续观察缺失。运行前检查：
+
+```stata
+xtset firm_id year
+generate lag_x = L.x
+count if !missing(y, lag_x, control1, control2)
+```
+
+面板键重复则要先解决，不能在错误面板结构上生成滞后项。
+
+## 分类变量和小样本限制
+
+只保留一个类别、完全预测、权重为零、聚类组不足或某些估计命令的样本要求，也可能导致没有观察。先运行最简模型，再逐个加入变量、固定效应和筛选条件，记录从哪一步开始归零。
+
+## 推荐的排查顺序
+
+1. `count`确认数据不是空的。
+2. 单独验证`if/in`筛选。
+3. 统计所有模型变量共同非缺失样本。
+4. 检查滞后、差分、权重和固定效应删除。
+5. 从最简模型逐项恢复完整设定。
+
+修复后要报告实际估计样本量，并解释样本为何少于原始数据，不能只让命令“跑出来”。

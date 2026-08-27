@@ -5,9 +5,10 @@ import { categories, categoryOrder, homeFaq, services } from '@/data/knowledgeDa
 
 interface HomeProps {
   featured: Omit<Knowledge, '_id' | '_raw' | 'body'>[]
+  totalCount: number
 }
 
-export default function Home({ featured }: HomeProps) {
+export default function Home({ featured, totalCount }: HomeProps) {
   return (
     <div className="pt-8 sm:pt-10">
       <section className="relative overflow-hidden rounded-[2rem] bg-blue-950 px-6 py-14 text-white sm:px-10 sm:py-20 lg:px-16">
@@ -43,7 +44,7 @@ export default function Home({ featured }: HomeProps) {
           <div className="grid grid-cols-3 gap-3 lg:grid-cols-1">
             {[
               ['6', '核心知识模块'],
-              ['20', '首批问题指南'],
+              [String(totalCount), '中文问题指南'],
               ['2', '微信/QQ联系入口'],
             ].map(([value, label]) => (
               <div

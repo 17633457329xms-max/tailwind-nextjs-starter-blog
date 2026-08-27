@@ -1,0 +1,80 @@
+---
+title: Stata提示type mismatch r(109)怎么解决
+date: '2026-08-27'
+lastmod: '2026-08-27'
+summary: 按变量类型、异常字符、日期和合并键逐步排查Stata的type mismatch r(109)，避免直接force造成数据丢失。
+category: stata
+tags: ['Stata type mismatch', 'r(109)', 'destring', 'encode']
+stage: ['数据', '实证']
+difficulty: 入门
+---
+
+Stata出现`type mismatch r(109)`，表示命令把字符串变量当成数值，或把数值变量当成字符串使用。解决重点不是消除报错，而是先确认变量本来应该代表数字、类别、日期还是文本。
+
+## 第一步：定位变量类型
+
+```stata
+describe target_var
+codebook target_var
+list target_var in 1/20, clean
+```
+
+`str`开头是字符串类型，`byte`、`int`、`long`、`float`和`double`是数值类型。不要仅根据屏幕显示判断，带值标签的数值变量看起来也可能像文字。
+
+## 数字被存成字符串
+
+先查看是否存在逗号、百分号、空格、破折号或“缺失”等字符：
+
+```stata
+tab target_var if missing(real(target_var)) & !missing(target_var)
+```
+
+确认字符含义后再转换：
+
+```stata
+destring target_var, generate(target_num)
+compare target_var string(target_num)
+```
+
+若需要忽略千分位逗号，可以明确写出：
+
+```stata
+destring target_var, generate(target_num) ignore(",")
+```
+
+不要一开始就使用`force`，因为无法转换的非空内容会变成缺失值。
+
+## 类别文字需要编码
+
+省份、行业等类别文字不是连续数值，通常使用：
+
+```stata
+encode industry_name, generate(industry_id)
+tab industry_name industry_id, missing
+```
+
+`encode`生成带值标签的类别编码；它与把“123”转为数值的`destring`用途不同。
+
+## 日期字符串需要日期函数
+
+```stata
+generate daily_date = daily(date_text, "YMD")
+format daily_date %td
+count if missing(daily_date) & !missing(date_text)
+```
+
+日期顺序应根据原始格式调整，例如`YMD`、`DMY`。直接`destring`日期通常得不到Stata日期值。
+
+## 合并键类型不一致
+
+一个数据集中的企业代码可能是数值，另一个是带前导零的字符串。前导零可能具有标识含义，不能随意转数值。合并前分别检查`describe`、长度、唯一性和示例值，再统一为不丢信息的类型。主键检查可继续阅读[Stata合并数据提示主键不唯一](/stata/merge-key-not-unique)。
+
+## 回归前的最终检查
+
+```stata
+summarize target_num, detail
+count if missing(target_num)
+assert !missing(target_num) if sample_flag == 1
+```
+
+类型修复可能新增缺失值，进而导致[Stata回归提示no observations](/stata/no-observations-r2000)。因此必须记录转换前后非缺失数量和异常值处理规则。

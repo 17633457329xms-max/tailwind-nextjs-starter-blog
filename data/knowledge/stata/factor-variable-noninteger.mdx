@@ -1,0 +1,68 @@
+---
+title: Stata提示factor variables may not contain noninteger values
+date: '2026-08-27'
+lastmod: '2026-08-27'
+summary: 解释Stata因子变量必须使用整数类别编码，区分i.分类变量与c.连续变量，并处理小数、字符串和交互项。
+category: stata
+tags: ['Stata factor variables', '分类变量', '交互项', 'r(452)']
+stage: ['数据', '实证']
+difficulty: 入门
+---
+
+报错`factor variables may not contain noninteger values`通常是把含小数的连续变量写成了`i.var`。在Stata因子变量语法中，`i.`表示整数编码的类别，`c.`表示连续变量。
+
+## 先检查变量取值
+
+```stata
+describe target_var
+summarize target_var, detail
+tab target_var, missing
+count if target_var != floor(target_var) & !missing(target_var)
+```
+
+如果最后一行计数大于零，变量存在非整数值。先判断它本来是连续指标、比例、年份小数，还是因导入精度产生的伪小数。
+
+## 连续变量使用c.
+
+连续变量及其交互项写法：
+
+```stata
+reg y c.x controls
+reg y c.x##c.z controls
+reg y c.x##i.group controls
+```
+
+`c.x##i.group`同时包含`x`、组别虚拟变量和交互项。交互系数需要结合基准组与边际效应解释。
+
+## 分类变量必须是整数编码
+
+若行业代码本来应是类别，但被导入为`1.1、1.2`等小数，不要直接四舍五入。应回到数据字典确认编码规则。字符串行业名称可使用：
+
+```stata
+encode industry_name, generate(industry_id)
+tab industry_name industry_id, missing
+reg y i.industry_id controls
+```
+
+`encode`适合类别文字；数字字符串转数值应先按[type mismatch r(109)](/stata/type-mismatch-r109)检查异常字符。
+
+## 连续变量不要随意分组
+
+为了使用`i.`把连续变量粗暴取整或分成高低组，会损失信息并改变研究问题。若理论上确实需要分组，应预先说明阈值依据，并保留连续形式作为重要对照。
+
+## 基准组和省略类别
+
+可以使用`ib#.`指定有意义的基准类别：
+
+```stata
+reg y ib1.industry_id controls
+```
+
+若某个类别或交互项被省略，进一步查看[Stata回归变量被omitted](/stata/omitted-collinearity)，判断是基准组、空单元格还是完全共线。
+
+## 修复后的核验
+
+- `tab`确认类别编码与标签一致。
+- 检查缺失和异常小数是否被正确处理。
+- 用`margins`或线性组合解释交互项，不只看交互系数星号。
+- 在论文变量定义表中写清连续、分类和分组阈值。

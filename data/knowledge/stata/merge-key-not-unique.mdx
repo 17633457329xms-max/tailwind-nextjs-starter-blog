@@ -1,0 +1,65 @@
+---
+title: Stata合并数据提示variables do not uniquely identify observations
+date: '2026-08-27'
+lastmod: '2026-08-27'
+summary: 用isid、duplicates和样本层级检查Stata合并主键不唯一问题，说明何时使用1:1、1:m或m:1以及为什么避免m:m。
+category: stata
+tags: ['Stata merge', '主键不唯一', 'r(459)', 'duplicates']
+stage: ['数据', '实证']
+difficulty: 入门
+---
+
+执行`merge 1:1 id year`时提示`variables id year do not uniquely identify observations`，说明至少一个数据集里同一组键出现多行。先弄清重复行代表什么，再决定合并层级；直接删重或改成`m:m`通常会制造错误匹配。
+
+## 先确认当前数据的观察单位
+
+```stata
+describe id year
+isid id year
+duplicates report id year
+duplicates tag id year, generate(dup_key)
+list id year other_vars if dup_key > 0, sepby(id year)
+```
+
+企业—年份面板应由`firm_id year`唯一识别；城市—年份、专利—申请人等数据需要不同主键。主键失败有时是数据本来处于更细层级，并不一定是“错误重复”。
+
+## 区分四种常见原因
+
+1. 完全重复导入：所有字段相同，可能由文件拼接重复造成。
+2. 主键写少了：企业—年份—产品数据只用企业—年份当然重复。
+3. 一对多明细：一个企业一年有多笔专利、交易或子公司记录。
+4. 名称或代码清洗错误：多个实体被错误映射为同一个ID。
+
+## 选择正确的merge关系
+
+- `merge 1:1 id year`：两个数据集的键都唯一。
+- `merge 1:m id year`：主数据唯一，使用数据可有多行。
+- `merge m:1 id year`：主数据可有多行，使用数据唯一。
+
+合并前分别在两个数据集中运行`isid`验证对应一侧。`merge m:m`会按组内顺序组合观察，通常不代表真实业务关系，应避免作为主键错误的快捷修复。
+
+## 明细数据需要先聚合时
+
+如果研究单位是企业—年份，而专利数据是一项专利一行，可以在明确指标口径后聚合：
+
+```stata
+collapse (count) patent_count = patent_id, by(firm_id year)
+isid firm_id year
+save patent_firm_year.dta, replace
+```
+
+聚合前要决定同族专利、共同申请和撤回专利的处理，不能只为通过`isid`而随意`collapse`。
+
+## 合并后检查\_merge
+
+```stata
+merge 1:1 firm_id year using finance_data.dta
+tab _merge
+list firm_id year if _merge != 3 in 1/30
+```
+
+不要立刻`keep if _merge==3`并删除`_merge`。先统计未匹配来自年份范围、代码类型、前导零、名称变更还是样本边界，并保留合并审计记录。
+
+## 与面板设定的关系
+
+合并产生重复会进一步触发`repeated time values within panel`。面板键的系统检查见[Stata面板数据重复时间值报错](/stata/repeated-time-values)，变量类型不一致则参考[type mismatch r(109)](/stata/type-mismatch-r109)。
