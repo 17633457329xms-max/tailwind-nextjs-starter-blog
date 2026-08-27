@@ -4,9 +4,9 @@ import { genPageMetadata } from '@/app/seo'
 import { services } from '@/data/knowledgeData'
 
 export const metadata = genPageMetadata({
-  title: '研究辅导与论文润色服务说明',
+  title: '研究辅导与论文润色一对一定制服务说明',
   description:
-    '查看选题诊断、实证方法、Stata代码、写作反馈、论文润色优化和阶段辅导的适用阶段、材料与交付标准。',
+    '查看选题诊断、实证方法、Stata代码、写作反馈、论文润色优化一对一定制和阶段辅导的适用阶段、材料与交付标准。',
 })
 
 export default function ServiceStandardsPage() {
@@ -67,7 +67,7 @@ export default function ServiceStandardsPage() {
             ],
           ],
           [
-            '润色服务口径',
+            '润色一对一定制服务口径',
             [
               '明确篇幅和稿件阶段',
               '区分语言润色与结构优化',

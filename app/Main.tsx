@@ -58,7 +58,7 @@ export default function Home({ featured, totalCount }: HomeProps) {
                 <span className="text-[#9b3425] dark:text-[#e89b8f]">拆清楚，再解决。</span>
               </h1>
               <p className="mt-8 max-w-3xl text-base leading-8 text-slate-700 sm:text-lg dark:text-slate-300">
-                从选题、文献、变量和数据，到实证方法、Stata、SPSS、Python、论文表达与格式规范，提供可检索的中文知识内容、论文润色优化和一对一咨询入口。
+                从选题、文献、变量和数据，到实证方法、Stata、SPSS、Python、论文表达与格式规范，提供可检索的中文知识内容、论文润色优化一对一定制和咨询入口。
               </p>
             </div>
 
@@ -162,7 +162,7 @@ export default function Home({ featured, totalCount }: HomeProps) {
             <h2 className="mt-2 font-serif text-3xl font-black">选择适合当前阶段的服务</h2>
           </div>
           <p className="text-sm leading-7 text-slate-600 lg:justify-self-end lg:text-right dark:text-slate-400">
-            先通过免费内容自查；仍无法判断时，再选择单次诊断、论文润色优化或阶段辅导。
+            先通过免费内容自查；仍无法判断时，再选择单次诊断、论文润色优化一对一定制或阶段辅导。
           </p>
         </div>
         <div className="grid border-y border-slate-300 lg:grid-cols-3 lg:divide-x lg:divide-slate-300 dark:border-slate-700 dark:lg:divide-slate-700">

@@ -10,7 +10,7 @@ const resourceLinks = [
 ]
 
 const serviceLinks = [
-  ['论文润色', '/polishing'],
+  ['论文润色一对一定制', '/polishing'],
   ['咨询辅导', '/consulting'],
   ['服务说明', '/service-standards'],
   ['联系我', '/contact'],
@@ -28,7 +28,7 @@ export default function Footer() {
             <span className="text-lg font-black">谢老师讲论文</span>
           </div>
           <p className="max-w-md text-sm leading-7 text-slate-600 dark:text-slate-400">
-            面向国内经管学生，提供选题、方法、数据、Stata、论文写作与润色优化的知识内容和一对一咨询入口。
+            面向国内学生，提供选题、方法、数据、论文写作与润色优化一对一定制的知识内容和咨询入口。
           </p>
         </div>
         <div>

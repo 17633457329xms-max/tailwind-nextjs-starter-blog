@@ -47,7 +47,7 @@ export const categories: Record<CategorySlug, CategoryConfig> = {
     eyebrow: '先判断能不能做，再讨论怎么做',
     description: '从研究问题、数据可得性、变量关系和识别路径四个维度检查经管论文选题。',
     color: 'bg-blue-50 text-blue-800 dark:bg-blue-950/50 dark:text-blue-200',
-    filters: ['本科论文', '硕士论文', '博士论文', '企业层面', '城市层面', '选题可行性'],
+    filters: ['专科论文', '本科论文', '硕士论文', '博士论文'],
     featuredQueries: ['经管论文怎么选题', '数字经济选题', 'ESG论文选题'],
     theme: {
       hero: 'bg-[#5b3428] dark:bg-[#3a231d]',
@@ -74,7 +74,7 @@ export const categories: Record<CategorySlug, CategoryConfig> = {
     eyebrow: '讲清适用条件、识别假设和结果解释',
     description: '覆盖面板模型、DID、机制检验、内生性和稳健性等常用经管实证方法。',
     color: 'bg-indigo-50 text-indigo-800 dark:bg-indigo-950/50 dark:text-indigo-200',
-    filters: ['DID', '面板模型', '内生性', '机制检验', '稳健性'],
+    filters: ['DID', '固定效应', '工具变量', '内生性', '机制检验', '稳健性'],
     featuredQueries: ['DID适用条件', '平行趋势检验', '内生性怎么处理'],
     theme: {
       hero: 'bg-[#273452] dark:bg-[#1c253a]',
@@ -212,7 +212,7 @@ export const services = [
     href: '/consulting',
   },
   {
-    title: '论文润色优化',
+    title: '论文润色优化一对一定制',
     description: '优化语言、结构、逻辑、术语、摘要、图表说明、引用和格式，并保留修订痕迹。',
     deliverable: '修订版 + 问题批注 + 修改说明 + 自查清单',
     href: '/polishing',
@@ -228,7 +228,7 @@ export const services = [
 export const homeFaq = [
   [
     '可以咨询哪些问题？',
-    '选题、研究设计、变量数据、实证方法、Stata代码、结果解释、写作结构和论文润色优化均可先提交问题摘要。',
+    '选题、研究设计、变量数据、实证方法、Stata代码、结果解释、写作结构和论文润色优化一对一定制均可先提交问题摘要。',
   ],
   [
     '论文润色包含什么？',

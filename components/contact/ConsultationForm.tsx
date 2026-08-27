@@ -108,7 +108,7 @@ export default function ConsultationForm() {
             <option value="method">实证方法</option>
             <option value="stata">Stata代码</option>
             <option value="writing">论文写作</option>
-            <option value="polishing">论文润色优化</option>
+            <option value="polishing">论文润色优化一对一定制</option>
             <option value="ongoing">阶段辅导</option>
           </select>
         </label>

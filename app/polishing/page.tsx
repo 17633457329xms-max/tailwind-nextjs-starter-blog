@@ -4,7 +4,7 @@ import { genPageMetadata } from '@/app/seo'
 import siteMetadata from '@/data/siteMetadata'
 
 export const metadata = genPageMetadata({
-  title: '经管论文润色优化 - 语言、结构、逻辑与格式',
+  title: '经管论文润色优化一对一定制 - 语言、结构、逻辑与格式',
   description:
     '提供经管论文中文语言润色、结构逻辑优化、术语统一、标题摘要、图表表述、引用格式和返修说明优化。',
 })
@@ -24,7 +24,7 @@ export default function PolishingPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: '经管论文润色优化',
+    name: '经管论文润色优化一对一定制',
     description: metadata.description,
     provider: { '@type': 'Person', name: siteMetadata.author },
     areaServed: 'CN',
@@ -39,7 +39,7 @@ export default function PolishingPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <PageHero
-        eyebrow="论文润色优化"
+        eyebrow="论文润色优化一对一定制"
         title="不只改句子，也检查结构、逻辑和格式是否一致"
         description="根据论文阶段和现有问题，处理语言表达、章节逻辑、术语、标题摘要、图表结果、引用格式与返修说明，并通过修订痕迹和批注说明修改理由。"
         actions={
@@ -48,7 +48,7 @@ export default function PolishingPage() {
               href="/consulting"
               className="rounded-xl bg-amber-400 px-5 py-3 text-sm font-black text-blue-950 hover:bg-amber-300"
             >
-              提交润色需求
+              提交润色一对一定制需求
             </Link>
             <Link
               href="/writing"

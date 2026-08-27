@@ -118,7 +118,7 @@ export default async function Page({
                 需要结合你的论文具体判断？
               </h2>
               <p className="mt-2 text-sm leading-7 text-slate-700 dark:text-slate-300">
-                提交研究阶段、当前问题和已有方法情况，先进行问题分类，再确认适合单次诊断、论文润色还是阶段辅导。
+                提交研究阶段、当前问题和已有方法情况，先进行问题分类，再确认适合单次诊断、论文润色一对一定制还是阶段辅导。
               </p>
               <Link
                 href="/consulting"

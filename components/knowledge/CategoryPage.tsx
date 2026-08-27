@@ -1,5 +1,5 @@
 import PageHero from '@/components/PageHero'
-import KnowledgeCard from './KnowledgeCard'
+import FilterableKnowledgeGrid from './FilterableKnowledgeGrid'
 import Link from '@/components/Link'
 import type { CategoryConfig } from '@/data/knowledgeData'
 import type { Knowledge } from 'contentlayer/generated'
@@ -40,22 +40,8 @@ export default function CategoryPage({ category, items }: CategoryPageProps) {
               从具体问题开始
             </h2>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {category.filters.map((filter) => (
-              <span
-                key={filter}
-                className={`border px-3 py-1.5 text-xs font-semibold ${category.theme.filter}`}
-              >
-                {filter}
-              </span>
-            ))}
-          </div>
         </div>
-        <div className="grid border-t border-black/10 md:grid-cols-2 lg:grid-cols-3 dark:border-white/10">
-          {items.map((item) => (
-            <KnowledgeCard key={item.path} item={item} />
-          ))}
-        </div>
+        <FilterableKnowledgeGrid category={category} items={items} />
       </section>
 
       <section className={`mt-10 border p-7 sm:p-9 ${category.theme.cta}`}>

@@ -14,6 +14,36 @@ function activeClass(href: string) {
 export default function HeaderNav() {
   const pathname = usePathname()
 
+  if (pathname === '/') {
+    return (
+      <span className="hidden px-3 py-2 text-sm font-semibold text-slate-600 lg:block dark:text-slate-300">
+        选择一级学科进入
+      </span>
+    )
+  }
+
+  if (pathname.startsWith('/disciplines/')) {
+    return (
+      <nav className="hidden items-center gap-1 lg:flex" aria-label="学科导航">
+        {['研究议题', '方法路径', '质量标准'].map((title, index) => (
+          <Link
+            key={title}
+            href={`${pathname}#section-${index + 1}`}
+            className="px-2.5 py-2 text-sm font-semibold text-slate-700 hover:bg-white dark:text-slate-200 dark:hover:bg-slate-900"
+          >
+            {title}
+          </Link>
+        ))}
+        <Link
+          href="/consulting"
+          className="px-2.5 py-2 text-sm font-semibold text-slate-700 hover:bg-white dark:text-slate-200 dark:hover:bg-slate-900"
+        >
+          咨询辅导
+        </Link>
+      </nav>
+    )
+  }
+
   return (
     <nav className="hidden items-center gap-1 lg:flex" aria-label="主导航">
       {headerNavLinks

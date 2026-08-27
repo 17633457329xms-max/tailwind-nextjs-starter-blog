@@ -6,7 +6,7 @@ import { genPageMetadata } from '@/app/seo'
 import siteMetadata from '@/data/siteMetadata'
 
 export const metadata = genPageMetadata({
-  title: '经管论文研究设计、Stata与论文润色咨询',
+  title: '经管论文研究设计、Stata与论文润色一对一定制咨询',
   description:
     '提交经管论文选题、方法、变量数据、Stata代码、写作或润色问题摘要，确认适合的诊断与辅导方式。',
 })
@@ -15,11 +15,17 @@ export default function ConsultingPage() {
   const serviceJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: '经管论文研究辅导与润色优化咨询',
+    name: '经管论文研究辅导与润色优化一对一定制咨询',
     description: metadata.description,
     provider: { '@type': 'Person', name: siteMetadata.author },
     areaServed: 'CN',
-    serviceType: ['选题诊断', '实证方法辅导', 'Stata代码复核', '论文写作反馈', '论文润色优化'],
+    serviceType: [
+      '选题诊断',
+      '实证方法辅导',
+      'Stata代码复核',
+      '论文写作反馈',
+      '论文润色优化一对一定制',
+    ],
     url: `${siteMetadata.siteUrl}/consulting/`,
   }
 
@@ -32,7 +38,7 @@ export default function ConsultingPage() {
       <PageHero
         eyebrow="一对一问题诊断与阶段辅导"
         title="先说明问题，再确认适合的服务方式"
-        description="提交论文阶段、研究方向和当前卡点。先进行需求分类，再确定适合单次诊断、论文润色优化还是阶段辅导。"
+        description="提交论文阶段、研究方向和当前卡点。先进行需求分类，再确定适合单次诊断、论文润色优化一对一定制还是阶段辅导。"
         actions={
           <Link
             href="/service-standards"

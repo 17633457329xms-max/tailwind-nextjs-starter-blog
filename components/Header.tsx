@@ -4,6 +4,7 @@ import HeaderNav from './HeaderNav'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
 import SearchButton from './SearchButton'
+import TenantSwitcher from './TenantSwitcher'
 
 export default function Header() {
   return (
@@ -24,6 +25,7 @@ export default function Header() {
 
         <div className="flex items-center gap-1.5 lg:gap-3">
           <HeaderNav />
+          <TenantSwitcher />
           <SearchButton />
           <ThemeSwitch />
           <MobileNav />

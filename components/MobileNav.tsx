@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import Link from './Link'
 import headerNavLinks from '@/data/headerNavLinks'
 import { categories, isCategorySlug } from '@/data/knowledgeData'
+import { disciplines, disciplineOrder } from '@/data/disciplines'
 
 const MobileNav = () => {
   const [navShow, setNavShow] = useState(false)
@@ -55,7 +56,27 @@ const MobileNav = () => {
             leaveTo="translate-x-full opacity-0"
           >
             <DialogPanel className="fixed top-0 left-0 z-70 h-full w-full bg-white/95 duration-300 dark:bg-gray-950/98">
-              <nav className="mt-8 flex h-full basis-0 flex-col items-start overflow-y-auto pt-2 pl-8 text-left">
+              <nav className="mt-8 flex h-full basis-0 flex-col items-start overflow-y-auto px-8 pt-2 text-left">
+                <p className="mb-3 text-xs font-black tracking-widest text-slate-500">
+                  切换一级学科
+                </p>
+                <div className="mb-6 grid w-full grid-cols-2 gap-2">
+                  {disciplineOrder.map((discipline) => (
+                    <Link
+                      key={discipline}
+                      href={
+                        discipline === 'economics-management'
+                          ? '/economics-management'
+                          : `/disciplines/${discipline}`
+                      }
+                      onClick={onToggleNav}
+                      className="border border-black/10 px-3 py-2 text-sm font-bold dark:border-white/15"
+                    >
+                      {disciplines[discipline].name}
+                    </Link>
+                  ))}
+                </div>
+                <p className="mb-3 text-xs font-black tracking-widest text-slate-500">内容导航</p>
                 {headerNavLinks.map((link) => {
                   const active =
                     pathname === link.href ||

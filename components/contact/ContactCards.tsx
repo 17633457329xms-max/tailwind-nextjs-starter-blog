@@ -13,7 +13,8 @@ const contacts = [
   {
     type: 'wechat',
     title: '微信咨询',
-    description: '扫码添加时，请备注“论文阶段 + 研究方向”。',
+    description: '微信号：ameliavictor，添加时请备注“论文阶段 + 研究方向”。',
+    id: 'ameliavictor',
     image: '/static/images/contact/wechat.jpg',
     width: 928,
     height: 1380,
@@ -22,6 +23,7 @@ const contacts = [
     type: 'qq',
     title: 'QQ咨询',
     description: 'QQ：2176319486，添加时请简要说明当前问题。',
+    id: '2176319486',
     image: '/static/images/contact/qq.png',
     width: 1220,
     height: 1478,
@@ -29,15 +31,15 @@ const contacts = [
 ]
 
 export default function ContactCards({ compact = false }: { compact?: boolean }) {
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState<string | null>(null)
 
   const track = (event: string, type: string) => window.umami?.track(event, { type })
 
-  const copyQQ = async () => {
-    await navigator.clipboard.writeText('2176319486')
-    setCopied(true)
-    track('contact_id_copy', 'qq')
-    window.setTimeout(() => setCopied(false), 1800)
+  const copyId = async (type: string, id: string) => {
+    await navigator.clipboard.writeText(id)
+    setCopied(type)
+    track('contact_id_copy', type)
+    window.setTimeout(() => setCopied(null), 1800)
   }
 
   return (
@@ -75,19 +77,15 @@ export default function ContactCards({ compact = false }: { compact?: boolean })
             />
           </button>
           <div className="p-5">
-            {contact.type === 'qq' ? (
-              <button
-                type="button"
-                onClick={copyQQ}
-                className="w-full rounded-xl bg-blue-950 px-4 py-3 text-sm font-bold text-white hover:bg-blue-900"
-              >
-                {copied ? 'QQ号已复制' : '复制QQ号 2176319486'}
-              </button>
-            ) : (
-              <p className="text-center text-xs leading-6 text-slate-500">
-                手机端可保存图片后，在微信中识别二维码
-              </p>
-            )}
+            <button
+              type="button"
+              onClick={() => copyId(contact.type, contact.id)}
+              className="w-full cursor-pointer rounded-xl bg-blue-950 px-4 py-3 text-sm font-bold text-white hover:bg-blue-900"
+            >
+              {copied === contact.type
+                ? `${contact.type === 'wechat' ? '微信号' : 'QQ号'}已复制`
+                : `复制${contact.type === 'wechat' ? '微信号' : 'QQ号'} ${contact.id}`}
+            </button>
           </div>
         </article>
       ))}
