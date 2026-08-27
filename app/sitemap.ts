@@ -1,23 +1,37 @@
 import { MetadataRoute } from 'next'
-import { allBlogs } from 'contentlayer/generated'
+import { allKnowledge } from 'contentlayer/generated'
 import siteMetadata from '@/data/siteMetadata'
 
 export const dynamic = 'force-static'
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = siteMetadata.siteUrl
+const staticRoutes = [
+  '',
+  'topics',
+  'methods',
+  'variables',
+  'literature',
+  'stata',
+  'writing',
+  'polishing',
+  'consulting',
+  'service-standards',
+  'contact',
+  'about',
+  'privacy',
+]
 
-  const blogRoutes = allBlogs
-    .filter((post) => !post.draft)
-    .map((post) => ({
-      url: `${siteUrl}/${post.path}`,
-      lastModified: post.lastmod || post.date,
+export default function sitemap(): MetadataRoute.Sitemap {
+  const updated = new Date().toISOString().slice(0, 10)
+  const staticPages = staticRoutes.map((route) => ({
+    url: `${siteMetadata.siteUrl}${route ? `/${route}` : ''}`,
+    lastModified: updated,
+  }))
+  const knowledgePages = allKnowledge
+    .filter((item) => !item.draft)
+    .map((item) => ({
+      url: `${siteMetadata.siteUrl}/${item.path}`,
+      lastModified: item.lastmod || item.date,
     }))
 
-  const routes = ['', 'blog', 'projects', 'tags'].map((route) => ({
-    url: `${siteUrl}/${route}`,
-    lastModified: new Date().toISOString().split('T')[0],
-  }))
-
-  return [...routes, ...blogRoutes]
+  return [...staticPages, ...knowledgePages]
 }

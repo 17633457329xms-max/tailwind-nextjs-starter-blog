@@ -1,0 +1,51 @@
+---
+title: reghdfe安装、固定效应设置与聚类标准误
+date: '2026-08-26'
+lastmod: '2026-08-26'
+summary: 从安装检查、面板键、固定效应组合、聚类层级和结果读取五个步骤使用reghdfe。
+category: stata
+tags: ['reghdfe', '固定效应', '聚类标准误']
+stage: ['数据', '实证']
+difficulty: 入门
+---
+
+`reghdfe`用于吸收多维固定效应。命令能运行不代表设定合理，使用前要先明确观察单位、时间维度和误差可能相关的层级。
+
+## 安装与检查
+
+```stata
+ssc install ftools, replace
+ssc install reghdfe, replace
+which reghdfe
+help reghdfe
+```
+
+正式复现时记录Stata版本、命令包版本和安装日期。
+
+## 基准写法
+
+企业—年份面板中，一个常见设定为：
+
+```stata
+reghdfe y x controls, absorb(firm_id year) vce(cluster firm_id)
+```
+
+`absorb()`中的固定效应控制相应层级不随时间变化的差异或共同时间冲击，`vce(cluster ...)`处理组内误差相关。
+
+## 聚类层级怎么选
+
+聚类应结合处理变化和误差相关来源。如果政策在城市层面变化，仅按企业聚类可能低估同城共同冲击。聚类组数量过少时，常规渐近推断也需要谨慎。
+
+## 运行前检查
+
+```stata
+isid firm_id year
+xtset firm_id year
+tab year
+```
+
+如果`isid`失败，应先解释重复记录，而不是直接删重。
+
+## 结果报告
+
+回归表应说明固定效应、聚类层级、样本量和组内拟合信息。正文解释核心系数的方向、量级和单位，而不只描述星号。

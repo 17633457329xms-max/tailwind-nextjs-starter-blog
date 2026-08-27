@@ -1,0 +1,53 @@
+---
+title: DID事件研究图的Stata代码结构与结果检查
+date: '2026-08-24'
+lastmod: '2026-08-26'
+summary: 说明事件时间构造、两端合并、基准期、动态回归、系数提取和事件研究图检查的代码结构。
+category: stata
+tags: ['DID', '事件研究图', '平行趋势', 'Stata代码']
+stage: ['实证', '写作']
+difficulty: 进阶
+---
+
+事件研究图的重点不是配色，而是事件时间、对照组、基准期和置信区间是否正确。
+
+## 构造事件时间
+
+```stata
+gen event_time = year - first_treat_year if treated == 1
+replace event_time = -4 if event_time < -4 & treated == 1
+replace event_time =  4 if event_time >  4 & treated == 1
+```
+
+从未处理样本的`first_treat_year`应保持缺失，并在生成事件虚拟变量时作为对照组保留。
+
+## 生成虚拟变量
+
+```stata
+forvalues k = 4(-1)2 {
+    gen pre`k' = event_time == -`k'
+}
+gen current = event_time == 0
+forvalues k = 1/4 {
+    gen post`k' = event_time == `k'
+}
+```
+
+省略`event_time = -1`作为基准期。变量名与循环范围应结合实际窗口检查。
+
+## 动态回归
+
+```stata
+reghdfe y pre4 pre3 pre2 current post1 post2 post3 post4 controls, ///
+    absorb(id year) vce(cluster policy_level)
+```
+
+## 出图前检查
+
+1. 政策前系数顺序是否与横轴一致。
+2. 基准期是否明确省略。
+3. 置信区间使用的水平是否在图注说明。
+4. 两端合并是否造成样本含义变化。
+5. 分批处理时估计量是否适合当前对照组定义。
+
+正文应同时解释政策前趋势和政策后动态效果，不能用一张图代替识别讨论。

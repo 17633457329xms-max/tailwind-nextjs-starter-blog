@@ -1,9 +1,8 @@
-import { sortPosts, allCoreContent } from 'pliny/utils/contentlayer'
-import { allBlogs } from 'contentlayer/generated'
+import { allKnowledge } from 'contentlayer/generated'
+import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import Main from './Main'
 
-export default async function Page() {
-  const sortedPosts = sortPosts(allBlogs)
-  const posts = allCoreContent(sortedPosts)
-  return <Main posts={posts} />
+export default function Page() {
+  const featured = allCoreContent(sortPosts(allKnowledge.filter((item) => !item.draft))).slice(0, 6)
+  return <Main featured={featured} />
 }
