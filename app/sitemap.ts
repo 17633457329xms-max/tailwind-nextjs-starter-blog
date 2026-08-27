@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next'
 import { allKnowledge } from 'contentlayer/generated'
 import siteMetadata from '@/data/siteMetadata'
+import { disciplineArticles } from '@/data/disciplineArticles'
+import { disciplineOrder } from '@/data/disciplines'
 
 export const dynamic = 'force-static'
 
@@ -18,6 +20,7 @@ const staticRoutes = [
   'contact',
   'about',
   'privacy',
+  'economics-management',
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -32,6 +35,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteMetadata.siteUrl}/${item.path}`,
       lastModified: item.lastmod || item.date,
     }))
+  const disciplinePages = disciplineOrder
+    .filter((discipline) => discipline !== 'economics-management')
+    .map((discipline) => ({
+      url: `${siteMetadata.siteUrl}/disciplines/${discipline}`,
+      lastModified: updated,
+    }))
+  const disciplineKnowledgePages = disciplineArticles.map((article) => ({
+    url: `${siteMetadata.siteUrl}/disciplines/${article.discipline}/${article.slug}`,
+    lastModified: article.date,
+  }))
 
-  return [...staticPages, ...knowledgePages]
+  return [...staticPages, ...knowledgePages, ...disciplinePages, ...disciplineKnowledgePages]
 }

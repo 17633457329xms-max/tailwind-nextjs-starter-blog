@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import DisciplinePage from '@/components/DisciplinePage'
 import { disciplines, disciplineOrder, isDisciplineSlug } from '@/data/disciplines'
 import { genPageMetadata } from '@/app/seo'
+import { getDisciplineArticles } from '@/data/disciplineArticles'
 
 export const generateStaticParams = () =>
   disciplineOrder
@@ -21,5 +22,10 @@ export async function generateMetadata({ params }: { params: Promise<{ disciplin
 export default async function Page({ params }: { params: Promise<{ discipline: string }> }) {
   const { discipline } = await params
   if (!isDisciplineSlug(discipline) || discipline === 'economics-management') notFound()
-  return <DisciplinePage discipline={disciplines[discipline]} />
+  return (
+    <DisciplinePage
+      discipline={disciplines[discipline]}
+      articles={getDisciplineArticles(discipline)}
+    />
+  )
 }

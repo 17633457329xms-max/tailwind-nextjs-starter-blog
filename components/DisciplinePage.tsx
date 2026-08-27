@@ -1,7 +1,15 @@
 import Link from '@/components/Link'
 import type { DisciplineConfig } from '@/data/disciplines'
+import type { DisciplineArticle } from '@/data/disciplineArticles'
+import DisciplineArticleExplorer from './discipline/DisciplineArticleExplorer'
 
-export default function DisciplinePage({ discipline }: { discipline: DisciplineConfig }) {
+export default function DisciplinePage({
+  discipline,
+  articles,
+}: {
+  discipline: DisciplineConfig
+  articles: DisciplineArticle[]
+}) {
   const sections = [
     [
       '博士层级研究议题',
@@ -64,6 +72,21 @@ export default function DisciplinePage({ discipline }: { discipline: DisciplineC
           </section>
         ))}
       </div>
+      <section className="border-b border-black/15 py-12 sm:py-16 dark:border-white/15">
+        <div className="mb-8 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <p className="text-xs font-black tracking-[0.18em]" style={{ color: discipline.color }}>
+              深度内容库
+            </p>
+            <h2 className="mt-3 font-serif text-3xl font-black">从方法、证据和真实研究问题开始</h2>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-300">
+              每篇内容均提供可操作的研究步骤、证据矩阵、常见误区和权威资料入口。先用标签筛选，再进入全文。
+            </p>
+          </div>
+          <p className="text-sm font-black text-slate-500">首批 {articles.length} 篇 · 持续更新</p>
+        </div>
+        <DisciplineArticleExplorer articles={articles} discipline={discipline} />
+      </section>
       <section
         className="mt-10 grid gap-8 border p-8 lg:grid-cols-[1fr_auto] lg:items-center"
         style={{ borderColor: discipline.color }}
