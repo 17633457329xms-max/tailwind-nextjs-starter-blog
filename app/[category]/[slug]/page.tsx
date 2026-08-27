@@ -8,6 +8,7 @@ import { components } from '@/components/MDXComponents'
 import { categories, isCategorySlug } from '@/data/knowledgeData'
 import { genPageMetadata } from '@/app/seo'
 import KnowledgeCard from '@/components/knowledge/KnowledgeCard'
+import ArticleToc from '@/components/knowledge/ArticleToc'
 import Link from '@/components/Link'
 import { notFound } from 'next/navigation'
 
@@ -50,36 +51,44 @@ export default async function Page({
     )
   ).slice(0, 3)
   const content = coreContent(item)
+  const categoryConfig = categories[category]
+  const tocItems = (item.toc || []).filter((entry) => entry.depth === 2 || entry.depth === 3)
+  const showToc = tocItems.length >= 6
 
   return (
     <div className="pt-8 sm:pt-10">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(item.structuredData) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(item.structuredData),
+        }}
       />
       <nav className="mb-6 text-sm text-slate-500" aria-label="面包屑">
-        <Link href="/" className="hover:text-blue-700">
+        <Link href="/" className="hover:text-slate-950 dark:hover:text-white">
           首页
         </Link>
         <span className="mx-2">/</span>
-        <Link href={`/${category}`} className="hover:text-blue-700">
-          {categories[category].name}
+        <Link href={`/${category}`} className={`font-bold ${categoryConfig.theme.cardLink}`}>
+          {categoryConfig.name}
         </Link>
         <span className="mx-2">/</span>
         <span className="text-slate-700 dark:text-slate-300">正文</span>
       </nav>
 
       <article>
-        <header className="rounded-[2rem] border border-slate-200 bg-white px-6 py-10 sm:px-10 dark:border-slate-800 dark:bg-slate-900">
+        <header
+          className={`relative border-y-2 border-slate-950 px-6 py-10 sm:px-10 sm:py-14 dark:border-slate-200 ${categoryConfig.theme.surface}`}
+        >
+          <span className={`absolute top-0 left-0 h-1.5 w-28 ${categoryConfig.theme.cardRule}`} />
           <div className="mb-5 flex flex-wrap gap-2 text-xs font-bold">
-            <span className="rounded-full bg-blue-50 px-3 py-1.5 text-blue-800 dark:bg-blue-950 dark:text-blue-200">
-              {categories[category].name}
+            <span className={`px-3 py-1.5 ${categoryConfig.theme.cardBadge}`}>
+              {categoryConfig.name}
             </span>
-            <span className="rounded-full bg-slate-100 px-3 py-1.5 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+            <span className="border border-black/10 px-3 py-1.5 text-slate-600 dark:border-white/15 dark:text-slate-300">
               {item.difficulty}
             </span>
           </div>
-          <h1 className="max-w-4xl text-3xl leading-tight font-black tracking-tight text-slate-950 sm:text-5xl dark:text-white">
+          <h1 className="max-w-5xl font-serif text-3xl leading-tight font-black tracking-tight text-slate-950 sm:text-5xl dark:text-white">
             {item.title}
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-8 text-slate-600 sm:text-lg dark:text-slate-300">
@@ -87,39 +96,45 @@ export default async function Page({
           </p>
           <div className="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500">
             <span>作者：谢老师</span>
-            <time dateTime={item.date}>发布：{item.date.slice(0, 10)}</time>
-            <time dateTime={item.lastmod || item.date}>
-              核验：{(item.lastmod || item.date).slice(0, 10)}
-            </time>
-            <span>约 {item.readingTime.text.replace('min read', '分钟')}</span>
+            <time dateTime={item.date}>首次发布：{item.date.slice(0, 10)}</time>
+            {item.lastmod && item.lastmod.slice(0, 10) !== item.date.slice(0, 10) && (
+              <time dateTime={item.lastmod}>最近更新：{item.lastmod.slice(0, 10)}</time>
+            )}
+            <span>约 {Math.max(1, Math.ceil(item.readingTime.minutes))} 分钟阅读</span>
           </div>
         </header>
 
-        <div className="mx-auto max-w-4xl py-12">
-          <div className="prose prose-slate dark:prose-invert prose-headings:scroll-mt-24 prose-a:text-blue-700 max-w-none">
-            <MDXLayoutRenderer code={item.body.code} components={components} toc={item.toc} />
-          </div>
-          <div className="mt-12 rounded-2xl border border-amber-200 bg-amber-50 p-6 dark:border-amber-900 dark:bg-amber-950/30">
-            <h2 className="text-lg font-black text-slate-950 dark:text-white">
-              需要结合你的论文具体判断？
-            </h2>
-            <p className="mt-2 text-sm leading-7 text-slate-700 dark:text-slate-300">
-              提交研究阶段、当前问题和已有方法情况，先进行问题分类，再确认适合单次诊断、论文润色还是阶段辅导。
-            </p>
-            <Link
-              href="/consulting"
-              className="mt-4 inline-flex font-bold text-blue-800 hover:underline dark:text-blue-300"
-            >
-              提交问题摘要 →
-            </Link>
+        <div
+          className={`mx-auto py-12 ${showToc ? 'max-w-6xl xl:grid xl:grid-cols-[14rem_minmax(0,48rem)] xl:gap-14' : 'max-w-4xl'}`}
+        >
+          {showToc && <ArticleToc items={tocItems} />}
+          <div>
+            {showToc && <ArticleToc items={tocItems} mobile />}
+            <div className="prose prose-slate dark:prose-invert prose-headings:scroll-mt-24 max-w-none">
+              <MDXLayoutRenderer code={item.body.code} components={components} toc={item.toc} />
+            </div>
+            <div className={`mt-12 border p-6 ${categoryConfig.theme.cta}`}>
+              <h2 className="text-lg font-black text-slate-950 dark:text-white">
+                需要结合你的论文具体判断？
+              </h2>
+              <p className="mt-2 text-sm leading-7 text-slate-700 dark:text-slate-300">
+                提交研究阶段、当前问题和已有方法情况，先进行问题分类，再确认适合单次诊断、论文润色还是阶段辅导。
+              </p>
+              <Link
+                href="/consulting"
+                className={`mt-4 inline-flex font-bold hover:underline ${categoryConfig.theme.cardLink}`}
+              >
+                提交问题摘要 →
+              </Link>
+            </div>
           </div>
         </div>
       </article>
 
       {related.length > 0 && (
         <section className="border-t border-slate-200 py-12 dark:border-slate-800">
-          <h2 className="mb-6 text-2xl font-black">继续阅读</h2>
-          <div className="grid gap-5 md:grid-cols-3">
+          <h2 className="mb-6 font-serif text-2xl font-black">继续阅读</h2>
+          <div className="grid border-t border-l border-black/10 md:grid-cols-3 dark:border-white/10">
             {related.map((entry) => (
               <KnowledgeCard key={entry.path} item={entry} />
             ))}

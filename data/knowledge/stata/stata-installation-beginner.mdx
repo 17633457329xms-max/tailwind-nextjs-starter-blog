@@ -1,0 +1,98 @@
+---
+title: Stata怎么安装：正版获取、版本选择与第一段命令
+date: '2026-08-27'
+lastmod: '2026-08-27'
+summary: 面向第一次使用Stata的学生，说明正版授权来源、MP/SE/BE版本辨认、Windows与macOS安装、许可证激活、更新检查和第一段do文件。
+category: stata
+tags: ['Stata安装', 'Stata入门', 'do文件', '正版软件']
+stage: ['零基础', '数据', '实证']
+difficulty: 零基础
+references:
+  [
+    'https://www.stata.com/install-guide/',
+    'https://www.stata.com/bookstore/getting-started-windows/',
+  ]
+---
+
+第一次安装Stata，真正容易出错的不是“下一步”按钮，而是安装包来源、许可证版本和文件保存习惯。建议先完成学校授权确认，再安装与许可证一致的版本，最后用一个最小练习确认软件、路径和do文件都能正常工作。
+
+> [!IMPORTANT]
+> 只使用学校、单位或Stata官方提供的安装包和许可证。来源不明的修改版可能携带恶意程序，也会让后续更新、扩展包和复现环境失去可靠性。
+
+## 安装前准备什么
+
+先向学校图书馆、学院实验室或信息化部门确认是否购买了校园授权。有些学校提供统一下载入口，有些需要连接校园网或VPN，有些则发放个人授权码。拿到材料后确认三件事：
+
+1. 操作系统是Windows、macOS还是Linux。
+2. 许可证对应Stata/MP、Stata/SE还是Stata/BE。
+3. 是否收到License and Activation Key或`.stcodes`文件。
+
+MP、SE、BE主要区别在可处理规模与计算能力。不要因为看到“MP更快”就安装与许可证不匹配的版本，官方安装指南也要求先按授权信息辨认版本。
+
+## Windows与macOS怎么安装
+
+Windows用户运行学校或官方提供的安装程序，按提示选择许可证对应版本。若安装程序无法写入系统目录，可右键选择“以管理员身份运行”。macOS用户打开下载的安装镜像，将应用安装到Applications目录，再按授权提示完成设置。
+
+安装目录尽量保留默认值。论文数据和代码不要放进软件安装目录，而应单独建立项目文件夹，例如：
+
+```text
+thesis-project/
+├─ 01_raw_data/      原始数据，只读保存
+├─ 02_clean_data/    清洗后的数据
+├─ 03_do/            Stata代码
+├─ 04_output/        表格和图片
+└─ README.txt        数据来源与处理说明
+```
+
+## 第一次打开后检查什么
+
+打开Stata后，在命令窗口依次输入：
+
+```stata
+about
+update query
+sysuse auto, clear
+describe
+summarize price mpg weight
+```
+
+`about`用于核对版本和许可证；`update query`检查官方更新；`sysuse auto`载入内置示例数据。如果`describe`和`summarize`能正常给出结果，说明基础安装可用。
+
+## 为什么要马上建立do文件
+
+不要把所有命令都临时敲在命令窗口。打开Do-file Editor，新建文件并保存为`00_test.do`：
+
+```stata
+clear all
+set more off
+
+sysuse auto, clear
+describe
+summarize price mpg weight
+reg price mpg weight
+```
+
+从编辑器运行整段代码。能够重复得到相同结果，才说明你已经从“软件装上了”进入“分析可以复现”的状态。后续可继续学习[reghdfe安装与固定效应设置](/stata/reghdfe-guide)。
+
+## 中文路径和文件找不到怎么办
+
+初学者常见报错来自当前工作目录，而不是数据本身。可以用`pwd`查看当前目录，用`cd`切换目录：
+
+```stata
+pwd
+cd "D:/thesis-project"
+dir
+```
+
+尽量使用简短、稳定的英文文件夹名，不要频繁移动项目。Windows路径在Stata中可以使用正斜杠，带空格路径必须加引号。
+
+## 安装完成自查清单
+
+- 软件来自学校或官方渠道，许可证版本一致。
+- `about`能显示有效版本信息。
+- `update query`可以检查更新。
+- 内置`auto`数据能够打开并回归。
+- 已建立独立项目文件夹和第一份do文件。
+- 原始数据与清洗数据分开保存。
+
+如果软件能打开但导入自己的数据时报错，应先判断变量类型和路径，再参考[type mismatch r(109)排查方法](/stata/type-mismatch-r109)，不要通过反复重装掩盖数据问题。

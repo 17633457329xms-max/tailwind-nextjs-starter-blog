@@ -83,7 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8fafc" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#020617" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
-      <body className="bg-[#f8fafc] pl-[calc(100vw-100%)] text-slate-950 antialiased dark:bg-slate-950 dark:text-white">
+      <body className="bg-[#f4f1ea] pl-[calc(100vw-100%)] text-slate-950 antialiased dark:bg-[#111315] dark:text-white">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}

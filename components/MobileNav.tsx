@@ -2,11 +2,14 @@
 
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react'
 import { Fragment, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import Link from './Link'
 import headerNavLinks from '@/data/headerNavLinks'
+import { categories, isCategorySlug } from '@/data/knowledgeData'
 
 const MobileNav = () => {
   const [navShow, setNavShow] = useState(false)
+  const pathname = usePathname()
 
   const onToggleNav = () => {
     setNavShow((status) => !status)
@@ -53,16 +56,30 @@ const MobileNav = () => {
           >
             <DialogPanel className="fixed top-0 left-0 z-70 h-full w-full bg-white/95 duration-300 dark:bg-gray-950/98">
               <nav className="mt-8 flex h-full basis-0 flex-col items-start overflow-y-auto pt-2 pl-8 text-left">
-                {headerNavLinks.map((link) => (
-                  <Link
-                    key={link.title}
-                    href={link.href}
-                    className="mb-3 py-2 pr-4 text-xl font-bold tracking-wide text-slate-900 outline-none hover:text-blue-700 dark:text-slate-100 dark:hover:text-blue-300"
-                    onClick={onToggleNav}
-                  >
-                    {link.title}
-                  </Link>
-                ))}
+                {headerNavLinks.map((link) => {
+                  const active =
+                    pathname === link.href ||
+                    (link.href !== '/' && pathname.startsWith(`${link.href}/`))
+                  const slug = link.href.slice(1)
+                  const activeStyle = isCategorySlug(slug)
+                    ? categories[slug].theme.navActive
+                    : 'bg-slate-900 text-white dark:bg-white dark:text-slate-950'
+                  return (
+                    <Link
+                      key={link.title}
+                      href={link.href}
+                      aria-current={active ? 'page' : undefined}
+                      className={`mb-2 px-3 py-2 text-xl font-bold tracking-wide outline-none ${
+                        active
+                          ? activeStyle
+                          : 'text-slate-900 hover:bg-slate-100 dark:text-slate-100 dark:hover:bg-slate-900'
+                      }`}
+                      onClick={onToggleNav}
+                    >
+                      {link.title}
+                    </Link>
+                  )
+                })}
               </nav>
 
               <button

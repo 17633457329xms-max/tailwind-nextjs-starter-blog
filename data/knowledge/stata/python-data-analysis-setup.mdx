@@ -1,0 +1,107 @@
+---
+title: Python论文数据分析入门：安装、环境配置与第一份Notebook
+date: '2026-08-27'
+lastmod: '2026-08-27'
+summary: 面向零基础学生解释Python官方安装、虚拟环境、Jupyter、pandas数据读取、缺失值检查和项目文件结构，帮助跑通第一份可复现Notebook。
+category: stata
+tags: ['Python安装', 'Python数据分析', 'Jupyter', 'pandas']
+stage: ['零基础', '数据', '实证']
+difficulty: 零基础
+references: ['https://docs.python.org/3/using/windows.html', 'https://www.python.org/downloads/']
+---
+
+Python不是必须掌握的论文工具，但当你需要重复清洗大量文件、抓取公开数据、处理文本或把分析流程自动化时，它会明显节省时间。零基础入门的目标不是背语法，而是建立一个不会污染系统、别人也能复现的项目环境。
+
+## 从官方渠道安装
+
+Windows用户应从Python官方文档或下载页获取Python Install Manager或官方安装程序；macOS用户也应使用官方签名安装包或可信包管理方式。不要从网盘下载“集成破解版”，因为解释器、第三方包和证书状态都难以核验。
+
+安装后打开终端，检查：
+
+```text
+python --version
+py --version
+```
+
+能返回版本号说明命令已经可用。若系统存在多个Python，不要急着修改大量PATH设置，先确认`python`和`py`分别指向哪个解释器。
+
+## 为什么要使用虚拟环境
+
+不同论文项目可能依赖不同版本的软件包。虚拟环境让每个项目拥有独立依赖，避免“昨天能跑、今天升级后不能跑”。在论文项目目录执行：
+
+```text
+py -m venv .venv
+.venv\Scripts\activate
+python -m pip install --upgrade pip
+python -m pip install pandas openpyxl jupyter matplotlib statsmodels
+```
+
+macOS或Linux的激活命令通常是`source .venv/bin/activate`。激活后，终端提示符前会出现`.venv`。
+
+## 建立论文项目结构
+
+推荐将原始数据、代码和输出分开：
+
+```text
+thesis-python/
+├─ data_raw/
+├─ data_clean/
+├─ notebooks/
+├─ scripts/
+├─ output/
+└─ requirements.txt
+```
+
+原始数据只读保存。临时生成的Excel、图和回归表进入`output`，不要和原始数据混在一起。
+
+## 打开第一份Notebook
+
+在已激活环境的终端运行：
+
+```text
+jupyter notebook
+```
+
+浏览器打开后，在`notebooks`目录新建Python Notebook。第一段代码不要直接做复杂模型，而是确认读取、变量类型和缺失值：
+
+```python
+import pandas as pd
+
+df = pd.read_excel('../data_raw/sample.xlsx')
+
+print(df.shape)
+print(df.head())
+print(df.dtypes)
+print(df.isna().sum().sort_values(ascending=False).head(10))
+```
+
+`shape`告诉你行列数，`head`检查表头和前几行，`dtypes`检查变量类型，`isna`检查缺失。只要这四项还没看明白，就不应马上回归。
+
+## 第一次清洗要保留什么证据
+
+不要在Excel里手工删行后覆盖原文件。清洗应写进Notebook或脚本，并保存清洗后的新文件：
+
+```python
+clean = df.copy()
+clean.columns = clean.columns.str.strip().str.lower()
+clean = clean.drop_duplicates()
+clean.to_csv('../data_clean/sample_clean.csv', index=False, encoding='utf-8-sig')
+```
+
+每一步都写一句Markdown说明“为什么处理”，例如主键重复、字段空格或样本筛选。这样导师问到样本量变化时，你能找到确切原因。
+
+## Notebook与脚本怎么选择
+
+Notebook适合探索、图文解释和逐步展示；`.py`脚本适合稳定、批量和自动运行。早期可以在Notebook探索，流程确定后再把可复用函数移到`scripts`。论文最终交付至少应保留环境依赖：
+
+```text
+python -m pip freeze > requirements.txt
+```
+
+## 零基础最常见的三个误区
+
+1. 把安装多个编辑器误认为学会Python。先跑通一个环境即可。
+2. 复制代码但不检查变量类型和样本量。每次合并、筛选后都要核对行数。
+3. 用Python做不需要的复杂处理。简单描述统计用SPSS或Stata同样可以，工具要服从研究问题。
+
+准备进入实证时，可对照[Stata合并主键不唯一的检查逻辑](/stata/merge-key-not-unique)理解数据层级，并阅读[实证分析章节怎么写](/writing/empirical-analysis-writing)，把代码输出转换成可解释的论文证据。

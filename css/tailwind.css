@@ -4,12 +4,21 @@
 @source '../node_modules/pliny';
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+  Design system: Chinese academic editorial.
+  Foundation: warm paper (#f4f1ea), near-black ink, one vermilion brand accent.
+  Display type uses a Chinese serif stack; body type stays neutral and highly readable.
+  Category identity comes from six restrained, content-specific palettes rather than gradients.
+  Corners stay small, shadows are rare, and spacing/rules create the visual hierarchy.
+*/
+
 /* Core theme configuration */
 @theme {
   /* Font families */
   --font-sans:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
     'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-serif: 'Songti SC', 'Source Han Serif SC', 'Noto Serif CJK SC', STSong, SimSun, serif;
 
   /* Colors */
   /* Copied from https://tailwindcss.com/docs/theme#default-theme-variable-reference */
@@ -64,6 +73,7 @@
 
   body {
     font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
   }
 
   *,
@@ -89,6 +99,9 @@
 
 @layer utilities {
   .prose {
+    font-size: 1.0625rem;
+    line-height: 2;
+
     & a {
       color: var(--color-primary-500);
       &:hover {
@@ -99,11 +112,25 @@
       }
     }
     & :where(h1, h2) {
-      font-weight: 700;
+      font-family: var(--font-serif);
+      font-weight: 800;
       letter-spacing: var(--tracking-tight);
     }
     & h3 {
-      font-weight: 600;
+      font-family: var(--font-serif);
+      font-weight: 700;
+    }
+    & h2 {
+      margin-top: 3em;
+      border-top: 1px solid color-mix(in oklab, currentColor 18%, transparent);
+      padding-top: 1.1em;
+    }
+    & p {
+      text-wrap: pretty;
+    }
+    & blockquote {
+      border-left-width: 2px;
+      font-style: normal;
     }
     & :where(code):not(pre code) {
       color: var(--color-indigo-500);
