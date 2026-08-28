@@ -13,8 +13,8 @@ const contacts = [
   {
     type: 'wechat',
     title: '微信咨询',
-    description: '微信号：ameliavictor，添加时请备注“论文阶段 + 研究方向”。',
-    id: 'ameliavictor',
+    description: '微信号：quietnode_73，添加时请备注“论文阶段 + 研究方向”。',
+    id: 'quietnode_73',
     image: '/static/images/contact/wechat.jpg',
     width: 928,
     height: 1380,
