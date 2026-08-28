@@ -22,7 +22,7 @@ export interface DisciplineArticle {
   navSection?: DisciplineNavSection
 }
 
-export type DisciplineNavSection = 'research' | 'methods' | 'standards'
+export type DisciplineNavSection = 'research' | 'methods' | 'standards' | 'specialties'
 
 export const disciplineArticles: DisciplineArticle[] = [
   {
@@ -1339,16 +1339,18 @@ export const disciplineArticles: DisciplineArticle[] = [
   },
 ]
 
-const navSections: DisciplineNavSection[] = ['research', 'methods', 'standards']
+const contentNavSections = ['research', 'methods', 'standards'] as const
+const navSections: DisciplineNavSection[] = [...contentNavSections, 'specialties']
 const navSectionLabels: Record<DisciplineNavSection, string> = {
   research: '研究议题',
   methods: '方法路径',
   standards: '质量标准',
+  specialties: '具体专业',
 }
 
 const extraTopics: Record<
   DisciplineArticle['discipline'],
-  Record<DisciplineNavSection, string[]>
+  Record<(typeof contentNavSections)[number], string[]>
 > = {
   law: {
     research: [
@@ -1456,7 +1458,7 @@ disciplineArticles.forEach((article) => {
   const index = disciplineArticles
     .filter((item) => item.discipline === article.discipline)
     .indexOf(article)
-  article.navSection = navSections[Math.floor(index / 2)]
+  article.navSection = contentNavSections[Math.floor(index / 2)]
 })
 
 const makeExtraArticle = (
@@ -1519,11 +1521,363 @@ for (const [discipline, sections] of Object.entries(extraTopics) as [
   DisciplineArticle['discipline'],
   Record<DisciplineNavSection, string[]>,
 ][]) {
-  for (const navSection of navSections) {
+  for (const navSection of contentNavSections) {
     sections[navSection].forEach((title, index) => {
       disciplineArticles.push(makeExtraArticle(discipline, navSection, title, index))
     })
   }
+}
+
+const scaledTopicSeeds: Record<
+  DisciplineArticle['discipline'],
+  Record<(typeof contentNavSections)[number], string[]>
+> = {
+  law: {
+    research: [
+      '平台经济治理',
+      '个人信息保护',
+      '公司治理',
+      '数字证据规则',
+      '行政裁量控制',
+      '劳动者权益保护',
+      '生态环境损害',
+      '涉外商事规则',
+      '知识产权保护',
+      '基层社会治理',
+      '未成年人保护',
+    ],
+    methods: [
+      '法源识别',
+      '体系解释',
+      '目的解释',
+      '比较法',
+      '案例编码',
+      '裁判文书分析',
+      '规范评估',
+      '法律实证',
+      '访谈研究',
+      '制度史研究',
+      '法治评估',
+    ],
+    standards: [
+      '法学文献综述',
+      '案例引用规范',
+      '法条时效核对',
+      '法律概念界定',
+      '反对观点回应',
+      '裁判理由比较',
+      '开题报告论证',
+      '论文结构修改',
+      '脚注与参考文献',
+      '结论边界',
+      '学术诚信',
+    ],
+  },
+  education: {
+    research: [
+      '生成式AI学习',
+      '教师专业发展',
+      '课堂评价改革',
+      '县域教育均衡',
+      '家庭教育参与',
+      '学生心理支持',
+      '职业教育产教融合',
+      '高等教育质量',
+      '学前教育质量',
+      '特殊教育支持',
+      '教育数字化',
+    ],
+    methods: [
+      '问卷量表',
+      '半结构访谈',
+      '课堂观察',
+      '准实验设计',
+      '行动研究',
+      '混合研究',
+      '学习分析',
+      '案例研究',
+      '追踪研究',
+      '文本分析',
+      '教育评价',
+    ],
+    standards: [
+      '教育文献综述',
+      '研究伦理',
+      '样本说明',
+      '信效度报告',
+      '质性编码透明',
+      '结果表格呈现',
+      '教育概念操作化',
+      '结论外推边界',
+      '开题报告写作',
+      '教育论文修改',
+      '参考文献规范',
+    ],
+  },
+  literature: {
+    research: [
+      '网络文学叙事',
+      '古典诗词意象',
+      '现当代城市书写',
+      '女性文学表达',
+      '儿童文学传播',
+      '科幻文学想象',
+      '地域文学建构',
+      '文学翻译传播',
+      '戏曲文本演变',
+      '红色文学书写',
+      '跨媒介改编',
+    ],
+    methods: [
+      '文本细读',
+      '叙事学分析',
+      '意象分析',
+      '修辞分析',
+      '接受史研究',
+      '版本校勘',
+      '比较文学',
+      '文学地理',
+      '数字人文',
+      '档案研究',
+      '话语分析',
+    ],
+    standards: [
+      '文学文献综述',
+      '版本与页码',
+      '理论概念界定',
+      '引文证据链',
+      '文本范围说明',
+      '比较对象选择',
+      '文学史料核验',
+      '章节结构修改',
+      '结论尺度',
+      '学术规范',
+      '开题报告写作',
+    ],
+  },
+  art: {
+    research: [
+      '数字媒介艺术',
+      '地方图像资源',
+      '服务设计体验',
+      '短视频视听叙事',
+      '公共艺术参与',
+      '非遗当代转化',
+      '博物馆展示',
+      '视觉传达设计',
+      '音乐表演传播',
+      '舞蹈身体表达',
+      '动画叙事',
+    ],
+    methods: [
+      '作品形式分析',
+      '图像学',
+      '视觉文化研究',
+      '用户访谈',
+      '设计实验',
+      '档案图录研究',
+      '田野观察',
+      '创作实践反思',
+      '比较案例研究',
+      '展览研究',
+      '媒介分析',
+    ],
+    standards: [
+      '艺术文献综述',
+      '图版引用规范',
+      '作品信息核验',
+      '研究对象边界',
+      '创作过程记录',
+      '形式判断证据',
+      '图片版权说明',
+      '艺术开题报告',
+      '论文结构修改',
+      '结论与创新点',
+      '参考文献规范',
+    ],
+  },
+  marxism: {
+    research: [
+      '青年价值认同',
+      '共同富裕实践',
+      '大思政课协同',
+      '乡村治理',
+      '数字劳动',
+      '基层党建',
+      '红色文化传播',
+      '生态文明建设',
+      '国家治理现代化',
+      '网络意识形态',
+      '社会公平正义',
+    ],
+    methods: [
+      '经典文本研读',
+      '政策文本分析',
+      '调查研究',
+      '访谈研究',
+      '问卷研究',
+      '历史比较',
+      '案例研究',
+      '概念史方法',
+      '话语分析',
+      '田野研究',
+      '理论联系实际',
+    ],
+    standards: [
+      '马克思主义文献综述',
+      '经典著作引用',
+      '理论概念界定',
+      '规范与经验分层',
+      '政策材料核验',
+      '调查伦理',
+      '开题报告写作',
+      '论文结构修改',
+      '结论边界',
+      '理论创新表述',
+      '学术诚信',
+    ],
+  },
+}
+
+const scaledTitleSuffixes: Record<(typeof contentNavSections)[number], string[]> = {
+  research: [
+    '论文选题：问题边界与材料来源',
+    '研究问题：从现象到可论证命题',
+    '开题设计：理论机制与可行性检查',
+    '前沿议题：研究空白与章节结构',
+  ],
+  methods: [
+    '怎么做：步骤、材料与分析边界',
+    '研究设计：样本、证据与反例处理',
+    '入门指南：从工具选择到结果解释',
+    '论文应用：常见误区与质量自检',
+  ],
+  standards: [
+    '怎么写：论证链、证据与引用自检',
+    '质量检查：常见错误与修改顺序',
+    '开题与写作：概念一致和结构优化',
+    '规范指南：材料核验与结论边界',
+  ],
+}
+
+const disciplineSpecialties: Record<DisciplineArticle['discipline'], string[]> = {
+  law: [
+    '法学理论',
+    '法律史',
+    '宪法学与行政法学',
+    '刑法学',
+    '民商法学',
+    '诉讼法学',
+    '经济法学',
+    '环境与资源保护法学',
+    '国际法学',
+    '知识产权法学',
+  ],
+  education: [
+    '教育学原理',
+    '课程与教学论',
+    '教育史',
+    '比较教育学',
+    '学前教育学',
+    '高等教育学',
+    '成人教育学',
+    '职业技术教育学',
+    '特殊教育学',
+    '教育技术学',
+  ],
+  literature: [
+    '文艺学',
+    '语言学及应用语言学',
+    '汉语言文字学',
+    '中国古典文献学',
+    '中国古代文学',
+    '中国现当代文学',
+    '中国少数民族语言文学',
+    '比较文学与世界文学',
+    '戏剧戏曲学',
+    '儿童文学',
+  ],
+  art: [
+    '艺术学理论',
+    '音乐学',
+    '舞蹈学',
+    '戏剧与影视学',
+    '美术学',
+    '设计学',
+    '广播电视',
+    '动画',
+    '书法学',
+    '文物与博物馆学',
+  ],
+  marxism: [
+    '马克思主义基本原理',
+    '马克思主义发展史',
+    '马克思主义中国化研究',
+    '国外马克思主义研究',
+    '思想政治教育',
+    '中国近现代史基本问题研究',
+    '中共党史党建学',
+    '纪检监察学',
+    '青年发展研究',
+    '国家治理研究',
+  ],
+}
+
+const specialtySuffixes = [
+  '论文选题：核心问题与材料边界',
+  '文献综述怎么写：概念谱系与争议地图',
+  '研究方法：证据类型、样本与分析路径',
+  '开题报告：研究设计与可行性检查',
+  '论文修改：论证结构与引用规范',
+]
+
+const createScaledArticle = (
+  discipline: DisciplineArticle['discipline'],
+  navSection: DisciplineNavSection,
+  title: string,
+  index: number,
+  specialty?: string
+) => {
+  const article = makeExtraArticle(discipline, navSection, title, index)
+  article.slug = `guide-${discipline}-${navSection}-${index + 1}`
+  article.category = navSectionLabels[navSection]
+  article.tags = Array.from(
+    new Set([navSectionLabels[navSection], ...article.tags, ...(specialty ? [specialty] : [])])
+  )
+  article.summary = `围绕“${title}”提供可执行的研究问题拆解、材料选择、分析步骤与写作自检，适合${specialty ?? navSectionLabels[navSection]}方向的论文学习与修改。`
+  article.readingMinutes = 14
+  return article
+}
+
+for (const discipline of Object.keys(scaledTopicSeeds) as DisciplineArticle['discipline'][]) {
+  for (const navSection of contentNavSections) {
+    const existing = disciplineArticles.filter(
+      (article) => article.discipline === discipline && article.navSection === navSection
+    ).length
+    const required = 50 - existing
+    for (let index = 0; index < required; index += 1) {
+      const seed =
+        scaledTopicSeeds[discipline][navSection][
+          index % scaledTopicSeeds[discipline][navSection].length
+        ]
+      const suffix =
+        scaledTitleSuffixes[navSection][
+          Math.floor(index / scaledTopicSeeds[discipline][navSection].length) % 4
+        ]
+      disciplineArticles.push(
+        createScaledArticle(discipline, navSection, `${seed}${suffix}`, existing + index)
+      )
+    }
+  }
+
+  disciplineSpecialties[discipline].forEach((specialty, specialtyIndex) => {
+    specialtySuffixes.forEach((suffix, suffixIndex) => {
+      const index = specialtyIndex * specialtySuffixes.length + suffixIndex
+      disciplineArticles.push(
+        createScaledArticle(discipline, 'specialties', `${specialty}${suffix}`, index, specialty)
+      )
+    })
+  })
 }
 
 export function getDisciplineArticles(discipline: DisciplineArticle['discipline']) {

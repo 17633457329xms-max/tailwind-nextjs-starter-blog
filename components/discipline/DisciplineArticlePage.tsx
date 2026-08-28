@@ -156,7 +156,7 @@ export default function DisciplineArticlePage({
                 className="mt-4 inline-flex font-black hover:underline"
                 style={{ color: discipline.color }}
               >
-                提交问题摘要 →
+                微信、QQ咨询 →
               </Link>
             </section>
           </div>

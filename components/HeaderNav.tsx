@@ -29,7 +29,7 @@ export default function HeaderNav() {
     const disciplineBase = pathname.split('/').slice(0, 3).join('/')
     return (
       <nav className="hidden items-center gap-1 lg:flex" aria-label="学科导航">
-        {['研究议题', '方法路径', '质量标准'].map((title, index) => (
+        {['研究议题', '方法路径', '质量标准', '具体专业'].map((title, index) => (
           <Link
             key={title}
             href={`${disciplineBase}#section-${index + 1}`}

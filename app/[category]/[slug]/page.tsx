@@ -124,7 +124,7 @@ export default async function Page({
                 href="/consulting"
                 className={`mt-4 inline-flex font-bold hover:underline ${categoryConfig.theme.cardLink}`}
               >
-                提交问题摘要 →
+                微信、QQ咨询 →
               </Link>
             </div>
           </div>

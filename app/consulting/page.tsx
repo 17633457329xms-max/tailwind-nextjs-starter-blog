@@ -7,7 +7,7 @@ import siteMetadata from '@/data/siteMetadata'
 export const metadata = genPageMetadata({
   title: '经管论文研究设计、Stata与论文润色一对一定制咨询',
   description:
-    '提交经管论文选题、方法、变量数据、Stata代码、写作或润色问题摘要，确认适合的诊断与辅导方式。',
+    '通过微信或QQ直接联系，沟通经管论文选题、方法、变量数据、Stata代码、写作或润色优化一对一定制需求。',
 })
 
 export default function ConsultingPage() {
@@ -36,8 +36,8 @@ export default function ConsultingPage() {
       />
       <PageHero
         eyebrow="一对一问题诊断与阶段辅导"
-        title="先说明问题，再确认适合的服务方式"
-        description="提交论文阶段、研究方向和当前卡点。先进行需求分类，再确定适合单次诊断、论文润色优化一对一定制还是阶段辅导。"
+        title="通过微信或QQ直接联系"
+        description="本站不设在线咨询表单。可通过页面展示的微信或QQ说明论文阶段、研究方向和当前卡点，再确认适合的学习辅导或论文润色优化一对一定制方式。"
         actions={
           <Link
             href="/service-standards"

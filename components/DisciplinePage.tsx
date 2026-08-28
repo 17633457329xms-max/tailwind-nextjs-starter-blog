@@ -30,6 +30,11 @@ export default function DisciplinePage({
       discipline.standards,
       '博士层级写作尤其重视原创问题、证据透明、概念一致及对既有研究的实质推进。',
     ],
+    [
+      '具体专业学习路径',
+      ['按专业查看选题与问题', '按专业查看常用材料与方法', '按专业查看写作与引用规范'],
+      '选择顶部“具体专业”后，可用专业名称筛选当前学科覆盖的全部专业方向，并进入对应文章学习。',
+    ],
   ] as const
 
   useEffect(() => {
@@ -47,7 +52,7 @@ export default function DisciplinePage({
     ? sections.filter((_, index) => index + 1 === activeSection)
     : sections
   const activeNavSection = activeSection
-    ? (['research', 'methods', 'standards'] as const)[activeSection - 1]
+    ? (['research', 'methods', 'standards', 'specialties'] as const)[activeSection - 1]
     : null
   const visibleArticles = activeNavSection
     ? articles.filter((article) => article.navSection === activeNavSection)
@@ -120,8 +125,8 @@ export default function DisciplinePage({
             <h2 className="mt-3 font-serif text-3xl font-black">{articleLibraryTitle}</h2>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-300">
               {activeSection
-                ? `当前仅展示“${sections[activeSection - 1][0]}”下的 6 篇专属文章。每篇均提供可操作的研究步骤、证据边界、常见误区和权威资料入口。`
-                : '每篇内容均提供可操作的研究步骤、证据矩阵、常见误区和权威资料入口。请选择顶部栏目查看对应的 6 篇专属文章。'}
+                ? `当前仅展示“${sections[activeSection - 1][0]}”下的 ${visibleArticles.length} 篇专属文章。每篇均提供可操作的研究步骤、证据边界、常见误区和权威资料入口。`
+                : '每篇内容均提供可操作的研究步骤、证据矩阵、常见误区和权威资料入口。请选择顶部栏目查看对应的专属文章。'}
             </p>
           </div>
           <p className="text-sm font-black text-slate-500">
@@ -138,7 +143,7 @@ export default function DisciplinePage({
         <div>
           <h2 className="font-serif text-2xl font-black">一对一定制研究辅导与论文润色优化</h2>
           <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-300">
-            先提交培养层次、研究方向、当前材料和具体卡点，再确认选题诊断、方法辅导、写作反馈或论文润色优化一对一定制的范围。
+            通过微信或QQ简要说明培养层次、研究方向和当前卡点，再确认选题诊断、方法辅导、写作反馈或论文润色优化一对一定制的范围。
           </p>
         </div>
         <Link
@@ -146,7 +151,7 @@ export default function DisciplinePage({
           className="px-6 py-3 text-sm font-black text-white"
           style={{ backgroundColor: discipline.color }}
         >
-          提交问题摘要
+          微信、QQ咨询
         </Link>
       </section>
     </div>

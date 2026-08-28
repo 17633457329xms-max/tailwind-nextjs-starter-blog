@@ -21,7 +21,7 @@ export default function ServiceStandardsPage() {
             href="/consulting"
             className="rounded-xl bg-amber-400 px-5 py-3 text-sm font-black text-blue-950 hover:bg-amber-300"
           >
-            提交问题摘要
+            微信、QQ咨询
           </Link>
         }
       />
@@ -60,7 +60,7 @@ export default function ServiceStandardsPage() {
           [
             '材料与隐私',
             [
-              '首次只提交问题摘要',
+              '首次通过微信或QQ简要说明问题',
               '必要材料按约定方式传递',
               '联系方式与正文不进入分析事件',
               '页面案例仅使用已获授权内容',
