@@ -1,9 +1,20 @@
-import { allKnowledge } from 'contentlayer/generated'
-import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
-import Main from '../Main'
+import DisciplinePage from '@/components/DisciplinePage'
+import { getDisciplineArticles } from '@/data/disciplineArticles'
+import { disciplines } from '@/data/disciplines'
+import { genPageMetadata } from '@/app/seo'
 
-export default function Page() {
-  const published = allKnowledge.filter((item) => !item.draft)
-  const featured = allCoreContent(sortPosts(published)).slice(0, 6)
-  return <Main featured={featured} totalCount={published.length} />
+const discipline = disciplines['economics-management']
+
+export const metadata = genPageMetadata({
+  title: '经管论文选题、实证方法、Stata与写作研究中心',
+  description: `${discipline.statement}${discipline.audience}`,
+})
+
+export default function EconomicsManagementPage() {
+  return (
+    <DisciplinePage
+      discipline={discipline}
+      articles={getDisciplineArticles('economics-management')}
+    />
+  )
 }

@@ -29,7 +29,7 @@ export default async function Page({
   params: Promise<{ discipline: string; slug: string }>
 }) {
   const { discipline, slug } = await params
-  if (!isDisciplineSlug(discipline) || discipline === 'economics-management') notFound()
+  if (!isDisciplineSlug(discipline)) notFound()
   const article = getDisciplineArticle(discipline, slug)
   if (!article) notFound()
   const related = getDisciplineArticles(discipline)

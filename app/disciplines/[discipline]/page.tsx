@@ -4,10 +4,7 @@ import { disciplines, disciplineOrder, isDisciplineSlug } from '@/data/disciplin
 import { genPageMetadata } from '@/app/seo'
 import { getDisciplineArticles } from '@/data/disciplineArticles'
 
-export const generateStaticParams = () =>
-  disciplineOrder
-    .filter((slug) => slug !== 'economics-management')
-    .map((discipline) => ({ discipline }))
+export const generateStaticParams = () => disciplineOrder.map((discipline) => ({ discipline }))
 
 export async function generateMetadata({ params }: { params: Promise<{ discipline: string }> }) {
   const { discipline } = await params
@@ -21,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ disciplin
 
 export default async function Page({ params }: { params: Promise<{ discipline: string }> }) {
   const { discipline } = await params
-  if (!isDisciplineSlug(discipline) || discipline === 'economics-management') notFound()
+  if (!isDisciplineSlug(discipline)) notFound()
   return (
     <DisciplinePage
       discipline={disciplines[discipline]}

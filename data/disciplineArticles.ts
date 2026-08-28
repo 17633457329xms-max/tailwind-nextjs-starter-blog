@@ -9,7 +9,7 @@ export interface DisciplineArticleSection {
 
 export interface DisciplineArticle {
   slug: string
-  discipline: Exclude<DisciplineSlug, 'economics-management'>
+  discipline: DisciplineSlug
   category: string
   title: string
   summary: string
@@ -1352,6 +1352,11 @@ const extraTopics: Record<
   DisciplineArticle['discipline'],
   Record<(typeof contentNavSections)[number], string[]>
 > = {
+  'economics-management': {
+    research: ['公司治理与企业绩效', '数字化转型', '金融风险管理', '供应链韧性'],
+    methods: ['面板数据模型', '双重差分', '工具变量', '机制与异质性检验'],
+    standards: ['经管文献综述', '变量口径核验', '实证结果复现', '论文结构修改'],
+  },
   law: {
     research: [
       '民商法论文选题：平台交易纠纷的规范问题',
@@ -1468,6 +1473,7 @@ const makeExtraArticle = (
   index: number
 ): DisciplineArticle => {
   const name = {
+    'economics-management': '经济学与管理学',
     law: '法学',
     education: '教育学',
     literature: '中国语言文学',
@@ -1532,6 +1538,47 @@ const scaledTopicSeeds: Record<
   DisciplineArticle['discipline'],
   Record<(typeof contentNavSections)[number], string[]>
 > = {
+  'economics-management': {
+    research: [
+      '企业数字化转型',
+      '公司治理与投资者保护',
+      '金融科技与普惠金融',
+      '供应链韧性',
+      '绿色创新',
+      '营商环境优化',
+      '高质量就业',
+      '数字平台竞争',
+      '资本市场信息披露',
+      '消费行为变化',
+      '乡村产业振兴',
+    ],
+    methods: [
+      '固定效应模型',
+      '双重差分',
+      '事件研究法',
+      '工具变量法',
+      '断点回归',
+      '倾向得分匹配',
+      '中介效应检验',
+      '异质性分析',
+      '文本分析',
+      'DEA效率分析',
+      '结构方程模型',
+    ],
+    standards: [
+      '经管文献综述',
+      '变量定义与口径',
+      '数据清洗记录',
+      '回归表规范',
+      '稳健性检验',
+      '内生性回应',
+      '机制检验写作',
+      '论文开题报告',
+      '实证结论边界',
+      'Stata代码复现',
+      '参考文献规范',
+    ],
+  },
   law: {
     research: [
       '平台经济治理',
@@ -1761,6 +1808,18 @@ const scaledTitleSuffixes: Record<(typeof contentNavSections)[number], string[]>
 }
 
 const disciplineSpecialties: Record<DisciplineArticle['discipline'], string[]> = {
+  'economics-management': [
+    '工商管理',
+    '金融学',
+    '会计学',
+    '审计学',
+    '物流管理',
+    '国际经济与贸易',
+    '市场营销',
+    '人力资源管理',
+    '财务管理',
+    '电子商务',
+  ],
   law: [
     '法学理论',
     '法律史',

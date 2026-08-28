@@ -147,7 +147,11 @@ export default function DisciplinePage({
           </p>
         </div>
         <Link
-          href={`/disciplines/${discipline.slug}/consulting`}
+          href={
+            discipline.slug === 'economics-management'
+              ? '/consulting'
+              : `/disciplines/${discipline.slug}/consulting`
+          }
           className="px-6 py-3 text-sm font-black text-white"
           style={{ backgroundColor: discipline.color }}
         >
