@@ -1,3 +1,6 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Link from '@/components/Link'
 import type { DisciplineConfig } from '@/data/disciplines'
 import type { DisciplineArticle } from '@/data/disciplineArticles'
@@ -10,6 +13,7 @@ export default function DisciplinePage({
   discipline: DisciplineConfig
   articles: DisciplineArticle[]
 }) {
+  const [activeSection, setActiveSection] = useState<number | null>(null)
   const sections = [
     [
       '博士层级研究议题',
@@ -27,6 +31,30 @@ export default function DisciplinePage({
       '博士层级写作尤其重视原创问题、证据透明、概念一致及对既有研究的实质推进。',
     ],
   ] as const
+
+  useEffect(() => {
+    const readHash = () => {
+      const section = Number(window.location.hash.replace('#section-', ''))
+      setActiveSection(section >= 1 && section <= sections.length ? section : null)
+    }
+
+    readHash()
+    window.addEventListener('hashchange', readHash)
+    return () => window.removeEventListener('hashchange', readHash)
+  }, [sections.length])
+
+  const visibleSections = activeSection
+    ? sections.filter((_, index) => index + 1 === activeSection)
+    : sections
+  const activeNavSection = activeSection
+    ? (['research', 'methods', 'standards'] as const)[activeSection - 1]
+    : null
+  const visibleArticles = activeNavSection
+    ? articles.filter((article) => article.navSection === activeNavSection)
+    : articles
+  const articleLibraryTitle = activeSection
+    ? `${sections[activeSection - 1][0]}内容库`
+    : '从方法、证据和真实研究问题开始'
   return (
     <div className="py-10 sm:py-14">
       <nav className="mb-6 text-sm text-slate-500">
@@ -47,30 +75,41 @@ export default function DisciplinePage({
         </p>
         <p className="mt-3 text-sm text-slate-500">{discipline.audience}</p>
       </header>
-      <div className="grid gap-0 border-l border-black/15 lg:grid-cols-3 dark:border-white/15">
-        {sections.map(([title, items, note], index) => (
-          <section
-            id={`section-${index + 1}`}
-            key={title}
-            className="border-r border-b border-black/15 p-7 dark:border-white/15"
-          >
-            <p className="text-xs font-black tracking-[0.18em]" style={{ color: discipline.color }}>
-              0{index + 1}
-            </p>
-            <h2 className="mt-4 font-serif text-2xl font-black">{title}</h2>
-            <ul className="mt-6 space-y-4">
-              {items.map((item) => (
-                <li
-                  key={item}
-                  className="border-t border-black/10 pt-4 text-sm font-bold dark:border-white/10"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <p className="mt-6 text-sm leading-7 text-slate-500">{note}</p>
-          </section>
-        ))}
+      <div
+        className={`grid gap-0 border-l border-black/15 dark:border-white/15 ${
+          activeSection ? 'lg:grid-cols-1' : 'lg:grid-cols-3'
+        }`}
+        aria-live="polite"
+      >
+        {visibleSections.map(([title, items, note]) => {
+          const index = sections.findIndex(([sectionTitle]) => sectionTitle === title)
+          return (
+            <section
+              id={`section-${index + 1}`}
+              key={title}
+              className="border-r border-b border-black/15 p-7 dark:border-white/15"
+            >
+              <p
+                className="text-xs font-black tracking-[0.18em]"
+                style={{ color: discipline.color }}
+              >
+                0{index + 1}
+              </p>
+              <h2 className="mt-4 font-serif text-2xl font-black">{title}</h2>
+              <ul className="mt-6 space-y-4">
+                {items.map((item) => (
+                  <li
+                    key={item}
+                    className="border-t border-black/10 pt-4 text-sm font-bold dark:border-white/10"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-6 text-sm leading-7 text-slate-500">{note}</p>
+            </section>
+          )
+        })}
       </div>
       <section className="border-b border-black/15 py-12 sm:py-16 dark:border-white/15">
         <div className="mb-8 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
@@ -78,14 +117,19 @@ export default function DisciplinePage({
             <p className="text-xs font-black tracking-[0.18em]" style={{ color: discipline.color }}>
               深度内容库
             </p>
-            <h2 className="mt-3 font-serif text-3xl font-black">从方法、证据和真实研究问题开始</h2>
+            <h2 className="mt-3 font-serif text-3xl font-black">{articleLibraryTitle}</h2>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-300">
-              每篇内容均提供可操作的研究步骤、证据矩阵、常见误区和权威资料入口。先用标签筛选，再进入全文。
+              {activeSection
+                ? `当前仅展示“${sections[activeSection - 1][0]}”下的 6 篇专属文章。每篇均提供可操作的研究步骤、证据边界、常见误区和权威资料入口。`
+                : '每篇内容均提供可操作的研究步骤、证据矩阵、常见误区和权威资料入口。请选择顶部栏目查看对应的 6 篇专属文章。'}
             </p>
           </div>
-          <p className="text-sm font-black text-slate-500">首批 {articles.length} 篇 · 持续更新</p>
+          <p className="text-sm font-black text-slate-500">
+            {activeSection ? `当前 ${visibleArticles.length} 篇` : `共 ${articles.length} 篇`} ·
+            持续更新
+          </p>
         </div>
-        <DisciplineArticleExplorer articles={articles} discipline={discipline} />
+        <DisciplineArticleExplorer articles={visibleArticles} discipline={discipline} />
       </section>
       <section
         className="mt-10 grid gap-8 border p-8 lg:grid-cols-[1fr_auto] lg:items-center"
@@ -98,7 +142,7 @@ export default function DisciplinePage({
           </p>
         </div>
         <Link
-          href="/consulting"
+          href={`/disciplines/${discipline.slug}/consulting`}
           className="px-6 py-3 text-sm font-black text-white"
           style={{ backgroundColor: discipline.color }}
         >

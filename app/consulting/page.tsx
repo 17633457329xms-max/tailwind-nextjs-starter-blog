@@ -1,5 +1,4 @@
 import PageHero from '@/components/PageHero'
-import ConsultationForm from '@/components/contact/ConsultationForm'
 import ContactCards from '@/components/contact/ContactCards'
 import Link from '@/components/Link'
 import { genPageMetadata } from '@/app/seo'
@@ -49,9 +48,8 @@ export default function ConsultingPage() {
         }
       />
 
-      <section className="grid gap-8 py-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
-        <ConsultationForm />
-        <div className="lg:sticky lg:top-24">
+      <section className="py-12">
+        <div className="max-w-3xl">
           <div className="mb-5 rounded-2xl border border-amber-200 bg-amber-50 p-5 dark:border-amber-900 dark:bg-amber-950/30">
             <h2 className="font-black">希望直接联系？</h2>
             <p className="mt-2 text-sm leading-7 text-slate-700 dark:text-slate-300">

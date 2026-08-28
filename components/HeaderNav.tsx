@@ -13,6 +13,9 @@ function activeClass(href: string) {
 
 export default function HeaderNav() {
   const pathname = usePathname()
+  const syncDisciplineSection = () => {
+    window.setTimeout(() => window.dispatchEvent(new Event('hashchange')), 0)
+  }
 
   if (pathname === '/') {
     return (
@@ -30,6 +33,7 @@ export default function HeaderNav() {
           <Link
             key={title}
             href={`${disciplineBase}#section-${index + 1}`}
+            onClick={syncDisciplineSection}
             className="px-2.5 py-2 text-sm font-semibold text-slate-700 hover:bg-white dark:text-slate-200 dark:hover:bg-slate-900"
           >
             {title}
