@@ -1,4 +1,5 @@
 import Link from '@/components/Link'
+import CopyableCodeBlock from './CopyableCodeBlock'
 import type { DisciplineArticle } from '@/data/disciplineArticles'
 import type { DisciplineConfig } from '@/data/disciplines'
 import DisciplineArticleCard from './DisciplineArticleCard'
@@ -174,30 +175,13 @@ export default function DisciplineArticlePage({
             )}
             {article.chart && <PublicDataChart chart={article.chart} color={discipline.color} />}
             {article.codeExample && (
-              <section className="not-prose mb-10 border border-black/15 dark:border-white/15">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/15 px-5 py-4 dark:border-white/15">
-                  <div>
-                    <p
-                      className="text-xs font-black tracking-widest"
-                      style={{ color: discipline.color }}
-                    >
-                      可复现代码示例
-                    </p>
-                    <h2 className="mt-1 font-serif text-xl font-black">
-                      {article.codeExample.title}
-                    </h2>
-                  </div>
-                  <span className="border border-black/15 px-2 py-1 text-xs font-black dark:border-white/15">
-                    {article.codeExample.language}
-                  </span>
-                </div>
-                <pre className="overflow-x-auto bg-slate-950 p-5 text-sm leading-6 text-slate-100">
-                  <code>{article.codeExample.code}</code>
-                </pre>
-                <p className="px-5 pb-5 text-sm leading-7 text-slate-600 dark:text-slate-300">
-                  {article.codeExample.note}
-                </p>
-              </section>
+              <CopyableCodeBlock
+                code={article.codeExample.code}
+                language={article.codeExample.language}
+                title={article.codeExample.title}
+                note={article.codeExample.note}
+                color={discipline.color}
+              />
             )}
             <div className="prose prose-slate dark:prose-invert prose-headings:scroll-mt-24 max-w-none">
               {article.sections.map((section, index) => (
