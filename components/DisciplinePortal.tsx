@@ -16,8 +16,7 @@ export default function DisciplinePortal() {
       <section className="grid border-t border-l border-black/15 sm:grid-cols-2 lg:grid-cols-3 dark:border-white/15">
         {disciplineOrder.map((slug, index) => {
           const item = disciplines[slug]
-          const href =
-            slug === 'economics-management' ? '/economics-management' : `/disciplines/${slug}`
+          const href = `/disciplines/${slug}`
           return (
             <Link
               key={slug}

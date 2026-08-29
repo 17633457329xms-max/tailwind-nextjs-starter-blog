@@ -7,6 +7,30 @@ export interface DisciplineArticleSection {
   table?: { headers: string[]; rows: string[][]; caption: string }
 }
 
+export interface DisciplineCaseStudy {
+  title: string
+  context: string
+  takeaway: string
+  sourceLabel: string
+  sourceUrl: string
+}
+
+export interface DisciplineChart {
+  title: string
+  description: string
+  unit: string
+  sourceLabel: string
+  sourceUrl: string
+  values: { label: string; value: number }[]
+}
+
+export interface DisciplineCodeExample {
+  title: string
+  language: string
+  code: string
+  note: string
+}
+
 export interface DisciplineArticle {
   slug: string
   discipline: DisciplineSlug
@@ -20,6 +44,9 @@ export interface DisciplineArticle {
   sections: DisciplineArticleSection[]
   references: { label: string; url: string }[]
   navSection?: DisciplineNavSection
+  caseStudy?: DisciplineCaseStudy
+  chart?: DisciplineChart
+  codeExample?: DisciplineCodeExample
 }
 
 export type DisciplineNavSection = 'research' | 'methods' | 'standards' | 'specialties'
@@ -1352,10 +1379,20 @@ const extraTopics: Record<
   DisciplineArticle['discipline'],
   Record<(typeof contentNavSections)[number], string[]>
 > = {
-  'economics-management': {
-    research: ['公司治理与企业绩效', '数字化转型', '金融风险管理', '供应链韧性'],
-    methods: ['面板数据模型', '双重差分', '工具变量', '机制与异质性检验'],
-    standards: ['经管文献综述', '变量口径核验', '实证结果复现', '论文结构修改'],
+  economics: {
+    research: [
+      '数字经济与生产率',
+      '金融风险与市场行为',
+      '区域发展与公共政策',
+      '劳动就业与消费决策',
+    ],
+    methods: ['面板数据模型', '双重差分', '工具变量', '结构与机制检验'],
+    standards: ['经济学文献综述', '变量口径核验', '实证结果复现', '论文结构修改'],
+  },
+  management: {
+    research: ['公司治理与企业绩效', '数字化转型', '供应链韧性', '组织行为与创新管理'],
+    methods: ['面板实证模型', '案例研究', '问卷与结构方程', '机制与异质性检验'],
+    standards: ['管理学文献综述', '构念与量表核验', '研究过程复现', '论文结构修改'],
   },
   law: {
     research: [
@@ -1375,6 +1412,46 @@ const extraTopics: Record<
       '法学论文注释规范：法条、案例与期刊文献引用',
       '法学论文开题报告怎么写：问题、法源与论证路线',
       '法学论文修改清单：概念一致、时点准确与反驳处理',
+    ],
+  },
+  philosophy: {
+    research: [
+      '哲学论文选题：人工智能伦理与责任归属',
+      '中国哲学论文选题：传统概念的现代阐释',
+      '外国哲学论文选题：认识论争议与知识辩护',
+      '伦理学论文选题：公共正义与制度选择',
+    ],
+    methods: [
+      '哲学论文概念分析怎么做：必要条件、反例与概念边界',
+      '哲学经典文本细读：版本、语境与论证重建',
+      '哲学论文思想史方法：人物、问题与时代条件',
+      '规范伦理研究：原则、案例与反对意见处理',
+    ],
+    standards: [
+      '哲学论文文献综述：问题谱系而非观点罗列',
+      '哲学论文原典引用：版本、译本与页码规范',
+      '哲学开题报告：核心概念、论题与论证路线',
+      '哲学论文修改：概念一致、推理有效与反驳回应',
+    ],
+  },
+  history: {
+    research: [
+      '历史学论文选题：地方档案与基层社会治理',
+      '中国近现代史论文选题：制度变迁与社会行动者',
+      '世界史论文选题：跨区域交流与全球史视角',
+      '历史记忆论文选题：遗产传播与公共叙事',
+    ],
+    methods: [
+      '历史学史料批判：来源、版本与形成过程',
+      '历史档案研究：检索、摘录与材料互证',
+      '历史比较研究：可比单位与因果解释边界',
+      '数字史学入门：数据库、时空信息与可视化证据',
+    ],
+    standards: [
+      '历史学论文文献综述：史学问题与研究分歧',
+      '历史学论文注释规范：档案、方志与文献出处',
+      '历史学开题报告：史料范围、时段与问题意识',
+      '历史学论文修改：时间线、概念时态与解释尺度',
     ],
   },
   education: {
@@ -1403,18 +1480,61 @@ const extraTopics: Record<
       '中国古代文学论文选题：诗词意象与传播语境',
       '现当代文学论文选题：城市书写与空间政治',
       '比较文学论文选题：跨文化改写与接受史',
+      '外国语言文学论文选题：英语小说的叙事伦理与文化语境',
     ],
     methods: [
       '文学论文叙事学分析：视角、时间与声音',
       '文学论文意象分析：材料归类与解释尺度',
       '文学研究数字人文入门：语料、词频与细读结合',
       '文学论文接受史研究：评论材料与历史语境',
+      '外国语言文学研究：原文细读、译本比较与跨文化阐释',
     ],
     standards: [
       '文学论文文献综述：理论谱系与作品研究对话',
       '文学论文引文规范：版本、页码与译本说明',
       '汉语言文学开题报告：文本范围与理论工具',
       '文学论文修改：避免术语堆砌和主题先行',
+      '外国语言文学论文写作：原文引注、译文处理与理论边界',
+    ],
+  },
+  'computer-science': {
+    research: [
+      '计算机论文选题：大模型可信应用与评测体系',
+      '软件工程论文选题：智能代码生成与软件质量',
+      '网络安全论文选题：隐私保护与攻击检测',
+      '数据科学论文选题：行业数据智能与决策支持',
+    ],
+    methods: [
+      '计算机实验设计：任务定义、数据划分与评价指标',
+      '算法论文怎么做：问题建模、复杂度与正确性分析',
+      '机器学习消融实验：变量控制、基线与误差分析',
+      '系统原型研究：需求、实现、性能与用户评价',
+    ],
+    standards: [
+      '计算机论文文献综述：技术路线、基线与研究空白',
+      '计算机论文可复现性：代码、数据、环境与随机种子',
+      '计算机开题报告：问题定义、创新点与实验计划',
+      '计算机论文修改：指标解释、失败实验与威胁分析',
+    ],
+  },
+  transportation: {
+    research: [
+      '交通论文选题：城市拥堵治理与出行行为',
+      '交通运输规划论文选题：综合交通与区域协同',
+      '智慧交通论文选题：车路协同与数据治理',
+      '道路安全论文选题：风险因素与干预评价',
+    ],
+    methods: [
+      '交通调查怎么做：抽样、问卷、OD与出行日记',
+      '交通网络模型：需求预测、路径选择与参数校准',
+      '交通仿真研究：场景设定、验证与敏感性分析',
+      '交通政策评估：对照组、时空溢出与结果解释',
+    ],
+    standards: [
+      '交通论文文献综述：问题场景、模型与工程证据',
+      '交通数据质量：缺失、异常、时空匹配与隐私保护',
+      '交通开题报告：研究区域、时段与技术路线',
+      '交通论文修改：模型假设、参数来源与结论边界',
     ],
   },
   art: {
@@ -1473,10 +1593,15 @@ const makeExtraArticle = (
   index: number
 ): DisciplineArticle => {
   const name = {
-    'economics-management': '经济学与管理学',
+    economics: '经济学',
+    management: '管理学',
     law: '法学',
+    philosophy: '哲学',
+    history: '历史学',
     education: '教育学',
-    literature: '中国语言文学',
+    literature: '文学',
+    'computer-science': '计算机类',
+    transportation: '交通类',
     art: '艺术学',
     marxism: '马克思主义理论',
   }[discipline]
@@ -1538,12 +1663,12 @@ const scaledTopicSeeds: Record<
   DisciplineArticle['discipline'],
   Record<(typeof contentNavSections)[number], string[]>
 > = {
-  'economics-management': {
+  economics: {
     research: [
-      '企业数字化转型',
-      '公司治理与投资者保护',
+      '数字经济与全要素生产率',
+      '公司治理与资本市场效率',
       '金融科技与普惠金融',
-      '供应链韧性',
+      '区域协调与公共政策',
       '绿色创新',
       '营商环境优化',
       '高质量就业',
@@ -1576,6 +1701,47 @@ const scaledTopicSeeds: Record<
       '论文开题报告',
       '实证结论边界',
       'Stata代码复现',
+      '参考文献规范',
+    ],
+  },
+  management: {
+    research: [
+      '企业数字化转型',
+      '公司治理与组织绩效',
+      '供应链韧性',
+      '战略创新管理',
+      '人力资源与员工行为',
+      '市场营销与消费者决策',
+      '会计信息质量',
+      '审计监督与风险控制',
+      '物流运营与绿色供应链',
+      '公共组织治理',
+      '平台企业管理',
+    ],
+    methods: [
+      '固定效应模型',
+      '双重差分',
+      '案例研究',
+      '扎根理论',
+      '问卷量表',
+      '结构方程模型',
+      '中介效应检验',
+      '异质性分析',
+      '文本分析',
+      '层级回归',
+      '混合研究',
+    ],
+    standards: [
+      '管理学文献综述',
+      '理论构念与变量口径',
+      '数据清洗记录',
+      '案例与访谈证据',
+      '稳健性检验',
+      '内生性回应',
+      '机制检验写作',
+      '论文开题报告',
+      '管理启示边界',
+      '研究过程复现',
       '参考文献规范',
     ],
   },
@@ -1617,6 +1783,88 @@ const scaledTopicSeeds: Record<
       '论文结构修改',
       '脚注与参考文献',
       '结论边界',
+      '学术诚信',
+    ],
+  },
+  philosophy: {
+    research: [
+      '人工智能伦理',
+      '算法责任归属',
+      '中国哲学现代阐释',
+      '儒家伦理与公共生活',
+      '认识论与知识辩护',
+      '科学解释',
+      '技术哲学',
+      '正义理论',
+      '生命伦理',
+      '环境伦理',
+      '逻辑与论证',
+    ],
+    methods: [
+      '概念分析',
+      '论证重建',
+      '经典文本细读',
+      '思想史方法',
+      '规范伦理分析',
+      '案例哲学',
+      '现象学描述',
+      '解释学',
+      '比较哲学',
+      '逻辑分析',
+      '科学哲学研究',
+    ],
+    standards: [
+      '哲学文献综述',
+      '原典版本核验',
+      '概念界定',
+      '论证有效性',
+      '反例与反驳',
+      '译文比较',
+      '问题史语境',
+      '开题报告写作',
+      '章节结构修改',
+      '结论边界',
+      '学术规范',
+    ],
+  },
+  history: {
+    research: [
+      '地方社会治理',
+      '近代制度转型',
+      '城市史与空间变迁',
+      '丝路交流',
+      '全球史比较',
+      '历史记忆',
+      '文化遗产传播',
+      '基层档案研究',
+      '战争与社会动员',
+      '环境史',
+      '数字史学',
+    ],
+    methods: [
+      '史料批判',
+      '档案研究',
+      '版本考证',
+      '历史比较',
+      '口述史',
+      '历史地理',
+      '数据库检索',
+      '量化史学',
+      '个案研究',
+      '概念史',
+      '历史解释',
+    ],
+    standards: [
+      '历史学文献综述',
+      '史料来源说明',
+      '档案引用规范',
+      '时间线核对',
+      '概念时态',
+      '材料互证',
+      '史实与解释分层',
+      '开题报告写作',
+      '章节结构修改',
+      '结论尺度',
       '学术诚信',
     ],
   },
@@ -1674,6 +1922,12 @@ const scaledTopicSeeds: Record<
       '戏曲文本演变',
       '红色文学书写',
       '跨媒介改编',
+      '英语文学叙事伦理',
+      '美国文学身份书写',
+      '英国文学现代性经验',
+      '日本文学与东亚文化',
+      '法语文学译介与接受',
+      '外国语言文学跨文化传播',
     ],
     methods: [
       '文本细读',
@@ -1687,6 +1941,11 @@ const scaledTopicSeeds: Record<
       '数字人文',
       '档案研究',
       '话语分析',
+      '原文细读',
+      '译本比较',
+      '翻译研究',
+      '跨文化阐释',
+      '语料库文体学',
     ],
     standards: [
       '文学文献综述',
@@ -1700,6 +1959,91 @@ const scaledTopicSeeds: Record<
       '结论尺度',
       '学术规范',
       '开题报告写作',
+      '外文引注规范',
+      '原文与译文处理',
+      '理论与文本互证',
+    ],
+  },
+  'computer-science': {
+    research: [
+      '大语言模型应用',
+      '可信人工智能',
+      '智能软件工程',
+      '代码生成质量',
+      '网络攻击检测',
+      '隐私计算',
+      '知识图谱推理',
+      '多模态学习',
+      '边缘计算',
+      '数据治理',
+      '人机交互',
+    ],
+    methods: [
+      '问题建模',
+      '算法设计',
+      '复杂度分析',
+      '数据集构建',
+      '实验设计',
+      '消融实验',
+      '误差分析',
+      '基线比较',
+      '系统原型',
+      '性能测试',
+      '用户研究',
+    ],
+    standards: [
+      '计算机文献综述',
+      '任务定义',
+      '评价指标',
+      '数据集划分',
+      '代码可复现',
+      '随机种子控制',
+      '基线公平比较',
+      '失败实验报告',
+      '开题报告写作',
+      '威胁分析',
+      '参考文献规范',
+    ],
+  },
+  transportation: {
+    research: [
+      '城市交通拥堵',
+      '公共交通服务',
+      '综合交通规划',
+      '道路交通安全',
+      '智慧交通',
+      '车路协同',
+      '绿色低碳运输',
+      '物流运输组织',
+      '高铁与区域发展',
+      '出行行为',
+      '交通数据治理',
+    ],
+    methods: [
+      '交通调查',
+      'OD矩阵估计',
+      '需求预测',
+      '网络分配',
+      '交通仿真',
+      '时空数据分析',
+      '事故风险模型',
+      '政策评估',
+      '案例比较',
+      '敏感性分析',
+      '多目标评价',
+    ],
+    standards: [
+      '交通文献综述',
+      '区域时段界定',
+      '数据质量控制',
+      '模型假设',
+      '参数标定',
+      '仿真验证',
+      '安全伦理',
+      '环境影响边界',
+      '开题报告写作',
+      '结果可视化',
+      '参考文献规范',
     ],
   },
   art: {
@@ -1808,17 +2152,29 @@ const scaledTitleSuffixes: Record<(typeof contentNavSections)[number], string[]>
 }
 
 const disciplineSpecialties: Record<DisciplineArticle['discipline'], string[]> = {
-  'economics-management': [
-    '工商管理',
+  economics: [
     '金融学',
+    '理论经济学',
+    '应用经济学',
+    '国际经济与贸易',
+    '财政学',
+    '产业经济学',
+    '区域经济学',
+    '劳动经济学',
+    '数量经济学',
+    '金融工程',
+  ],
+  management: [
+    '工商管理',
     '会计学',
     '审计学',
     '物流管理',
-    '国际经济与贸易',
     '市场营销',
     '人力资源管理',
     '财务管理',
     '电子商务',
+    '公共管理',
+    '信息管理与信息系统',
   ],
   law: [
     '法学理论',
@@ -1831,6 +2187,30 @@ const disciplineSpecialties: Record<DisciplineArticle['discipline'], string[]> =
     '环境与资源保护法学',
     '国际法学',
     '知识产权法学',
+  ],
+  philosophy: [
+    '马克思主义哲学',
+    '中国哲学',
+    '外国哲学',
+    '逻辑学',
+    '伦理学',
+    '美学',
+    '宗教学',
+    '科学技术哲学',
+    '政治哲学',
+    '环境哲学',
+  ],
+  history: [
+    '中国史',
+    '世界史',
+    '考古学',
+    '专门史',
+    '历史地理学',
+    '历史文献学',
+    '史学理论及史学史',
+    '中国近现代史',
+    '区域社会史',
+    '文化遗产研究',
   ],
   education: [
     '教育学原理',
@@ -1855,6 +2235,40 @@ const disciplineSpecialties: Record<DisciplineArticle['discipline'], string[]> =
     '比较文学与世界文学',
     '戏剧戏曲学',
     '儿童文学',
+    '英语语言文学',
+    '俄语语言文学',
+    '法语语言文学',
+    '德语语言文学',
+    '日语语言文学',
+    '印度语言文学',
+    '西班牙语语言文学',
+    '阿拉伯语语言文学',
+    '欧洲语言文学',
+    '亚非语言文学',
+  ],
+  'computer-science': [
+    '计算机科学与技术',
+    '软件工程',
+    '人工智能',
+    '网络空间安全',
+    '数据科学与大数据技术',
+    '物联网工程',
+    '信息安全',
+    '数字媒体技术',
+    '计算机应用技术',
+    '智能科学与技术',
+  ],
+  transportation: [
+    '交通运输规划与管理',
+    '道路与铁道工程',
+    '交通信息工程及控制',
+    '载运工具运用工程',
+    '交通运输工程',
+    '物流工程与管理',
+    '城市交通',
+    '轨道交通',
+    '道路交通安全',
+    '智慧交通',
   ],
   art: [
     '艺术学理论',
@@ -1938,6 +2352,161 @@ for (const discipline of Object.keys(scaledTopicSeeds) as DisciplineArticle['dis
     })
   })
 }
+
+const evidenceByDiscipline: Record<
+  DisciplineArticle['discipline'],
+  Omit<DisciplineCaseStudy, 'title' | 'context' | 'takeaway'> & {
+    caseName: string
+    material: string
+    methodHint: string
+  }
+> = {
+  economics: {
+    caseName: '世界银行 WDI 指标的可复现比较',
+    material: '中国及可比经济体的宏观发展指标、指标元数据与年份口径',
+    methodHint: '先核对指标定义、覆盖年份与缺失值，再进行趋势、分组或政策比较',
+    sourceLabel: '世界银行世界发展指标（WDI）',
+    sourceUrl: 'https://datatopics.worldbank.org/world-development-indicators/',
+  },
+  management: {
+    caseName: '上市公司定期报告的企业治理与战略披露',
+    material: '上市公司年报、社会责任报告和公告中的可核验披露信息',
+    methodHint: '将研究概念拆成可追溯的披露字段，并保留公司、报告期与原文页码',
+    sourceLabel: '上海证券交易所定期报告',
+    sourceUrl: 'https://www.sse.com.cn/disclosure/listedinfo/regular/',
+  },
+  law: {
+    caseName: '最高人民法院案例库中的同类争点比较',
+    material: '裁判要旨、案件事实、裁判理由与所援引的规范材料',
+    methodHint: '先界定案件类型和检索条件，再比较规则适用而非只摘录结论',
+    sourceLabel: '最高人民法院案例库',
+    sourceUrl: 'https://rmfyalk.court.gov.cn/',
+  },
+  philosophy: {
+    caseName: '人工智能伦理建议书的规范论证练习',
+    material: '国际组织公开的规范文本、概念定义与原则之间的张力',
+    methodHint: '区分文本陈述、原则理由与研究者自己的规范判断，并主动处理反例',
+    sourceLabel: '联合国教科文组织《人工智能伦理问题建议书》',
+    sourceUrl:
+      'https://www.unesco.org/en/legal-affairs/recommendation-ethics-artificial-intelligence',
+  },
+  history: {
+    caseName: '数字馆藏中的史料互证',
+    material: '古籍、报刊、地方文献、编目记录及其形成与流传信息',
+    methodHint: '记录版本、作者、时间、收藏与检索路径，用不同类型史料相互校验',
+    sourceLabel: '国家图书馆数字资源',
+    sourceUrl: 'https://www.nlc.cn/web/dsb/',
+  },
+  education: {
+    caseName: '教育统计与政策文本的交叉解释',
+    material: '教育部公开统计、政策文件与学校层面的公开材料',
+    methodHint: '先区分统计口径与政策目标，再说明样本、年份和教育阶段是否可比',
+    sourceLabel: '教育部教育统计数据',
+    sourceUrl: 'https://www.moe.gov.cn/jyb_sjzl/moe_560/',
+  },
+  literature: {
+    caseName: '版本、译本与批评材料的文本证据链',
+    material: '原作版本、译本、报刊评论、作者材料及其可追溯目录信息',
+    methodHint: '先确定研究使用的文本版本，再区分原文证据、译文处理与理论解释',
+    sourceLabel: '国家图书馆数字资源',
+    sourceUrl: 'https://www.nlc.cn/web/dsb/',
+  },
+  'computer-science': {
+    caseName: '公共数据集上的可复现实验',
+    material: '公开数据集、任务说明、数据划分、基线方法和评价指标',
+    methodHint: '固定数据划分和随机种子，先复现基线，再报告消融、误差与失败样本',
+    sourceLabel: 'UCI Machine Learning Repository',
+    sourceUrl: 'https://archive.ics.uci.edu/',
+  },
+  transportation: {
+    caseName: '交通运输行业统计公报的出行结构分析',
+    material: '交通运输部公开的客运、货运、基础设施与投资统计数据',
+    methodHint: '明确运输方式、区域、年份与统计口径，避免把不同指标直接横向比较',
+    sourceLabel: '交通运输部交通运输行业发展统计公报',
+    sourceUrl: 'https://xxgk.mot.gov.cn/jigou/zhghs/202606/t20260618_4207752.html',
+  },
+  art: {
+    caseName: '公共文化统计与作品材料的并置分析',
+    material: '公开文化统计、展览信息、作品图录、机构档案与访谈材料',
+    methodHint: '让数据描述、作品细读与创作过程各自承担明确的证据功能',
+    sourceLabel: '文化和旅游部政府信息公开',
+    sourceUrl: 'https://zwgk.mct.gov.cn/zfxxgkml/tjxx/',
+  },
+  marxism: {
+    caseName: '权威政策材料与基层实践材料的分层分析',
+    material: '公开政策文本、权威理论文献、统计资料和可核验的基层案例',
+    methodHint: '区分理论命题、政策表述与经验发现，避免以个案替代总体判断',
+    sourceLabel: '全国哲学社会科学工作办公室',
+    sourceUrl: 'https://www.nopss.gov.cn/',
+  },
+}
+
+const codeExampleFor = (article: DisciplineArticle): DisciplineCodeExample | undefined => {
+  if (article.navSection !== 'methods') return undefined
+  if (article.discipline === 'economics' || article.discipline === 'management') {
+    return {
+      title: 'Python：读取公开 World Bank 指标并绘制时间趋势',
+      language: 'python',
+      code: `import pandas as pd\nimport matplotlib.pyplot as plt\n\nurl = ('https://api.worldbank.org/v2/country/CHN/indicator/'\n       'NY.GDP.MKTP.KD.ZG?format=json&per_page=80')\nraw = pd.read_json(url)\ndata = pd.DataFrame(raw.iloc[1, 0])[['date', 'value']].dropna()\ndata['date'] = data['date'].astype(int)\ndata = data.sort_values('date')\n\nplt.plot(data['date'], data['value'], marker='o')\nplt.xlabel('年份')\nplt.ylabel('GDP 增长率（%）')\nplt.title('中国 GDP 增长率：World Bank WDI')\nplt.show()`,
+      note: '示例用于学习公开数据的下载、缺失值处理和趋势绘图。正式论文须在代码与正文中记录指标代码、下载日期、样本筛选和数据版本。',
+    }
+  }
+  if (article.discipline === 'education') {
+    return {
+      title: 'R：量表数据的描述统计与可视化起步',
+      language: 'r',
+      code: `library(readr)\nlibrary(dplyr)\nlibrary(ggplot2)\n\ndat <- read_csv('survey_clean.csv')\ndat %>%\n  summarise(across(c(learning_engagement, academic_self_efficacy),\n                   list(mean = mean, sd = sd), na.rm = TRUE))\n\nggplot(dat, aes(x = learning_engagement)) +\n  geom_histogram(bins = 20, fill = '#315f55', color = 'white') +\n  labs(x = '学习投入得分', y = '人数')`,
+      note: '仅在完成知情同意、去标识化和数据清洗后使用。正式分析应报告量表来源、反向题处理、缺失规则与信效度证据。',
+    }
+  }
+  if (article.discipline === 'computer-science') {
+    return {
+      title: 'Python：固定划分、随机种子与基线模型复现',
+      language: 'python',
+      code: `from sklearn.model_selection import train_test_split\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import classification_report\n\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.2, random_state=42, stratify=y\n)\nmodel = make_pipeline(StandardScaler(), LogisticRegression(random_state=42))\nmodel.fit(X_train, y_train)\nprint(classification_report(y_test, model.predict(X_test)))`,
+      note: '示例强调可复现基线。论文还应说明数据许可、预处理、超参数、硬件环境和每个评价指标的含义。',
+    }
+  }
+  if (article.discipline === 'transportation') {
+    return {
+      title: 'Python：用公开统计公报数据绘制城市客运结构',
+      language: 'python',
+      code: `import pandas as pd\nimport matplotlib.pyplot as plt\n\ndat = pd.DataFrame({\n    '方式': ['公共汽电车', '城市轨道交通', '出租汽车'],\n    '客运量': [365.66, 332.24, 344.82],  # 2025年，亿人次\n})\nax = dat.plot.bar(x='方式', y='客运量', legend=False, color='#3d5874')\nax.set_ylabel('亿人次')\nax.set_title('2025年全国城市客运量构成')\nplt.tight_layout()\nplt.show()`,
+      note: '数值来自交通运输部 2025 年行业发展统计公报。正式研究应下载原始表格、保留单位与年份，并说明不同运输方式的统计范围。',
+    }
+  }
+  return undefined
+}
+
+disciplineArticles.forEach((article) => {
+  const evidence = evidenceByDiscipline[article.discipline]
+  article.caseStudy = {
+    title: `${evidence.caseName}：用于“${article.title}”的材料起点`,
+    context: `可将${evidence.material}作为公开案例材料，但必须围绕“${article.title}”重新限定对象、时间和分析单位，而不是把公开材料直接当作结论。`,
+    takeaway: `建议的处理顺序是：${evidence.methodHint}。`,
+    sourceLabel: evidence.sourceLabel,
+    sourceUrl: evidence.sourceUrl,
+  }
+  article.codeExample = codeExampleFor(article)
+  if (article.discipline === 'transportation') {
+    article.chart = {
+      title: '2025年全国城市客运量构成',
+      description:
+        '用于展示公开统计图表应如何注明年份、单位与统计口径；不应用于替代对具体城市或线路的实证判断。',
+      unit: '亿人次',
+      sourceLabel: '交通运输部《2025年交通运输行业发展统计公报》',
+      sourceUrl: 'https://xxgk.mot.gov.cn/jigou/zhghs/202606/t20260618_4207752.html',
+      values: [
+        { label: '公共汽电车', value: 365.66 },
+        { label: '城市轨道交通', value: 332.24 },
+        { label: '出租汽车', value: 344.82 },
+      ],
+    }
+  }
+  if (!article.references.some((reference) => reference.url === evidence.sourceUrl)) {
+    article.references.push({ label: evidence.sourceLabel, url: evidence.sourceUrl })
+  }
+})
 
 export function getDisciplineArticles(discipline: DisciplineArticle['discipline']) {
   return disciplineArticles.filter((article) => article.discipline === discipline)

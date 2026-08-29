@@ -20,7 +20,6 @@ const staticRoutes = [
   'contact',
   'about',
   'privacy',
-  'economics-management',
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -35,12 +34,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteMetadata.siteUrl}/${item.path}`,
       lastModified: item.lastmod || item.date,
     }))
-  const disciplinePages = disciplineOrder
-    .filter((discipline) => discipline !== 'economics-management')
-    .map((discipline) => ({
-      url: `${siteMetadata.siteUrl}/disciplines/${discipline}`,
-      lastModified: updated,
-    }))
+  const disciplinePages = disciplineOrder.map((discipline) => ({
+    url: `${siteMetadata.siteUrl}/disciplines/${discipline}`,
+    lastModified: updated,
+  }))
   const disciplineKnowledgePages = disciplineArticles.map((article) => ({
     url: `${siteMetadata.siteUrl}/disciplines/${article.discipline}/${article.slug}`,
     lastModified: article.date,

@@ -3,6 +3,68 @@ import type { DisciplineArticle } from '@/data/disciplineArticles'
 import type { DisciplineConfig } from '@/data/disciplines'
 import DisciplineArticleCard from './DisciplineArticleCard'
 
+function PublicDataChart({
+  chart,
+  color,
+}: {
+  chart: NonNullable<DisciplineArticle['chart']>
+  color: string
+}) {
+  const max = Math.max(...chart.values.map((item) => item.value))
+
+  return (
+    <figure className="not-prose my-10 border border-black/15 p-5 dark:border-white/15">
+      <figcaption className="font-serif text-xl font-black">{chart.title}</figcaption>
+      <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+        {chart.description}
+      </p>
+      <div className="mt-6 overflow-x-auto">
+        <svg
+          viewBox="0 0 720 280"
+          role="img"
+          aria-label={`${chart.title}，单位：${chart.unit}`}
+          className="min-w-160"
+        >
+          <line x1="54" y1="228" x2="690" y2="228" stroke="currentColor" strokeOpacity="0.25" />
+          {chart.values.map((item, index) => {
+            const barWidth = 132
+            const gap = 66
+            const x = 88 + index * (barWidth + gap)
+            const height = (item.value / max) * 170
+            const y = 228 - height
+            return (
+              <g key={item.label}>
+                <rect x={x} y={y} width={barWidth} height={height} fill={color} opacity="0.88" />
+                <text
+                  x={x + barWidth / 2}
+                  y={y - 10}
+                  textAnchor="middle"
+                  fontSize="18"
+                  fontWeight="700"
+                >
+                  {item.value}
+                </text>
+                <text x={x + barWidth / 2} y="255" textAnchor="middle" fontSize="16">
+                  {item.label}
+                </text>
+              </g>
+            )
+          })}
+          <text x="54" y="28" fontSize="14" fill="currentColor" opacity="0.7">
+            单位：{chart.unit}
+          </text>
+        </svg>
+      </div>
+      <p className="mt-4 text-xs leading-6 text-slate-500">
+        数据来源：
+        <a href={chart.sourceUrl} target="_blank" rel="noreferrer" className="font-bold underline">
+          {chart.sourceLabel}
+        </a>
+      </p>
+    </figure>
+  )
+}
+
 export default function DisciplineArticlePage({
   article,
   discipline,
@@ -81,6 +143,62 @@ export default function DisciplineArticlePage({
                 ))}
               </div>
             </section>
+            {article.caseStudy && (
+              <section
+                className="mb-10 border-l-4 bg-black/3 p-6 dark:bg-white/5"
+                style={{ borderColor: discipline.color }}
+              >
+                <p
+                  className="text-xs font-black tracking-widest"
+                  style={{ color: discipline.color }}
+                >
+                  公开案例与材料起点
+                </p>
+                <h2 className="mt-3 font-serif text-2xl font-black">{article.caseStudy.title}</h2>
+                <p className="mt-4 text-sm leading-7 text-slate-700 dark:text-slate-200">
+                  {article.caseStudy.context}
+                </p>
+                <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
+                  {article.caseStudy.takeaway}
+                </p>
+                <a
+                  href={article.caseStudy.sourceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-4 inline-flex text-sm font-black underline"
+                  style={{ color: discipline.color }}
+                >
+                  查看公开材料来源：{article.caseStudy.sourceLabel} →
+                </a>
+              </section>
+            )}
+            {article.chart && <PublicDataChart chart={article.chart} color={discipline.color} />}
+            {article.codeExample && (
+              <section className="not-prose mb-10 border border-black/15 dark:border-white/15">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/15 px-5 py-4 dark:border-white/15">
+                  <div>
+                    <p
+                      className="text-xs font-black tracking-widest"
+                      style={{ color: discipline.color }}
+                    >
+                      可复现代码示例
+                    </p>
+                    <h2 className="mt-1 font-serif text-xl font-black">
+                      {article.codeExample.title}
+                    </h2>
+                  </div>
+                  <span className="border border-black/15 px-2 py-1 text-xs font-black dark:border-white/15">
+                    {article.codeExample.language}
+                  </span>
+                </div>
+                <pre className="overflow-x-auto bg-slate-950 p-5 text-sm leading-6 text-slate-100">
+                  <code>{article.codeExample.code}</code>
+                </pre>
+                <p className="px-5 pb-5 text-sm leading-7 text-slate-600 dark:text-slate-300">
+                  {article.codeExample.note}
+                </p>
+              </section>
+            )}
             <div className="prose prose-slate dark:prose-invert prose-headings:scroll-mt-24 max-w-none">
               {article.sections.map((section, index) => (
                 <section id={`section-${index + 1}`} key={section.heading}>

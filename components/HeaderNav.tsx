@@ -25,9 +25,8 @@ export default function HeaderNav() {
     )
   }
 
-  if (pathname.startsWith('/disciplines/') || pathname === '/economics-management') {
-    const disciplineBase =
-      pathname === '/economics-management' ? pathname : pathname.split('/').slice(0, 3).join('/')
+  if (pathname.startsWith('/disciplines/')) {
+    const disciplineBase = pathname.split('/').slice(0, 3).join('/')
     return (
       <nav className="hidden items-center gap-1 lg:flex" aria-label="学科导航">
         {['研究议题', '方法路径', '质量标准', '具体专业'].map((title, index) => (
@@ -41,11 +40,7 @@ export default function HeaderNav() {
           </Link>
         ))}
         <Link
-          href={
-            disciplineBase === '/economics-management'
-              ? '/consulting'
-              : `${disciplineBase}/consulting`
-          }
+          href={`${disciplineBase}/consulting`}
           className="px-2.5 py-2 text-sm font-semibold text-slate-700 hover:bg-white dark:text-slate-200 dark:hover:bg-slate-900"
         >
           咨询辅导

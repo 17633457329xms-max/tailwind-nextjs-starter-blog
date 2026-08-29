@@ -64,11 +64,7 @@ const MobileNav = () => {
                   {disciplineOrder.map((discipline) => (
                     <Link
                       key={discipline}
-                      href={
-                        discipline === 'economics-management'
-                          ? '/economics-management'
-                          : `/disciplines/${discipline}`
-                      }
+                      href={`/disciplines/${discipline}`}
                       onClick={onToggleNav}
                       className="border border-black/10 px-3 py-2 text-sm font-bold dark:border-white/15"
                     >
