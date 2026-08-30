@@ -6,6 +6,9 @@ import {
   getDisciplineArticles,
 } from '@/data/disciplineArticles'
 import { disciplines, isDisciplineSlug } from '@/data/disciplines'
+import { getKnowledgeTask } from '@/data/knowledgeArchitecture'
+import { getSpecialtyLeafArticles } from '@/data/leafArticleViews'
+import { getDisciplineSpecialty } from '@/data/specialties'
 import { genPageMetadata } from '@/app/seo'
 import siteMetadata from '@/data/siteMetadata'
 
@@ -25,23 +28,39 @@ export async function generateMetadata({
 
 export default async function Page({
   params,
+  searchParams,
 }: {
   params: Promise<{ discipline: string; slug: string }>
+  searchParams: Promise<{ specialty?: string; stage?: string; task?: string; leaf?: string }>
 }) {
   const { discipline, slug } = await params
+  const { specialty, stage, task, leaf } = await searchParams
   if (!isDisciplineSlug(discipline)) notFound()
   const article = getDisciplineArticle(discipline, slug)
   if (!article) notFound()
+  const selectedTask = getKnowledgeTask(discipline, stage, task)
+  const selectedSpecialty = getDisciplineSpecialty(discipline, specialty)
+  const leafNumber = Number(leaf)
+  const displayedArticle =
+    selectedTask && Number.isInteger(leafNumber) && leafNumber >= 1 && leafNumber <= 50
+      ? getSpecialtyLeafArticles({
+          articles: getDisciplineArticles(discipline),
+          discipline: disciplines[discipline],
+          specialty: selectedSpecialty.name,
+          stage: selectedTask.stage,
+          task: selectedTask.task,
+        })[leafNumber - 1]
+      : article
   const related = getDisciplineArticles(discipline)
     .filter((item) => item.slug !== slug)
     .slice(0, 3)
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: article.title,
-    description: article.summary,
-    datePublished: article.date,
-    dateModified: article.date,
+    headline: displayedArticle.title,
+    description: displayedArticle.summary,
+    datePublished: displayedArticle.date,
+    dateModified: displayedArticle.date,
     inLanguage: 'zh-CN',
     author: { '@type': 'Person', name: siteMetadata.author },
     publisher: { '@type': 'Person', name: siteMetadata.author },
@@ -54,7 +73,7 @@ export default async function Page({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <DisciplineArticlePage
-        article={article}
+        article={displayedArticle}
         discipline={disciplines[discipline]}
         related={related}
       />

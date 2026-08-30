@@ -5,31 +5,38 @@ import type { DisciplineArticle } from '@/data/disciplineArticles'
 import type { DisciplineConfig } from '@/data/disciplines'
 import DisciplineArticleCard from './DisciplineArticleCard'
 
-const pageSizeOptions = [10, 20, 50] as const
+const pageSizeOptions = [6, 12, 18] as const
+
+function articleFilters(article: DisciplineArticle): string[] {
+  return [
+    article.difficulty,
+    ...(article.caseStudy ? ['公开案例'] : []),
+    ...(article.chart ? ['数据图表'] : []),
+    ...(article.codeExample ? ['代码示例'] : []),
+    ...(article.knowledgeStage === 'tools' ? ['模板与工具'] : []),
+  ]
+}
 
 export default function DisciplineArticleExplorer({
   articles,
   discipline,
+  context,
 }: {
   articles: DisciplineArticle[]
   discipline: DisciplineConfig
+  context?: { specialty: string; stage?: string; task?: string }
 }) {
   const [selected, setSelected] = useState<string[]>([])
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState<(typeof pageSizeOptions)[number]>(10)
+  const [pageSize, setPageSize] = useState<(typeof pageSizeOptions)[number]>(6)
   const [jumpPage, setJumpPage] = useState('')
   const articleKey = articles.map((article) => article.slug).join('|')
   const filters = useMemo(
-    () => [
-      '全部',
-      ...Array.from(new Set(articles.flatMap((item) => [item.category, ...item.tags]))),
-    ],
+    () => ['全部', ...Array.from(new Set(articles.flatMap(articleFilters)))],
     [articles]
   )
   const visible = selected.length
-    ? articles.filter((item) =>
-        selected.some((filter) => item.category === filter || item.tags.includes(filter))
-      )
+    ? articles.filter((item) => selected.some((filter) => articleFilters(item).includes(filter)))
     : articles
   const totalPages = Math.max(1, Math.ceil(visible.length / pageSize))
   const safePage = Math.min(page, totalPages)
@@ -119,7 +126,12 @@ export default function DisciplineArticleExplorer({
       )}
       <div className="mt-6 grid border-t border-l border-black/15 md:grid-cols-2 lg:grid-cols-3 dark:border-white/15">
         {pagedArticles.map((article) => (
-          <DisciplineArticleCard key={article.slug} article={article} discipline={discipline} />
+          <DisciplineArticleCard
+            key={article.slug}
+            article={article}
+            discipline={discipline}
+            context={context}
+          />
         ))}
       </div>
       {visible.length === 0 && (

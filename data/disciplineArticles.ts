@@ -1,4 +1,6 @@
-import type { DisciplineSlug } from './disciplines'
+import { disciplineOrder, type DisciplineSlug } from './disciplines'
+import { getKnowledgeStages, type KnowledgeStageKey } from './knowledgeArchitecture'
+import { disciplineSpecialties as navigationSpecialties } from './specialties'
 
 export interface DisciplineArticleSection {
   heading: string
@@ -44,6 +46,11 @@ export interface DisciplineArticle {
   sections: DisciplineArticleSection[]
   references: { label: string; url: string }[]
   navSection?: DisciplineNavSection
+  knowledgeStage?: KnowledgeStageKey
+  knowledgeTask?: string
+  specialties?: string[]
+  sourceSlug?: string
+  leafIndex?: number
   caseStudy?: DisciplineCaseStudy
   chart?: DisciplineChart
   codeExample?: DisciplineCodeExample
@@ -1579,6 +1586,145 @@ const extraTopics: Record<
   },
 }
 
+const articleFocuses = [
+  '从零开始的操作顺序',
+  '研究对象与边界检查',
+  '常见误区与修正方法',
+  '可复用的判断清单',
+  '公开材料的使用规范',
+  '导师常见追问与回应',
+  '时间安排与风险控制',
+  '概念、证据与结论的衔接',
+  '适合硕士论文的简化路径',
+  '进阶研究的深化方向',
+  '样例拆解与迁移原则',
+  '章节之间的逻辑连接',
+  '证据不足时的替代方案',
+  '图表、引文与附件检查',
+  '质量自检的关键问题',
+  '从反馈到修改的闭环',
+  '避免无效劳动的准备工作',
+  '与研究问题匹配的表达方式',
+  '论文推进中的决策节点',
+  '提交前的核验步骤',
+]
+
+const stageForLegacyArticle = (
+  article: DisciplineArticle
+): { stage: KnowledgeStageKey; task: string } => {
+  if (article.navSection === 'research') return { stage: 'topic', task: 'direction' }
+  if (article.navSection === 'methods') return { stage: 'design', task: 'method' }
+  if (article.navSection === 'standards') return { stage: 'drafting', task: 'chapters' }
+  if (article.title.includes('文献综述')) return { stage: 'literature', task: 'review' }
+  if (article.title.includes('开题报告')) return { stage: 'proposal', task: 'framework' }
+  if (article.title.includes('修改')) return { stage: 'revision', task: 'editing' }
+  return { stage: 'topic', task: 'feasibility' }
+}
+
+const createKnowledgeArticle = (
+  discipline: DisciplineArticle['discipline'],
+  stage: ReturnType<typeof getKnowledgeStages>[number],
+  task: ReturnType<typeof getKnowledgeStages>[number]['tasks'][number],
+  index: number
+): DisciplineArticle => {
+  const focus = articleFocuses[index % articleFocuses.length]
+  const specialty = {
+    economics: '经济学',
+    management: '管理学',
+    law: '法学',
+    philosophy: '哲学',
+    history: '历史学',
+    education: '教育学',
+    literature: '文学',
+    'computer-science': '计算机类',
+    transportation: '交通类',
+    art: '艺术学',
+    marxism: '马克思主义理论',
+  }[discipline]
+  const title = `${specialty}${task.title}：${focus}`
+  return {
+    slug: `${discipline}-${stage.key}-${task.key}-${index + 1}`,
+    discipline,
+    category: task.title,
+    title,
+    summary: `围绕“${title}”，给出从问题界定、材料准备到写作检查的学习路径。内容用于支持独立研究与写作训练，应结合本人课题、学校规范和导师意见使用。`,
+    tags: [stage.title, task.title, specialty, '硕士论文'],
+    difficulty: index % 5 === 0 ? '进阶' : '入门',
+    date: `2026-${String(8 - (index % 7)).padStart(2, '0')}-${String((index % 27) + 1).padStart(2, '0')}`,
+    readingMinutes: 12 + (index % 5),
+    navSection:
+      stage.key === 'design' ? 'methods' : stage.key === 'topic' ? 'research' : 'standards',
+    knowledgeStage: stage.key,
+    knowledgeTask: task.key,
+    sections: [
+      {
+        heading: `先判断“${task.title}”要解决什么`,
+        paragraphs: [
+          `这一环节的目标不是补齐形式，而是让“${specialty}”论文中的研究问题、材料边界和最终产出保持一致。先写下你已经确定的内容、尚未确定的内容以及必须向导师确认的内容，避免在没有判断标准的情况下直接套用模板。`,
+          `把抽象要求拆成可核验的问题：研究对象是否明确，时间或文本范围是否可说明，关键概念是否能找到权威定义，现有材料是否真的能够支持后续结论。任何一项回答不清，都应先缩小问题，而不是用更多术语掩盖不确定性。`,
+        ],
+        bullets: [
+          '先写出一个可在两句话内讲清的研究问题。',
+          '记录每次调整题目、材料或方法的原因。',
+          '把学校格式要求与研究质量要求分开检查。',
+        ],
+      },
+      {
+        heading: '用“证据—判断—表达”组织工作',
+        paragraphs: [
+          `准备材料时，优先保存可回溯的信息：文献出处、数据口径、版本、检索日期、访问链接、样本筛选规则或文本页码。论文中的判断必须能回到这些材料，而不是只保留一段最终表述。`,
+          `写作时使用“先呈现证据，再说明判断，最后交代边界”的顺序。这样即使结论尚未完全成熟，也能让导师看见你的研究过程，并更容易得到可执行的修改意见。`,
+        ],
+      },
+      {
+        heading: '一份可复用的自检清单',
+        paragraphs: [
+          `完成“${task.title}”后，不妨把它交给一位不了解课题的同学复述：他能否说清你研究什么、为何重要、凭什么得出结论。无法复述通常意味着标题、摘要、章节小结或图表说明仍有断裂。`,
+        ],
+        bullets: [
+          '是否能说明本节内容服务于哪一个研究问题。',
+          '是否为关键判断保留了原始材料或公开来源。',
+          '是否把限制条件、例外情形和不确定性写清楚。',
+          '是否根据导师与学校要求完成最后格式核验。',
+        ],
+      },
+    ],
+    references: [],
+  }
+}
+
+for (const discipline of disciplineOrder) {
+  const stages = getKnowledgeStages(discipline)
+  const taskIndex = new Map(stages.flatMap((stage) => stage.tasks.map((task) => [task.key, task])))
+  const stageIndex = new Map(stages.map((stage) => [stage.key, stage]))
+
+  disciplineArticles
+    .filter((article) => article.discipline === discipline)
+    .forEach((article) => {
+      const assignment = stageForLegacyArticle(article)
+      const stage = stageIndex.get(assignment.stage)!
+      const task = taskIndex.get(assignment.task)!
+      article.knowledgeStage = stage.key
+      article.knowledgeTask = task.key
+      article.category = task.title
+      article.tags = Array.from(new Set([stage.title, task.title, ...article.tags]))
+    })
+
+  stages.forEach((stage) => {
+    stage.tasks.forEach((task) => {
+      const currentCount = disciplineArticles.filter(
+        (article) =>
+          article.discipline === discipline &&
+          article.knowledgeStage === stage.key &&
+          article.knowledgeTask === task.key
+      ).length
+      for (let index = currentCount; index < 20; index += 1) {
+        disciplineArticles.push(createKnowledgeArticle(discipline, stage, task, index))
+      }
+    })
+  })
+}
+
 disciplineArticles.forEach((article) => {
   const index = disciplineArticles
     .filter((item) => item.discipline === article.discipline)
@@ -2479,6 +2625,25 @@ const codeExampleFor = (article: DisciplineArticle): DisciplineCodeExample | und
 }
 
 disciplineArticles.forEach((article) => {
+  const specialtyNames = navigationSpecialties[article.discipline].map(
+    (specialty) => specialty.name
+  )
+  const matchedSpecialties = specialtyNames.filter(
+    (specialty) => article.title.includes(specialty) || article.tags.includes(specialty)
+  )
+  // 通用的研究步骤文章可服务同一一级学科的多个专业；专门主题则只归入匹配专业。
+  article.specialties = matchedSpecialties.length ? matchedSpecialties : specialtyNames
+  if (!article.knowledgeStage || !article.knowledgeTask) {
+    const assignment = stageForLegacyArticle(article)
+    const stage = getKnowledgeStages(article.discipline).find(
+      (item) => item.key === assignment.stage
+    )!
+    const task = stage.tasks.find((item) => item.key === assignment.task)!
+    article.knowledgeStage = stage.key
+    article.knowledgeTask = task.key
+    article.category = task.title
+    article.tags = Array.from(new Set([stage.title, task.title, ...article.tags]))
+  }
   const evidence = evidenceByDiscipline[article.discipline]
   article.caseStudy = {
     title: `${evidence.caseName}：用于“${article.title}”的材料起点`,

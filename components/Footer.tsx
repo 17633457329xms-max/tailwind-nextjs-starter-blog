@@ -1,3 +1,9 @@
+'use client'
+
+import { usePathname, useSearchParams } from 'next/navigation'
+import { disciplines, isDisciplineSlug } from '@/data/disciplines'
+import { getKnowledgeStages, getKnowledgeTask } from '@/data/knowledgeArchitecture'
+import { getDisciplineSpecialty } from '@/data/specialties'
 import Link from './Link'
 
 const resourceLinks = [
@@ -17,6 +23,53 @@ const serviceLinks = [
 ]
 
 export default function Footer() {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const disciplineSlug = pathname.match(/^\/disciplines\/([^/]+)/)?.[1]
+  const discipline =
+    disciplineSlug && isDisciplineSlug(disciplineSlug) ? disciplines[disciplineSlug] : undefined
+  const activeTask = discipline
+    ? getKnowledgeTask(
+        discipline.slug,
+        searchParams.get('stage') ?? undefined,
+        searchParams.get('task') ?? undefined
+      )
+    : undefined
+  const specialty = discipline
+    ? getDisciplineSpecialty(discipline.slug, searchParams.get('specialty'))
+    : undefined
+  const contextQuery = specialty ? `specialty=${encodeURIComponent(specialty.name)}&` : ''
+  const contextualLinks = discipline
+    ? activeTask
+      ? [
+          [
+            activeTask.stage.title,
+            `/disciplines/${discipline.slug}?${contextQuery}stage=${activeTask.stage.key}&task=${activeTask.task.key}`,
+          ],
+          ...activeTask.stage.tasks
+            .filter((task) => task.key !== activeTask.task.key)
+            .map((task) => [
+              task.title,
+              `/disciplines/${discipline.slug}?${contextQuery}stage=${activeTask.stage.key}&task=${task.key}`,
+            ]),
+          ...getKnowledgeStages(discipline.slug)
+            .filter((stage) => stage.key !== activeTask.stage.key)
+            .slice(0, 3)
+            .map((stage) => [
+              stage.title,
+              `/disciplines/${discipline.slug}?${contextQuery}stage=${stage.key}&task=${stage.tasks[0].key}`,
+            ]),
+        ]
+      : getKnowledgeStages(discipline.slug).map((stage) => [
+          stage.title,
+          `/disciplines/${discipline.slug}?${contextQuery}stage=${stage.key}&task=${stage.tasks[0].key}`,
+        ])
+    : resourceLinks
+  const knowledgeTitle = discipline
+    ? activeTask
+      ? `${specialty?.name} · ${activeTask.task.title}`
+      : `${specialty?.name ?? discipline.name}知识库`
+    : '知识库'
   return (
     <footer className="mt-20 border-t border-slate-200 py-12 dark:border-slate-800">
       <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
@@ -32,9 +85,11 @@ export default function Footer() {
           </p>
         </div>
         <div>
-          <h2 className="mb-4 text-sm font-bold text-slate-950 dark:text-white">知识库</h2>
+          <h2 className="mb-4 text-sm font-bold text-slate-950 dark:text-white">
+            {knowledgeTitle}
+          </h2>
           <ul className="grid grid-cols-2 gap-x-4 gap-y-3 text-sm text-slate-600 dark:text-slate-400">
-            {resourceLinks.map(([title, href]) => (
+            {contextualLinks.map(([title, href]) => (
               <li key={href}>
                 <Link href={href} className="hover:text-blue-700 dark:hover:text-blue-300">
                   {title}

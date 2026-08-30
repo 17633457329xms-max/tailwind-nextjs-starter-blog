@@ -10,6 +10,7 @@ import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 
 const verificationOther = Object.fromEntries(
   [
@@ -92,10 +93,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
           <SectionContainer>
             <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
-              <Header />
+              <Suspense fallback={<div className="h-16" aria-hidden="true" />}>
+                <Header />
+              </Suspense>
               <main className="mb-auto">{children}</main>
             </SearchProvider>
-            <Footer />
+            <Suspense fallback={null}>
+              <Footer />
+            </Suspense>
           </SectionContainer>
         </ThemeProviders>
       </body>

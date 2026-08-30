@@ -5,11 +5,16 @@ import type { DisciplineConfig } from '@/data/disciplines'
 export default function DisciplineArticleCard({
   article,
   discipline,
+  context,
 }: {
   article: DisciplineArticle
   discipline: DisciplineConfig
+  context?: { specialty: string; stage?: string; task?: string }
 }) {
-  const href = `/disciplines/${article.discipline}/${article.slug}`
+  const query = context
+    ? `?specialty=${encodeURIComponent(context.specialty)}${context.stage ? `&stage=${context.stage}` : ''}${context.task ? `&task=${context.task}` : ''}${article.leafIndex ? `&leaf=${article.leafIndex}` : ''}`
+    : ''
+  const href = `/disciplines/${article.discipline}/${article.sourceSlug ?? article.slug}${query}`
   return (
     <article className="group relative flex h-full flex-col border-r border-b border-black/15 bg-white/40 p-6 transition hover:bg-white dark:border-white/15 dark:bg-white/3 dark:hover:bg-white/8">
       <span

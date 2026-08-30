@@ -3,6 +3,8 @@ import CopyableCodeBlock from './CopyableCodeBlock'
 import type { DisciplineArticle } from '@/data/disciplineArticles'
 import type { DisciplineConfig } from '@/data/disciplines'
 import DisciplineArticleCard from './DisciplineArticleCard'
+import { getKnowledgeTask } from '@/data/knowledgeArchitecture'
+import { getDisciplineSpecialty } from '@/data/specialties'
 
 function PublicDataChart({
   chart,
@@ -75,13 +77,25 @@ export default function DisciplineArticlePage({
   discipline: DisciplineConfig
   related: DisciplineArticle[]
 }) {
+  const specialty = getDisciplineSpecialty(discipline.slug, article.specialties?.[0])
+  const task = getKnowledgeTask(discipline.slug, article.knowledgeStage, article.knowledgeTask)
+  const libraryHref = `/disciplines/${discipline.slug}?specialty=${encodeURIComponent(specialty.name)}&stage=${task?.stage.key ?? 'topic'}&task=${task?.task.key ?? 'direction'}`
   return (
     <div className="py-8 sm:py-12">
       <nav className="mb-6 text-sm text-slate-500" aria-label="面包屑">
         <Link href="/">学科首页</Link>
         <span className="mx-2">/</span>
         <Link href={`/disciplines/${discipline.slug}`}>{discipline.name}</Link>
-        <span className="mx-2">/</span>正文
+        <span className="mx-2">/</span>
+        <Link href={libraryHref}>{specialty.name}</Link>
+        {task && (
+          <>
+            <span className="mx-2">/</span>
+            <Link href={libraryHref}>{task.stage.title}</Link>
+            <span className="mx-2">/</span>
+            <Link href={libraryHref}>{task.task.title}</Link>
+          </>
+        )}
       </nav>
       <article>
         <header
