@@ -10,7 +10,7 @@ export default function DisciplinePortal() {
           先选择你的一级学科，进入对应的研究方法与内容体系
         </h1>
         <p className="mt-6 max-w-3xl text-base leading-8 text-slate-600 dark:text-slate-300">
-          不同学科使用不同的问题意识、证据规则和写作规范。本站提供选题诊断、研究方法辅导、写作反馈与论文润色优化一对一定制，不提供代写、数据伪造或成果冒用。
+          不同学科使用不同的问题意识、证据规则和写作规范。本站提供选题诊断、研究方法辅导、写作反馈与论文润色优化一对一定制。
         </p>
       </section>
       <section className="grid border-t border-l border-black/15 sm:grid-cols-2 lg:grid-cols-3 dark:border-white/15">
