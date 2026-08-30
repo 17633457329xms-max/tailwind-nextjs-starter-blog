@@ -47,9 +47,9 @@ export default function ContactCards({ compact = false }: { compact?: boolean })
       {contacts.map((contact) => (
         <article
           key={contact.type}
-          className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900"
+          className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900"
         >
-          <div className="p-5">
+          <div className="mt-auto p-5">
             <div className="flex items-center justify-between gap-3">
               <h2 className="text-lg font-black text-slate-950 dark:text-white">{contact.title}</h2>
               <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-800 dark:bg-blue-950 dark:text-blue-200">
