@@ -20,6 +20,7 @@ export interface DisciplineCaseStudy {
 export interface DisciplineChart {
   title: string
   description: string
+  dataUpdatedAt?: string
   unit: string
   sourceLabel: string
   sourceUrl: string
@@ -2661,23 +2662,27 @@ disciplineArticles.forEach((article) => {
   article.codeExample = codeExampleFor(article)
   if (article.discipline === 'economics') {
     article.chart = {
-      title: '中国实际 GDP 年增长率（2021—2024）',
+      title: '中国实际 GDP 年增长率（2021年至2025年）',
       description:
         '示范如何把公开宏观指标转化为可核验图表。正式论文应同时记录指标代码、国家代码、下载日期、缺失值处理和版本。',
       unit: '%',
       sourceLabel: '世界银行 WDI：NY.GDP.MKTP.KD.ZG',
+      dataUpdatedAt:
+        '官方公开数据截至 2025 年；于 2026-08-31 通过世界银行 WDI API 获取，历史值可能随源库修订。',
       sourceUrl: 'https://api.worldbank.org/v2/country/CHN/indicator/NY.GDP.MKTP.KD.ZG?format=json',
       values: [
-        { label: '2021', value: 8.4 },
-        { label: '2022', value: 3.0 },
-        { label: '2023', value: 5.2 },
-        { label: '2024', value: 5.0 },
+        { label: '2021', value: 8.57 },
+        { label: '2022', value: 3.13 },
+        { label: '2023', value: 5.42 },
+        { label: '2024', value: 4.96 },
+        { label: '2025', value: 4.96 },
       ],
     }
   }
   if (article.discipline === 'transportation') {
     article.chart = {
       title: '2025年全国城市客运量构成',
+      dataUpdatedAt: '官方公开数据截至 2025 年；统计公报于 2026-06-18 发布。',
       description:
         '用于展示公开统计图表应如何注明年份、单位与统计口径；不应用于替代对具体城市或线路的实证判断。',
       unit: '亿人次',

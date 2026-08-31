@@ -1,5 +1,7 @@
 import Link from '@/components/Link'
+import type { ReactNode } from 'react'
 import CopyableCodeBlock from './CopyableCodeBlock'
+import ChartActions from './ChartActions'
 import type { DisciplineArticle } from '@/data/disciplineArticles'
 import type { DisciplineConfig } from '@/data/disciplines'
 import DisciplineArticleCard from './DisciplineArticleCard'
@@ -15,25 +17,39 @@ function PublicDataChart({
   color: string
 }) {
   const max = Math.max(...chart.values.map((item) => item.value))
+  const barWidth = 132
+  const gap = 60
+  const plotStart = 72
+  const chartWidth = Math.max(
+    720,
+    plotStart + chart.values.length * barWidth + (chart.values.length - 1) * gap + 48
+  )
+  const axisEnd = chartWidth - 28
 
   return (
-    <figure className="not-prose my-10 border border-black/15 p-5 dark:border-white/15">
-      <figcaption className="font-serif text-xl font-black">{chart.title}</figcaption>
+    <figure className="not-prose relative my-10 border border-black/15 p-5 dark:border-white/15">
+      <figcaption className="font-serif text-xl font-black">
+        {chart.title}
+      </figcaption>
       <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
         {chart.description}
       </p>
+      {chart.dataUpdatedAt && (
+        <p className="mt-2 text-xs leading-5 text-slate-500 dark:text-slate-400">
+          数据更新：{chart.dataUpdatedAt}
+        </p>
+      )}
       <div className="mt-6 overflow-x-auto">
         <svg
-          viewBox="0 0 720 280"
+          viewBox={`0 0 ${chartWidth} 280`}
           role="img"
           aria-label={`${chart.title}，单位：${chart.unit}`}
-          className="min-w-160"
+          className="block h-auto w-full max-w-none min-w-160"
+          data-chart-svg
         >
-          <line x1="54" y1="228" x2="690" y2="228" stroke="currentColor" strokeOpacity="0.25" />
+          <line x1="54" y1="228" x2={axisEnd} y2="228" stroke="currentColor" strokeOpacity="0.25" />
           {chart.values.map((item, index) => {
-            const barWidth = 132
-            const gap = 66
-            const x = 88 + index * (barWidth + gap)
+            const x = plotStart + index * (barWidth + gap)
             const height = (item.value / max) * 170
             const y = 228 - height
             return (
@@ -59,6 +75,7 @@ function PublicDataChart({
           </text>
         </svg>
       </div>
+      <ChartActions title={chart.title} unit={chart.unit} values={chart.values} />
       <p className="mt-4 text-xs leading-6 text-slate-500">
         数据来源：
         <a href={chart.sourceUrl} target="_blank" rel="noreferrer" className="font-bold underline">
@@ -67,6 +84,27 @@ function PublicDataChart({
       </p>
     </figure>
   )
+}
+
+function renderInlineMath(text: string) {
+  const expression = /([A-Za-z\u0370-\u03FF]+)_([A-Za-z0-9]+)/g
+  const nodes: ReactNode[] = []
+  let cursor = 0
+  let match: RegExpExecArray | null
+
+  while ((match = expression.exec(text)) !== null) {
+    if (match.index > cursor) nodes.push(text.slice(cursor, match.index))
+    nodes.push(
+      <span key={`${match.index}-${match[0]}`} className="inline-block whitespace-nowrap">
+        {match[1]}
+        <sub className="ml-px align-sub text-[0.7em] leading-none">{match[2]}</sub>
+      </span>
+    )
+    cursor = match.index + match[0].length
+  }
+
+  if (cursor < text.length) nodes.push(text.slice(cursor))
+  return nodes.length > 0 ? nodes : text
 }
 
 export default function DisciplineArticlePage({
@@ -208,12 +246,12 @@ export default function DisciplineArticlePage({
                 <section id={`section-${index + 1}`} key={section.heading}>
                   <h2>{section.heading}</h2>
                   {section.paragraphs.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
+                    <p key={paragraph}>{renderInlineMath(paragraph)}</p>
                   ))}
                   {section.bullets && (
                     <ul>
                       {section.bullets.map((item) => (
-                        <li key={item}>{item}</li>
+                        <li key={item}>{renderInlineMath(item)}</li>
                       ))}
                     </ul>
                   )}
@@ -230,7 +268,7 @@ export default function DisciplineArticlePage({
                                 key={header}
                                 className="border border-black/15 bg-black/5 p-3 dark:border-white/15 dark:bg-white/10"
                               >
-                                {header}
+                                {renderInlineMath(header)}
                               </th>
                             ))}
                           </tr>
@@ -243,7 +281,7 @@ export default function DisciplineArticlePage({
                                   key={cell}
                                   className="border border-black/15 p-3 align-top leading-6 dark:border-white/15"
                                 >
-                                  {cell}
+                                  {renderInlineMath(cell)}
                                 </td>
                               ))}
                             </tr>

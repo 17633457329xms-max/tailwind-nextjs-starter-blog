@@ -270,17 +270,20 @@ function buildCaseStudy(input: DeepContentInput): DisciplineCaseStudy {
 function buildChart(input: DeepContentInput): DisciplineChart | undefined {
   if (input.discipline.slug !== 'economics') return undefined
   return {
-    title: '中国实际 GDP 年增长率（2021—2024）',
+    title: '中国实际 GDP 年增长率（2021年至2025年）',
     description:
       '使用世界银行 WDI 指标 NY.GDP.MKTP.KD.ZG 制作的公开数据示例。图表只用于演示时间序列描述；正式论文应保存 API 返回结果和下载日期。',
+    dataUpdatedAt:
+      '官方公开数据截至 2025 年；于 2026-08-31 通过世界银行 WDI API 获取，历史值可能随源库修订。',
     unit: '%',
     sourceLabel: '世界银行 WDI：NY.GDP.MKTP.KD.ZG',
     sourceUrl: 'https://api.worldbank.org/v2/country/CHN/indicator/NY.GDP.MKTP.KD.ZG?format=json',
     values: [
-      { label: '2021', value: 8.4 },
-      { label: '2022', value: 3.0 },
-      { label: '2023', value: 5.2 },
-      { label: '2024', value: 5.0 },
+      { label: '2021', value: 8.57 },
+      { label: '2022', value: 3.13 },
+      { label: '2023', value: 5.42 },
+      { label: '2024', value: 4.96 },
+      { label: '2025', value: 4.96 },
     ],
   }
 }

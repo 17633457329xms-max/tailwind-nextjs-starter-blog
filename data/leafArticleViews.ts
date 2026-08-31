@@ -120,6 +120,21 @@ const researchFocuses = [
 
 const workingLenses = ['入门操作', '案例拆解', '证据核验', '常见误区修正', '进阶推演']
 
+// 标题采用多种自然句式，避免所有文章都套用“主题——焦点”的模板。
+// 关键词仍完整保留（学科、阶段、任务、研究焦点），但阅读上更接近人工撰写的学术标题。
+const titlePatterns = [
+  (specialty: string, stage: string, theme: string, focus: string) =>
+    `${specialty}${stage}：${theme}与${focus}`,
+  (specialty: string, stage: string, theme: string, focus: string) =>
+    `${specialty}${stage}中的${theme}：聚焦${focus}`,
+  (specialty: string, stage: string, theme: string, focus: string) =>
+    `如何在${specialty}${stage}中处理${theme}，聚焦${focus}`,
+  (specialty: string, stage: string, theme: string, focus: string) =>
+    `${specialty}${stage}的${focus}：从${theme}入手`,
+  (specialty: string, stage: string, theme: string, focus: string) =>
+    `从${theme}到${focus}：${specialty}${stage}的实践路径`,
+]
+
 function makeSections(
   specialty: string,
   stage: KnowledgeStage,
@@ -202,7 +217,7 @@ export function getSpecialtyLeafArticles({
       leafIndex: sequence,
       specialties: [specialty],
       category: task.title,
-      title: `${specialty}${stage.title}：${taskTheme}——${focus}（${lens}）`,
+      title: titlePatterns[index % titlePatterns.length](specialty, stage.title, taskTheme, focus),
       summary: `围绕${specialty}在“${stage.title} · ${task.title}”阶段的“${taskTheme}”，用${lens}拆解${focus}、证据准备、操作步骤与质量自检。本篇为该细分路径第 ${sequence} 个独立学习切入点。`,
       tags: [specialty, stage.title, task.title, taskTheme, focus, lens],
       sections:

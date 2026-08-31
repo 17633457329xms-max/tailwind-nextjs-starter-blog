@@ -47,10 +47,17 @@ export default async function Page({
   searchParams: Promise<{ specialty?: string; stage?: string; task?: string; leaf?: string }>
 }) {
   const { discipline, slug } = await params
-  const { specialty, stage, task, leaf } = await searchParams
   if (!isDisciplineSlug(discipline)) notFound()
+
+  // 兼容旧版“学科-topic-direction-序号”文章链接，避免历史分享链接命中已移除的数据后返回 500。
+  if (new RegExp(`^${discipline}-topic-direction-\\d+$`).test(slug)) {
+    permanentRedirect(`/disciplines/${discipline}`)
+  }
+
   const article = getDisciplineArticle(discipline, slug)
   if (!article) notFound()
+
+  const { specialty, stage, task, leaf } = await searchParams
   const selectedTask = getKnowledgeTask(discipline, stage, task)
   const selectedSpecialty = getDisciplineSpecialty(discipline, specialty)
   const leafNumber = Number(leaf)
