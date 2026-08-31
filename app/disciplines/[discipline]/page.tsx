@@ -1,13 +1,19 @@
 import { notFound, permanentRedirect } from 'next/navigation'
 import DisciplinePage from '@/components/DisciplinePage'
-import { disciplines, disciplineOrder, isDisciplineSlug } from '@/data/disciplines'
+import {
+  disciplines,
+  isDisciplineSlug,
+  isPublicDiscipline,
+  publicDisciplineOrder,
+} from '@/data/disciplines'
 import { genPageMetadata } from '@/app/seo'
 import { getDisciplineArticles } from '@/data/disciplineArticles'
 import { getKnowledgeTask } from '@/data/knowledgeArchitecture'
 import { getDisciplineSpecialty } from '@/data/specialties'
 import { disciplineLibraryPath } from '@/data/disciplineUrls'
 
-export const generateStaticParams = () => disciplineOrder.map((discipline) => ({ discipline }))
+export const generateStaticParams = () =>
+  publicDisciplineOrder.map((discipline) => ({ discipline }))
 
 export async function generateMetadata({ params }: { params: Promise<{ discipline: string }> }) {
   const { discipline } = await params
@@ -16,6 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ disciplin
   return genPageMetadata({
     title: `${item.name}论文选题、研究方法与写作辅导`,
     description: `${item.statement}${item.audience}`,
+    robots: isPublicDiscipline(discipline) ? undefined : { index: false, follow: true },
   })
 }
 

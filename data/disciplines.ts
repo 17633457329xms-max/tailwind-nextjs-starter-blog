@@ -14,6 +14,22 @@ export const disciplineOrder = [
 
 export type DisciplineSlug = (typeof disciplineOrder)[number]
 
+/**
+ * 当前对外展示并参与 SEO 的一级学科。
+ * 后续扩展时，只需在此数组中加入对应 slug，即可恢复首页、切换器和 sitemap 入口。
+ */
+export const publicDisciplineSlugs = [
+  'economics',
+  'management',
+] as const satisfies readonly DisciplineSlug[]
+
+export const publicDisciplineOrder = disciplineOrder.filter((slug) =>
+  publicDisciplineSlugs.includes(slug as (typeof publicDisciplineSlugs)[number])
+)
+
+export const isPublicDiscipline = (value: string): value is DisciplineSlug =>
+  publicDisciplineSlugs.includes(value as (typeof publicDisciplineSlugs)[number])
+
 export interface DisciplineConfig {
   slug: DisciplineSlug
   name: string

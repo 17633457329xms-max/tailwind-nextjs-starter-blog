@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import Link from './Link'
 import headerNavLinks from '@/data/headerNavLinks'
 import { categories, isCategorySlug } from '@/data/knowledgeData'
-import { disciplines, disciplineOrder } from '@/data/disciplines'
+import { disciplines, publicDisciplineOrder } from '@/data/disciplines'
 
 const MobileNav = () => {
   const [navShow, setNavShow] = useState(false)
@@ -61,7 +61,7 @@ const MobileNav = () => {
                   切换一级学科
                 </p>
                 <div className="mb-6 grid w-full grid-cols-2 gap-2">
-                  {disciplineOrder.map((discipline) => (
+                  {publicDisciplineOrder.map((discipline) => (
                     <Link
                       key={discipline}
                       href={`/disciplines/${discipline}`}

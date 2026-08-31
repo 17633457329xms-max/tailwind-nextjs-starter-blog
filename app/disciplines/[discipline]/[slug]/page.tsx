@@ -5,7 +5,7 @@ import {
   getDisciplineArticle,
   getDisciplineArticles,
 } from '@/data/disciplineArticles'
-import { disciplines, isDisciplineSlug } from '@/data/disciplines'
+import { disciplines, isDisciplineSlug, isPublicDiscipline } from '@/data/disciplines'
 import { getKnowledgeTask } from '@/data/knowledgeArchitecture'
 import { getSpecialtyLeafArticles } from '@/data/leafArticleViews'
 import { getDisciplineSpecialty } from '@/data/specialties'
@@ -16,7 +16,9 @@ import { isIndexableDisciplineArticle } from '@/data/contentQuality'
 
 export const generateStaticParams = () =>
   disciplineArticles
-    .filter(isIndexableDisciplineArticle)
+    .filter(
+      (article) => isPublicDiscipline(article.discipline) && isIndexableDisciplineArticle(article)
+    )
     .map((article) => ({ discipline: article.discipline, slug: article.slug }))
 
 export async function generateMetadata({
@@ -30,7 +32,10 @@ export async function generateMetadata({
   return genPageMetadata({
     title: article.title,
     description: article.summary,
-    robots: isIndexableDisciplineArticle(article) ? undefined : { index: false, follow: true },
+    robots:
+      isPublicDiscipline(discipline) && isIndexableDisciplineArticle(article)
+        ? undefined
+        : { index: false, follow: true },
   })
 }
 

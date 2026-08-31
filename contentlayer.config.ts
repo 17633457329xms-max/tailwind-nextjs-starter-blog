@@ -22,6 +22,7 @@ import siteMetadata from './data/siteMetadata'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer.js'
 import { disciplineArticles } from './data/disciplineArticles'
 import { buildContentQualityAudit, isIndexableDisciplineArticle } from './data/contentQuality'
+import { isPublicDiscipline } from './data/disciplines'
 
 const headingIcon = fromHtmlIsomorphic(
   `<span class="content-header-link" aria-hidden="true">#</span>`,
@@ -34,7 +35,9 @@ function createSearchIndex(allKnowledge) {
     siteMetadata.search.kbarConfig.searchDocumentsPath
   ) {
     const disciplineDocuments = disciplineArticles
-      .filter(isIndexableDisciplineArticle)
+      .filter(
+        (article) => isPublicDiscipline(article.discipline) && isIndexableDisciplineArticle(article)
+      )
       .map((article) => ({
         title: article.title,
         date: article.date,

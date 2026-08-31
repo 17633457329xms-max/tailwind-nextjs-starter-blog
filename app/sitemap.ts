@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { allKnowledge } from 'contentlayer/generated'
 import siteMetadata from '@/data/siteMetadata'
 import { disciplineArticles } from '@/data/disciplineArticles'
-import { disciplineOrder } from '@/data/disciplines'
+import { isPublicDiscipline, publicDisciplineOrder } from '@/data/disciplines'
 import { isIndexableDisciplineArticle } from '@/data/contentQuality'
 import { disciplineSpecialties } from '@/data/specialties'
 import { disciplineLibraryPath } from '@/data/disciplineUrls'
@@ -43,18 +43,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteMetadata.siteUrl}/${item.path}`,
       lastModified: validDate(item.lastmod || item.date),
     }))
-  const disciplinePages = disciplineOrder.map((discipline) => ({
+  const disciplinePages = publicDisciplineOrder.map((discipline) => ({
     url: `${siteMetadata.siteUrl}/disciplines/${discipline}`,
     lastModified: updated,
   }))
-  const specialtyPages = disciplineOrder.flatMap((discipline) =>
+  const specialtyPages = publicDisciplineOrder.flatMap((discipline) =>
     disciplineSpecialties[discipline].map((specialty) => ({
       url: `${siteMetadata.siteUrl}${disciplineLibraryPath(discipline, specialty.name)}`,
       lastModified: updated,
     }))
   )
   const disciplineKnowledgePages = disciplineArticles
-    .filter(isIndexableDisciplineArticle)
+    .filter(
+      (article) => isPublicDiscipline(article.discipline) && isIndexableDisciplineArticle(article)
+    )
     .map((article) => ({
       url: `${siteMetadata.siteUrl}/disciplines/${article.discipline}/${article.slug}`,
       lastModified: validDate(article.date),
