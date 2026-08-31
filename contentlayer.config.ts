@@ -1,5 +1,5 @@
 import { defineDocumentType, makeSource } from 'contentlayer2/source-files'
-import { writeFileSync } from 'fs'
+import { mkdirSync, writeFileSync } from 'fs'
 import readingTime from 'reading-time'
 import path from 'path'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
@@ -20,6 +20,8 @@ import rehypePrismPlus from 'rehype-prism-plus'
 import rehypePresetMinify from 'rehype-preset-minify'
 import siteMetadata from './data/siteMetadata'
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer.js'
+import { disciplineArticles } from './data/disciplineArticles'
+import { buildContentQualityAudit, isIndexableDisciplineArticle } from './data/contentQuality'
 
 const headingIcon = fromHtmlIsomorphic(
   `<span class="content-header-link" aria-hidden="true">#</span>`,
@@ -31,9 +33,26 @@ function createSearchIndex(allKnowledge) {
     siteMetadata.search?.provider === 'kbar' &&
     siteMetadata.search.kbarConfig.searchDocumentsPath
   ) {
+    const disciplineDocuments = disciplineArticles
+      .filter(isIndexableDisciplineArticle)
+      .map((article) => ({
+        title: article.title,
+        date: article.date,
+        summary: article.summary,
+        category: article.category,
+        tags: article.tags,
+        difficulty: article.difficulty,
+        slug: article.slug,
+        path: `disciplines/${article.discipline}/${article.slug}`,
+      }))
     writeFileSync(
       `public/${path.basename(siteMetadata.search.kbarConfig.searchDocumentsPath)}`,
-      JSON.stringify(allCoreContent(sortPosts(allKnowledge)))
+      JSON.stringify([...allCoreContent(sortPosts(allKnowledge)), ...disciplineDocuments])
+    )
+    mkdirSync('reports', { recursive: true })
+    writeFileSync(
+      'reports/content-quality-audit.json',
+      JSON.stringify(buildContentQualityAudit(disciplineArticles), null, 2)
     )
     console.log('Knowledge search index generated...')
   }

@@ -1,10 +1,11 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import DisciplinePage from '@/components/DisciplinePage'
 import { disciplines, disciplineOrder, isDisciplineSlug } from '@/data/disciplines'
 import { genPageMetadata } from '@/app/seo'
 import { getDisciplineArticles } from '@/data/disciplineArticles'
 import { getKnowledgeTask } from '@/data/knowledgeArchitecture'
 import { getDisciplineSpecialty } from '@/data/specialties'
+import { disciplineLibraryPath } from '@/data/disciplineUrls'
 
 export const generateStaticParams = () => disciplineOrder.map((discipline) => ({ discipline }))
 
@@ -30,6 +31,16 @@ export default async function Page({
   if (!isDisciplineSlug(discipline)) notFound()
   const selectedSpecialty = getDisciplineSpecialty(discipline, specialty)
   const selectedTask = getKnowledgeTask(discipline, stage ?? 'topic', task ?? 'direction')
+  if (specialty || stage || task) {
+    permanentRedirect(
+      disciplineLibraryPath(
+        discipline,
+        selectedSpecialty.name,
+        selectedTask?.stage.key,
+        selectedTask?.task.key
+      )
+    )
+  }
   return (
     <DisciplinePage
       discipline={disciplines[discipline]}

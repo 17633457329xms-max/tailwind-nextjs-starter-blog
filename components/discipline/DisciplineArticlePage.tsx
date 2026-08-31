@@ -5,6 +5,7 @@ import type { DisciplineConfig } from '@/data/disciplines'
 import DisciplineArticleCard from './DisciplineArticleCard'
 import { getKnowledgeTask } from '@/data/knowledgeArchitecture'
 import { getDisciplineSpecialty } from '@/data/specialties'
+import { disciplineLibraryPath } from '@/data/disciplineUrls'
 
 function PublicDataChart({
   chart,
@@ -79,7 +80,12 @@ export default function DisciplineArticlePage({
 }) {
   const specialty = getDisciplineSpecialty(discipline.slug, article.specialties?.[0])
   const task = getKnowledgeTask(discipline.slug, article.knowledgeStage, article.knowledgeTask)
-  const libraryHref = `/disciplines/${discipline.slug}?specialty=${encodeURIComponent(specialty.name)}&stage=${task?.stage.key ?? 'topic'}&task=${task?.task.key ?? 'direction'}`
+  const libraryHref = disciplineLibraryPath(
+    discipline.slug,
+    specialty.name,
+    task?.stage.key,
+    task?.task.key
+  )
   return (
     <div className="py-8 sm:py-12">
       <nav className="mb-6 text-sm text-slate-500" aria-label="面包屑">

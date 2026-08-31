@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { DisciplineSlug } from '@/data/disciplines'
 import { disciplineSpecialties } from '@/data/specialties'
 import Link from '@/components/Link'
+import { disciplineLibraryPath } from '@/data/disciplineUrls'
 
 export default function SpecialtyOverflowNav({
   discipline,
@@ -68,7 +69,7 @@ export default function SpecialtyOverflowNav({
           return (
             <Link
               key={specialty.name}
-              href={`${baseHref}?specialty=${encodeURIComponent(specialty.name)}&stage=topic&task=direction`}
+              href={disciplineLibraryPath(discipline, specialty.name)}
               aria-current={active ? 'page' : undefined}
               className={`shrink-0 px-2.5 py-2 text-sm font-semibold transition ${
                 active

@@ -4,6 +4,7 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import { disciplines, isDisciplineSlug } from '@/data/disciplines'
 import { getKnowledgeStages, getKnowledgeTask } from '@/data/knowledgeArchitecture'
 import { getDisciplineSpecialty } from '@/data/specialties'
+import { disciplineLibraryPath } from '@/data/disciplineUrls'
 import Link from './Link'
 
 const resourceLinks = [
@@ -28,41 +29,61 @@ export default function Footer() {
   const disciplineSlug = pathname.match(/^\/disciplines\/([^/]+)/)?.[1]
   const discipline =
     disciplineSlug && isDisciplineSlug(disciplineSlug) ? disciplines[disciplineSlug] : undefined
+  const cleanContext = pathname.match(
+    /^\/disciplines\/[^/]+\/specialties\/([^/]+)\/([^/]+)\/([^/]+)/
+  )
+  const cleanSpecialty = cleanContext ? decodeURIComponent(cleanContext[1]) : undefined
+  const cleanStage = cleanContext?.[2]
+  const cleanTask = cleanContext?.[3]
   const activeTask = discipline
     ? getKnowledgeTask(
         discipline.slug,
-        searchParams.get('stage') ?? undefined,
-        searchParams.get('task') ?? undefined
+        cleanStage ?? searchParams.get('stage') ?? undefined,
+        cleanTask ?? searchParams.get('task') ?? undefined
       )
     : undefined
   const specialty = discipline
-    ? getDisciplineSpecialty(discipline.slug, searchParams.get('specialty'))
+    ? getDisciplineSpecialty(discipline.slug, cleanSpecialty ?? searchParams.get('specialty'))
     : undefined
-  const contextQuery = specialty ? `specialty=${encodeURIComponent(specialty.name)}&` : ''
   const contextualLinks = discipline
     ? activeTask
       ? [
           [
             activeTask.stage.title,
-            `/disciplines/${discipline.slug}?${contextQuery}stage=${activeTask.stage.key}&task=${activeTask.task.key}`,
+            disciplineLibraryPath(
+              discipline.slug,
+              specialty!.name,
+              activeTask.stage.key,
+              activeTask.task.key
+            ),
           ],
           ...activeTask.stage.tasks
             .filter((task) => task.key !== activeTask.task.key)
             .map((task) => [
               task.title,
-              `/disciplines/${discipline.slug}?${contextQuery}stage=${activeTask.stage.key}&task=${task.key}`,
+              disciplineLibraryPath(
+                discipline.slug,
+                specialty!.name,
+                activeTask.stage.key,
+                task.key
+              ),
             ]),
           ...getKnowledgeStages(discipline.slug)
             .filter((stage) => stage.key !== activeTask.stage.key)
             .slice(0, 3)
             .map((stage) => [
               stage.title,
-              `/disciplines/${discipline.slug}?${contextQuery}stage=${stage.key}&task=${stage.tasks[0].key}`,
+              disciplineLibraryPath(
+                discipline.slug,
+                specialty!.name,
+                stage.key,
+                stage.tasks[0].key
+              ),
             ]),
         ]
       : getKnowledgeStages(discipline.slug).map((stage) => [
           stage.title,
-          `/disciplines/${discipline.slug}?${contextQuery}stage=${stage.key}&task=${stage.tasks[0].key}`,
+          disciplineLibraryPath(discipline.slug, specialty!.name, stage.key, stage.tasks[0].key),
         ])
     : resourceLinks
   const knowledgeTitle = discipline

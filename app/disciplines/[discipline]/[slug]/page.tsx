@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import DisciplineArticlePage from '@/components/discipline/DisciplineArticlePage'
 import {
   disciplineArticles,
@@ -11,9 +11,13 @@ import { getSpecialtyLeafArticles } from '@/data/leafArticleViews'
 import { getDisciplineSpecialty } from '@/data/specialties'
 import { genPageMetadata } from '@/app/seo'
 import siteMetadata from '@/data/siteMetadata'
+import { disciplineLeafArticlePath } from '@/data/disciplineUrls'
+import { isIndexableDisciplineArticle } from '@/data/contentQuality'
 
 export const generateStaticParams = () =>
-  disciplineArticles.map((article) => ({ discipline: article.discipline, slug: article.slug }))
+  disciplineArticles
+    .filter(isIndexableDisciplineArticle)
+    .map((article) => ({ discipline: article.discipline, slug: article.slug }))
 
 export async function generateMetadata({
   params,
@@ -23,7 +27,11 @@ export async function generateMetadata({
   const { discipline, slug } = await params
   const article = getDisciplineArticle(discipline, slug)
   if (!article) return {}
-  return genPageMetadata({ title: article.title, description: article.summary })
+  return genPageMetadata({
+    title: article.title,
+    description: article.summary,
+    robots: isIndexableDisciplineArticle(article) ? undefined : { index: false, follow: true },
+  })
 }
 
 export default async function Page({
@@ -41,6 +49,21 @@ export default async function Page({
   const selectedTask = getKnowledgeTask(discipline, stage, task)
   const selectedSpecialty = getDisciplineSpecialty(discipline, specialty)
   const leafNumber = Number(leaf)
+  if (selectedTask && Number.isInteger(leafNumber) && leafNumber >= 1 && leafNumber <= 50) {
+    permanentRedirect(
+      disciplineLeafArticlePath({
+        discipline,
+        specialty: selectedSpecialty.name,
+        stage: selectedTask.stage.key,
+        task: selectedTask.task.key,
+        sourceSlug: slug,
+        leafIndex: leafNumber,
+      })
+    )
+  }
+  if (specialty || stage || task || leaf) {
+    permanentRedirect(`/disciplines/${discipline}/${slug}`)
+  }
   const displayedArticle =
     selectedTask && Number.isInteger(leafNumber) && leafNumber >= 1 && leafNumber <= 50
       ? getSpecialtyLeafArticles({

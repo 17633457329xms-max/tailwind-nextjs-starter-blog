@@ -1,5 +1,6 @@
 import type { DisciplineArticle, DisciplineArticleSection } from './disciplineArticles'
 import type { DisciplineConfig } from './disciplines'
+import { buildEconManagementDeepContent } from './econManagementDeepContent'
 import type { KnowledgeStage, KnowledgeTask } from './knowledgeArchitecture'
 
 // 每个三级任务拥有自己的内容主题，避免同一二级产出物下的两组卡片只替换简介或任务名称。
@@ -186,6 +187,15 @@ export function getSpecialtyLeafArticles({
     const focus = researchFocuses[index % researchFocuses.length]
     const lens = workingLenses[Math.floor(index / researchFocuses.length)]
     const sequence = index + 1
+    const deepContent = buildEconManagementDeepContent({
+      discipline,
+      specialty,
+      stage,
+      task,
+      focus,
+      lens,
+      sequence,
+    })
     return {
       ...source,
       sourceSlug: source.slug,
@@ -195,11 +205,13 @@ export function getSpecialtyLeafArticles({
       title: `${specialty}${stage.title}：${taskTheme}——${focus}（${lens}）`,
       summary: `围绕${specialty}在“${stage.title} · ${task.title}”阶段的“${taskTheme}”，用${lens}拆解${focus}、证据准备、操作步骤与质量自检。本篇为该细分路径第 ${sequence} 个独立学习切入点。`,
       tags: [specialty, stage.title, task.title, taskTheme, focus, lens],
-      sections: makeSections(specialty, stage, task, focus, lens, sequence),
-      readingMinutes: 10 + (index % 7),
-      caseStudy: undefined,
-      chart: undefined,
-      codeExample: undefined,
+      sections:
+        deepContent?.sections ?? makeSections(specialty, stage, task, focus, lens, sequence),
+      caseStudy: deepContent?.caseStudy ?? source.caseStudy,
+      chart: deepContent?.chart ?? source.chart,
+      codeExample: deepContent?.codeExample ?? source.codeExample,
+      references: deepContent?.references ?? source.references,
+      readingMinutes: deepContent?.readingMinutes ?? 10 + (index % 7),
     }
   })
 }

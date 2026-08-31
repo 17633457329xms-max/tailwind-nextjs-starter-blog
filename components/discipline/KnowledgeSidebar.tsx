@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import type { DisciplineConfig } from '@/data/disciplines'
 import { getKnowledgeStages } from '@/data/knowledgeArchitecture'
 import Link from '@/components/Link'
+import { disciplineLibraryPath } from '@/data/disciplineUrls'
 
 export default function KnowledgeSidebar({
   discipline,
@@ -17,9 +18,8 @@ export default function KnowledgeSidebar({
   selectedTask?: string
 }) {
   const [expanded, setExpanded] = useState(selectedStage ?? 'topic')
-  const baseHref = `/disciplines/${discipline.slug}`
   const withContext = (stage: string, task: string) =>
-    `${baseHref}?specialty=${encodeURIComponent(specialty)}&stage=${stage}&task=${task}`
+    disciplineLibraryPath(discipline.slug, specialty, stage, task)
 
   useEffect(() => {
     setExpanded(selectedStage ?? 'topic')

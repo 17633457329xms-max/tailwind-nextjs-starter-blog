@@ -1,0 +1,31 @@
+{
+  "generatedAt": "2026-08-31T01:24:45.882Z",
+  "totalDisciplineArticles": 5264,
+  "indexableEditorialArticles": 16,
+  "generatedTemplateArticles": 5234,
+  "editorialButInsufficient": 14,
+  "excludedFromSearchAndSitemap": 5248,
+  "qualityRules": {
+    "generatedTemplatesExcluded": true,
+    "minimumTitleCharacters": 12,
+    "minimumSummaryCharacters": 30,
+    "minimumSections": 2,
+    "minimumBodyCharacters": 450
+  },
+  "editorialButInsufficientSlugs": [
+    "practice-led-art-research",
+    "art-fieldwork-ethics",
+    "classic-text-context-method",
+    "policy-discourse-analysis",
+    "law-thesis-topic-selection",
+    "education-thesis-topic-selection",
+    "literature-thesis-topic-selection",
+    "art-thesis-topic-selection",
+    "marxism-thesis-topic-selection",
+    "legal-literature-search-guide",
+    "education-literature-review-guide",
+    "literature-review-writing-guide",
+    "art-literature-review-guide",
+    "marxism-literature-review-guide"
+  ]
+}

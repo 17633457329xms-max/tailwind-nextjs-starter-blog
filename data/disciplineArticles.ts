@@ -1621,6 +1621,12 @@ const stageForLegacyArticle = (
   return { stage: 'topic', task: 'feasibility' }
 }
 
+const articleDateFromOffset = (offset: number) => {
+  const date = new Date(Date.UTC(2026, 7, 27))
+  date.setUTCDate(date.getUTCDate() - offset)
+  return date.toISOString().slice(0, 10)
+}
+
 const createKnowledgeArticle = (
   discipline: DisciplineArticle['discipline'],
   stage: ReturnType<typeof getKnowledgeStages>[number],
@@ -1650,7 +1656,7 @@ const createKnowledgeArticle = (
     summary: `围绕“${title}”，给出从问题界定、材料准备到写作检查的学习路径。内容用于支持独立研究与写作训练，应结合本人课题、学校规范和导师意见使用。`,
     tags: [stage.title, task.title, specialty, '硕士论文'],
     difficulty: index % 5 === 0 ? '进阶' : '入门',
-    date: `2026-${String(8 - (index % 7)).padStart(2, '0')}-${String((index % 27) + 1).padStart(2, '0')}`,
+    date: articleDateFromOffset(index),
     readingMinutes: 12 + (index % 5),
     navSection:
       stage.key === 'design' ? 'methods' : stage.key === 'topic' ? 'research' : 'standards',
@@ -1765,7 +1771,7 @@ const makeExtraArticle = (
       navSection === 'research' ? '论文选题' : navSection === 'methods' ? '研究方法' : '论文写作',
     ],
     difficulty: navSection === 'methods' ? '进阶' : '入门',
-    date: `2026-08-${String(16 - index).padStart(2, '0')}`,
+    date: articleDateFromOffset(index),
     readingMinutes: 12,
     sections: [
       {
@@ -2653,6 +2659,22 @@ disciplineArticles.forEach((article) => {
     sourceUrl: evidence.sourceUrl,
   }
   article.codeExample = codeExampleFor(article)
+  if (article.discipline === 'economics') {
+    article.chart = {
+      title: '中国实际 GDP 年增长率（2021—2024）',
+      description:
+        '示范如何把公开宏观指标转化为可核验图表。正式论文应同时记录指标代码、国家代码、下载日期、缺失值处理和版本。',
+      unit: '%',
+      sourceLabel: '世界银行 WDI：NY.GDP.MKTP.KD.ZG',
+      sourceUrl: 'https://api.worldbank.org/v2/country/CHN/indicator/NY.GDP.MKTP.KD.ZG?format=json',
+      values: [
+        { label: '2021', value: 8.4 },
+        { label: '2022', value: 3.0 },
+        { label: '2023', value: 5.2 },
+        { label: '2024', value: 5.0 },
+      ],
+    }
+  }
   if (article.discipline === 'transportation') {
     article.chart = {
       title: '2025年全国城市客运量构成',

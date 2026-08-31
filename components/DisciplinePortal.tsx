@@ -25,7 +25,7 @@ export default function DisciplinePortal() {
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black tracking-[0.18em] text-slate-500">
-                  0{index + 1}
+                  {String(index + 1).padStart(2, '0')}
                 </span>
                 <span className="h-3 w-3" style={{ backgroundColor: item.color }} />
               </div>

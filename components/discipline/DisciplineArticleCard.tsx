@@ -1,6 +1,7 @@
 import Link from '@/components/Link'
 import type { DisciplineArticle } from '@/data/disciplineArticles'
 import type { DisciplineConfig } from '@/data/disciplines'
+import { disciplineLeafArticlePath } from '@/data/disciplineUrls'
 
 export default function DisciplineArticleCard({
   article,
@@ -11,10 +12,17 @@ export default function DisciplineArticleCard({
   discipline: DisciplineConfig
   context?: { specialty: string; stage?: string; task?: string }
 }) {
-  const query = context
-    ? `?specialty=${encodeURIComponent(context.specialty)}${context.stage ? `&stage=${context.stage}` : ''}${context.task ? `&task=${context.task}` : ''}${article.leafIndex ? `&leaf=${article.leafIndex}` : ''}`
-    : ''
-  const href = `/disciplines/${article.discipline}/${article.sourceSlug ?? article.slug}${query}`
+  const href =
+    context?.stage && context.task && article.leafIndex
+      ? disciplineLeafArticlePath({
+          discipline: article.discipline,
+          specialty: context.specialty,
+          stage: context.stage,
+          task: context.task,
+          sourceSlug: article.sourceSlug ?? article.slug,
+          leafIndex: article.leafIndex,
+        })
+      : `/disciplines/${article.discipline}/${article.sourceSlug ?? article.slug}`
   return (
     <article className="group relative flex h-full flex-col border-r border-b border-black/15 bg-white/40 p-6 transition hover:bg-white dark:border-white/15 dark:bg-white/3 dark:hover:bg-white/8">
       <span
