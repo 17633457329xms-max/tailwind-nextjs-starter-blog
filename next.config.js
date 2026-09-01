@@ -6,11 +6,11 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cloud.umami.is;
   style-src 'self' 'unsafe-inline';
   img-src 'self' blob: data:;
   media-src 'self';
-  connect-src 'self';
+  connect-src 'self' https://cloud.umami.is;
   font-src 'self';
   frame-src 'self'
 `
