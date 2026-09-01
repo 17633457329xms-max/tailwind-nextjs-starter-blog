@@ -28,9 +28,7 @@ function PublicDataChart({
 
   return (
     <figure className="not-prose relative my-10 border border-black/15 p-5 dark:border-white/15">
-      <figcaption className="font-serif text-xl font-black">
-        {chart.title}
-      </figcaption>
+      <figcaption className="font-serif text-xl font-black">{chart.title}</figcaption>
       <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
         {chart.description}
       </p>
