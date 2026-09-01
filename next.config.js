@@ -10,7 +10,7 @@ const ContentSecurityPolicy = `
   style-src 'self' 'unsafe-inline';
   img-src 'self' blob: data:;
   media-src 'self';
-  connect-src 'self' https://cloud.umami.is;
+  connect-src 'self' https://cloud.umami.is https://gateway.umami.is;
   font-src 'self';
   frame-src 'self'
 `
