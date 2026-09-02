@@ -66,6 +66,11 @@ module.exports = () => {
     output,
     basePath,
     reactStrictMode: true,
+    typescript: {
+      // The project is type-checked in CI/local development.  This opt-in keeps
+      // a constrained production server from stalling during a deploy build.
+      ignoreBuildErrors: process.env.SKIP_TYPECHECK === 'true',
+    },
     turbopack: {
       root: process.cwd(),
       rules: {
