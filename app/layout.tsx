@@ -62,7 +62,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const basePath = process.env.BASE_PATH || ''
-  const umamiWebsiteId = process.env.NEXT_UMAMI_ID
+  const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_ID
   const umamiSrc = process.env.NEXT_PUBLIC_UMAMI_SRC || 'https://cloud.umami.is/script.js'
   const websiteJsonLd = {
     '@context': 'https://schema.org',
