@@ -24,7 +24,7 @@ export default function DisciplineArticleExplorer({
 }: {
   articles: DisciplineArticle[]
   discipline: DisciplineConfig
-  context?: { specialty: string; stage?: string; task?: string }
+  context?: { specialty: string; stage?: string; task?: string; topic?: string; mode?: 'advanced' }
 }) {
   const [selected, setSelected] = useState<string[]>([])
   const [page, setPage] = useState(1)

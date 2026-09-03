@@ -1,7 +1,7 @@
 import Link from '@/components/Link'
 import type { DisciplineArticle } from '@/data/disciplineArticles'
 import type { DisciplineConfig } from '@/data/disciplines'
-import { disciplineLeafArticlePath } from '@/data/disciplineUrls'
+import { disciplineAdvancedArticlePath, disciplineLeafArticlePath } from '@/data/disciplineUrls'
 
 export default function DisciplineArticleCard({
   article,
@@ -10,19 +10,28 @@ export default function DisciplineArticleCard({
 }: {
   article: DisciplineArticle
   discipline: DisciplineConfig
-  context?: { specialty: string; stage?: string; task?: string }
+  context?: { specialty: string; stage?: string; task?: string; topic?: string; mode?: 'advanced' }
 }) {
   const href =
-    context?.stage && context.task && article.leafIndex
-      ? disciplineLeafArticlePath({
+    context?.mode === 'advanced' && context.stage && context.topic && article.leafIndex
+      ? disciplineAdvancedArticlePath({
           discipline: article.discipline,
           specialty: context.specialty,
           stage: context.stage,
-          task: context.task,
+          topic: context.topic,
           sourceSlug: article.sourceSlug ?? article.slug,
           leafIndex: article.leafIndex,
         })
-      : `/disciplines/${article.discipline}/${article.sourceSlug ?? article.slug}`
+      : context?.stage && context.task && article.leafIndex
+        ? disciplineLeafArticlePath({
+            discipline: article.discipline,
+            specialty: context.specialty,
+            stage: context.stage,
+            task: context.task,
+            sourceSlug: article.sourceSlug ?? article.slug,
+            leafIndex: article.leafIndex,
+          })
+        : `/disciplines/${article.discipline}/${article.sourceSlug ?? article.slug}`
   return (
     <article className="group relative flex h-full flex-col border-r border-b border-black/15 bg-white/40 p-6 transition hover:bg-white dark:border-white/15 dark:bg-white/3 dark:hover:bg-white/8">
       <span

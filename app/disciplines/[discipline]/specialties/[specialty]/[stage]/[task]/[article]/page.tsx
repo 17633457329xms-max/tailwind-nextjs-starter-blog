@@ -1,11 +1,11 @@
-import { notFound } from 'next/navigation'
-import DisciplineArticlePage from '@/components/discipline/DisciplineArticlePage'
+import { notFound, permanentRedirect } from 'next/navigation'
 import { genPageMetadata } from '@/app/seo'
 import { getDisciplineArticles } from '@/data/disciplineArticles'
 import { disciplines, isDisciplineSlug } from '@/data/disciplines'
 import { getKnowledgeTask } from '@/data/knowledgeArchitecture'
-import { getSpecialtyLeafArticles } from '@/data/leafArticleViews'
+import { getAdvancedTopics, getSpecialtyLeafArticles } from '@/data/leafArticleViews'
 import { getDisciplineSpecialty } from '@/data/specialties'
+import { disciplineAdvancedArticlePath } from '@/data/disciplineUrls'
 
 type Params = {
   discipline: string
@@ -48,13 +48,25 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   const values = await params
   const resolved = resolveLeaf(values)
   if (!resolved || !isDisciplineSlug(values.discipline)) notFound()
-  return (
-    <DisciplineArticlePage
-      article={resolved.article}
-      discipline={disciplines[values.discipline]}
-      related={resolved.sourceArticles
-        .filter((item) => item.slug !== resolved.article.sourceSlug)
-        .slice(0, 3)}
-    />
+  const selectedTask = getKnowledgeTask(values.discipline, values.stage, values.task)
+  const leafIndex = getLeafIndex(values.article)
+  const topic =
+    selectedTask && Number.isInteger(leafIndex)
+      ? getAdvancedTopics(selectedTask.stage).find(
+          (item) =>
+            item.taskKey === selectedTask.task.key && item.themeIndex === (leafIndex - 1) % 5
+        )
+      : undefined
+  if (!topic) notFound()
+  permanentRedirect(
+    disciplineAdvancedArticlePath({
+      discipline: values.discipline,
+      specialty: getDisciplineSpecialty(values.discipline, decodeURIComponent(values.specialty))
+        .name,
+      stage: values.stage,
+      topic: topic.key,
+      sourceSlug: resolved.article.sourceSlug ?? resolved.article.slug,
+      leafIndex,
+    })
   )
 }
