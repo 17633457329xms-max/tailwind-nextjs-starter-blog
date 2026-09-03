@@ -29,11 +29,17 @@ export default function HeaderNav() {
   if (pathname.startsWith('/disciplines/')) {
     const disciplineSlug = pathname.split('/')[2]
     if (!isDisciplineSlug(disciplineSlug)) return null
+    const pathSegments = pathname.split('/')
+    const specialtyFromPath =
+      pathSegments[3] === 'specialties' && pathSegments[4]
+        ? decodeURIComponent(pathSegments[4])
+        : null
     return (
       <SpecialtyOverflowNav
         discipline={disciplineSlug}
         selectedSpecialty={
-          getDisciplineSpecialty(disciplineSlug, searchParams.get('specialty')).name
+          getDisciplineSpecialty(disciplineSlug, specialtyFromPath || searchParams.get('specialty'))
+            .name
         }
       />
     )
