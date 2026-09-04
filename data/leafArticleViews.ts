@@ -4,7 +4,7 @@ import { buildEconManagementDeepContent } from './econManagementDeepContent'
 import type { KnowledgeStage, KnowledgeTask } from './knowledgeArchitecture'
 
 // 每个三级任务拥有自己的内容主题，避免同一二级产出物下的两组卡片只替换简介或任务名称。
-export const taskThemes: Record<string, string[]> = {
+const taskThemes: Record<string, string[]> = {
   direction: [
     '研究对象与范围的收束',
     '问题意识到可答题目的转化',
@@ -120,28 +120,6 @@ const researchFocuses = [
 
 const workingLenses = ['入门操作', '案例拆解', '证据核验', '常见误区修正', '进阶推演']
 
-export interface AdvancedTopic {
-  key: string
-  taskKey: string
-  title: string
-  themeIndex: number
-}
-
-export function getAdvancedTopics(stage: KnowledgeStage): AdvancedTopic[] {
-  return stage.tasks.flatMap((task) =>
-    (taskThemes[task.key] ?? [task.title]).map((title, themeIndex) => ({
-      key: `${task.key}-${themeIndex + 1}`,
-      taskKey: task.key,
-      title,
-      themeIndex,
-    }))
-  )
-}
-
-export function getAdvancedTopic(stage: KnowledgeStage, key?: string) {
-  return getAdvancedTopics(stage).find((topic) => topic.key === key)
-}
-
 // 标题采用多种自然句式，避免所有文章都套用“主题——焦点”的模板。
 // 关键词仍完整保留（学科、阶段、任务、研究焦点），但阅读上更接近人工撰写的学术标题。
 const titlePatterns = [
@@ -205,14 +183,12 @@ export function getSpecialtyLeafArticles({
   specialty,
   stage,
   task,
-  themeIndex,
 }: {
   articles: DisciplineArticle[]
   discipline: DisciplineConfig
   specialty: string
   stage: KnowledgeStage
   task: KnowledgeTask
-  themeIndex?: number
 }): DisciplineArticle[] {
   const sourcePool = articles.filter(
     (article) => article.knowledgeStage === stage.key && article.knowledgeTask === task.key
@@ -222,10 +198,7 @@ export function getSpecialtyLeafArticles({
   return Array.from({ length: 50 }, (_, index) => {
     const source = fallbackPool[index % fallbackPool.length]
     const taskThemePool = taskThemes[task.key] ?? [task.title]
-    const taskTheme =
-      typeof themeIndex === 'number'
-        ? (taskThemePool[themeIndex] ?? task.title)
-        : taskThemePool[index % taskThemePool.length]
+    const taskTheme = taskThemePool[index % taskThemePool.length]
     const focus = researchFocuses[index % researchFocuses.length]
     const lens = workingLenses[Math.floor(index / researchFocuses.length)]
     const sequence = index + 1

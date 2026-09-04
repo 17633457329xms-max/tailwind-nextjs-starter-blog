@@ -1,10 +1,10 @@
-import { notFound, permanentRedirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
+import DisciplinePage from '@/components/DisciplinePage'
 import { genPageMetadata } from '@/app/seo'
+import { getDisciplineArticles } from '@/data/disciplineArticles'
 import { disciplines, isDisciplineSlug, isPublicDiscipline } from '@/data/disciplines'
 import { getKnowledgeTask } from '@/data/knowledgeArchitecture'
 import { getDisciplineSpecialty } from '@/data/specialties'
-import { getAdvancedTopics } from '@/data/leafArticleViews'
-import { disciplineAdvancedPath } from '@/data/disciplineUrls'
 
 type Params = { discipline: string; specialty: string; stage: string; task: string }
 
@@ -27,16 +27,13 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   const selectedSpecialty = getDisciplineSpecialty(discipline, decodeURIComponent(specialty))
   const selectedTask = getKnowledgeTask(discipline, stage, task)
   if (!selectedTask) notFound()
-  const defaultTopic = getAdvancedTopics(selectedTask.stage).find(
-    (item) => item.taskKey === selectedTask.task.key
-  )
-  if (!defaultTopic) notFound()
-  permanentRedirect(
-    disciplineAdvancedPath(
-      discipline,
-      selectedSpecialty.name,
-      selectedTask.stage.key,
-      defaultTopic.key
-    )
+  return (
+    <DisciplinePage
+      discipline={disciplines[discipline]}
+      articles={getDisciplineArticles(discipline)}
+      specialty={selectedSpecialty.name}
+      stageKey={selectedTask.stage.key}
+      taskKey={selectedTask.task.key}
+    />
   )
 }
