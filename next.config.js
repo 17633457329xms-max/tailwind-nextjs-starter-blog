@@ -92,6 +92,13 @@ module.exports = () => {
         },
       ]
     },
+    async redirects() {
+      const legacySections = ['topics', 'methods', 'variables', 'literature', 'stata', 'writing']
+      return legacySections.flatMap((section) => [
+        { source: `/${section}`, destination: '/', permanent: true },
+        { source: `/${section}/:path*`, destination: '/', permanent: true },
+      ])
+    },
     webpack: (config, options) => {
       config.module.rules.push({
         test: /\.svg$/,
