@@ -51,10 +51,10 @@ export default function PolishingPage() {
               提交润色一对一定制需求
             </Link>
             <Link
-              href="/writing"
+              href="/disciplines/management"
               className="rounded-xl border border-blue-600 px-5 py-3 text-sm font-bold hover:bg-white/10"
             >
-              查看写作教程
+              进入专业知识库
             </Link>
           </>
         }

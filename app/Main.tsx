@@ -1,7 +1,8 @@
 import type { Knowledge } from 'contentlayer/generated'
 import Link from '@/components/Link'
 import KnowledgeCard from '@/components/knowledge/KnowledgeCard'
-import { categories, categoryOrder, homeFaq, services } from '@/data/knowledgeData'
+import { homeFaq, services } from '@/data/knowledgeData'
+import { disciplines, publicDisciplineOrder } from '@/data/disciplines'
 
 interface HomeProps {
   featured: Omit<Knowledge, '_id' | '_raw' | 'body'>[]
@@ -10,19 +11,19 @@ interface HomeProps {
 
 const beginnerPaths = [
   {
-    label: '01 / 数据软件',
-    title: '第一次安装 Stata，从正版授权到跑通第一段命令',
-    href: '/stata/stata-installation-beginner',
+    label: '01 / 管理学',
+    title: '从你的具体专业进入：选题、材料与研究设计一起看',
+    href: '/disciplines/management',
   },
   {
-    label: '02 / 文献检索',
-    title: '第一次查论文，先学会数据库、字段与检索式',
-    href: '/literature/chinese-literature-database-search',
+    label: '02 / 经济学',
+    title: '从你的具体专业进入：问题、数据与实证逻辑一起看',
+    href: '/disciplines/economics',
   },
   {
-    label: '03 / 工具整理',
-    title: '论文小白工具清单：只保留真正会用到的工具',
-    href: '/writing/thesis-tools-beginner-guide',
+    label: '03 / 咨询辅导',
+    title: '尚未确定所属专业或研究阶段？先提交你的具体问题',
+    href: '/consulting',
   },
 ]
 
@@ -70,10 +71,10 @@ export default function Home({ featured, totalCount }: HomeProps) {
                 提交论文问题
               </Link>
               <Link
-                href="/topics"
+                href="/disciplines/management"
                 className="border border-slate-950 px-6 py-3.5 text-sm font-bold transition hover:bg-slate-950 hover:text-white dark:border-white dark:hover:bg-white dark:hover:text-slate-950"
               >
-                浏览知识库
+                选择专业进入
               </Link>
               <span className="text-xs text-slate-500 sm:ml-auto dark:text-slate-400">
                 选题 · 方法 · 数据 · 文献 · 软件 · 写作
@@ -86,40 +87,40 @@ export default function Home({ featured, totalCount }: HomeProps) {
       <section className="py-16 sm:py-20">
         <div className="mb-10 grid gap-5 lg:grid-cols-[1fr_1fr] lg:items-end">
           <div>
-            <p className="text-sm font-bold text-[#9b3425] dark:text-[#e89b8f]">按问题进入</p>
+            <p className="text-sm font-bold text-[#9b3425] dark:text-[#e89b8f]">按专业进入</p>
             <h2 className="mt-2 font-serif text-3xl font-black tracking-tight sm:text-5xl">
-              六个知识入口，各有自己的判断方式
+              先选专业，再进入对应的研究任务
             </h2>
           </div>
           <p className="max-w-xl leading-8 text-slate-600 lg:justify-self-end dark:text-slate-400">
-            选题看可行性，方法看识别条件，变量看口径，文献看证据链，软件看复现，写作看信息是否一致。
+            每个专业都按自己的研究规范组织选题、文献、材料、方法与论文写作内容，避免跨专业套用模板。
           </p>
         </div>
 
         <div className="grid border-t border-l border-black/15 md:grid-cols-2 lg:grid-cols-3 dark:border-white/15">
-          {categoryOrder.map((slug) => {
-            const category = categories[slug]
+          {publicDisciplineOrder.map((slug) => {
+            const discipline = disciplines[slug]
             return (
               <Link
                 key={slug}
-                href={`/${slug}`}
-                className={`group flex min-h-72 flex-col justify-between border-r border-b border-black/15 p-7 transition hover:brightness-[0.97] dark:border-white/15 dark:hover:brightness-110 ${category.theme.homeSurface}`}
+                href={`/disciplines/${slug}`}
+                className="group flex min-h-72 flex-col justify-between border-r border-b border-black/15 bg-[#f5eee4] p-7 transition hover:brightness-[0.97] dark:border-white/15 dark:bg-slate-900 dark:hover:brightness-110"
               >
                 <div className="flex items-start justify-between">
                   <span className="font-mono text-xs tracking-[0.2em] text-slate-500 dark:text-slate-400">
-                    SECTION {category.index}
+                    DISCIPLINE
                   </span>
-                  <span className={`h-1 w-12 ${category.theme.cardRule}`} />
+                  <span className="h-1 w-12 bg-[#9b3425] dark:bg-[#e89b8f]" />
                 </div>
                 <div>
                   <h3 className="font-serif text-2xl font-black text-slate-950 dark:text-white">
-                    {category.name}
+                    {discipline.name}
                   </h3>
                   <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
-                    {category.description}
+                    {discipline.audience}
                   </p>
-                  <p className={`mt-5 text-xs font-bold ${category.theme.cardLink}`}>
-                    {category.featuredQueries.slice(0, 2).join(' · ')}
+                  <p className="mt-5 text-xs font-bold text-[#9b3425] dark:text-[#e89b8f]">
+                    {discipline.research.slice(0, 2).join(' · ')}
                   </p>
                 </div>
               </Link>
@@ -192,8 +193,8 @@ export default function Home({ featured, totalCount }: HomeProps) {
             <p className="text-sm font-bold text-[#9b3425] dark:text-[#e89b8f]">近期内容</p>
             <h2 className="mt-2 font-serif text-3xl font-black">从高频问题开始阅读</h2>
           </div>
-          <Link href="/methods" className="text-sm font-bold hover:underline">
-            查看全部栏目 →
+          <Link href="/disciplines/management" className="text-sm font-bold hover:underline">
+            进入管理学专业 →
           </Link>
         </div>
         <div className="grid border-t border-l border-black/10 md:grid-cols-2 lg:grid-cols-3 dark:border-white/10">

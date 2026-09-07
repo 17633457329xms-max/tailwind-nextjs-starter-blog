@@ -1,20 +1,16 @@
 'use client'
 
 import { usePathname, useSearchParams } from 'next/navigation'
-import { disciplines, isDisciplineSlug } from '@/data/disciplines'
+import { disciplines, isDisciplineSlug, publicDisciplineOrder } from '@/data/disciplines'
 import { getKnowledgeStages, getKnowledgeTask } from '@/data/knowledgeArchitecture'
 import { getDisciplineSpecialty } from '@/data/specialties'
 import { disciplineLibraryPath } from '@/data/disciplineUrls'
 import Link from './Link'
 
-const resourceLinks = [
-  ['论文选题', '/topics'],
-  ['实证方法', '/methods'],
-  ['变量数据', '/variables'],
-  ['文献检索', '/literature'],
-  ['Stata代码', '/stata'],
-  ['写作润色', '/writing'],
-]
+const disciplineLinks = publicDisciplineOrder.map((discipline) => [
+  disciplines[discipline].name,
+  `/disciplines/${discipline}`,
+])
 
 const serviceLinks = [
   ['论文润色一对一定制', '/polishing'],
@@ -85,12 +81,12 @@ export default function Footer() {
           stage.title,
           disciplineLibraryPath(discipline.slug, specialty!.name, stage.key, stage.tasks[0].key),
         ])
-    : resourceLinks
+    : disciplineLinks
   const knowledgeTitle = discipline
     ? activeTask
       ? `${specialty?.name} · ${activeTask.task.title}`
       : `${specialty?.name ?? discipline.name}知识库`
-    : '知识库'
+    : '学科入口'
   return (
     <footer className="mt-20 border-t border-slate-200 py-12 dark:border-slate-800">
       <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
