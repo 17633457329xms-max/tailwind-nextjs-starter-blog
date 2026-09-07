@@ -21,7 +21,7 @@ export default function DisciplinePortal() {
             <Link
               key={slug}
               href={href}
-              className="group min-h-72 border-r border-b border-black/15 bg-white/35 p-7 transition hover:bg-white dark:border-white/15 dark:bg-white/3 dark:hover:bg-white/8"
+              className="group flex min-h-72 flex-col border-r border-b border-black/15 bg-white/35 p-7 transition hover:bg-white dark:border-white/15 dark:bg-white/3 dark:hover:bg-white/8"
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black tracking-[0.18em] text-slate-500">
@@ -34,7 +34,7 @@ export default function DisciplinePortal() {
               <p className="mt-5 text-sm leading-7 text-slate-600 dark:text-slate-300">
                 {item.statement}
               </p>
-              <span className="mt-7 inline-flex text-sm font-black group-hover:underline">
+              <span className="mt-auto inline-flex pt-7 text-sm font-black group-hover:underline">
                 进入学科 →
               </span>
             </Link>
