@@ -2,6 +2,8 @@ import PageHero from '@/components/PageHero'
 import ContactCards from '@/components/contact/ContactCards'
 import Link from '@/components/Link'
 import { genPageMetadata } from '@/app/seo'
+import { consultingEnabled } from '@/data/siteFeatures'
+import { redirect } from 'next/navigation'
 
 export const metadata = genPageMetadata({
   title: '微信与QQ联系方式',
@@ -10,6 +12,8 @@ export const metadata = genPageMetadata({
 })
 
 export default function ContactPage() {
+  if (!consultingEnabled) redirect('/')
+
   return (
     <div className="pt-8 sm:pt-10">
       <PageHero

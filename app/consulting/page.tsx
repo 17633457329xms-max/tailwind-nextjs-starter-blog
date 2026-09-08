@@ -1,6 +1,8 @@
 import ContactCards from '@/components/contact/ContactCards'
 import { genPageMetadata } from '@/app/seo'
 import siteMetadata from '@/data/siteMetadata'
+import { consultingEnabled } from '@/data/siteFeatures'
+import { redirect } from 'next/navigation'
 
 export const metadata = genPageMetadata({
   title: '经管论文研究设计、Stata与论文润色一对一定制咨询',
@@ -9,6 +11,8 @@ export const metadata = genPageMetadata({
 })
 
 export default function ConsultingPage() {
+  if (!consultingEnabled) redirect('/')
+
   const serviceJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Service',

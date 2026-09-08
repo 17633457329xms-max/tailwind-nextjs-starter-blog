@@ -5,6 +5,7 @@ import type { DisciplineSlug } from '@/data/disciplines'
 import { disciplineSpecialties } from '@/data/specialties'
 import Link from '@/components/Link'
 import { disciplineLibraryPath } from '@/data/disciplineUrls'
+import { consultingEnabled } from '@/data/siteFeatures'
 
 export default function SpecialtyOverflowNav({
   discipline,
@@ -92,12 +93,14 @@ export default function SpecialtyOverflowNav({
           ›
         </button>
       )}
-      <Link
-        href={`${baseHref}/consulting`}
-        className="shrink-0 px-2.5 py-2 text-sm font-semibold text-slate-700 hover:bg-white dark:text-slate-200 dark:hover:bg-slate-900"
-      >
-        咨询辅导
-      </Link>
+      {consultingEnabled && (
+        <Link
+          href={`${baseHref}/consulting`}
+          className="shrink-0 px-2.5 py-2 text-sm font-semibold text-slate-700 hover:bg-white dark:text-slate-200 dark:hover:bg-slate-900"
+        >
+          咨询辅导
+        </Link>
+      )}
     </nav>
   )
 }

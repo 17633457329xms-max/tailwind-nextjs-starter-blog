@@ -2,6 +2,7 @@ import PageHero from '@/components/PageHero'
 import Link from '@/components/Link'
 import { genPageMetadata } from '@/app/seo'
 import siteMetadata from '@/data/siteMetadata'
+import { consultingEnabled } from '@/data/siteFeatures'
 
 export const metadata = genPageMetadata({
   title: '经管论文润色优化一对一定制 - 语言、结构、逻辑与格式',
@@ -44,12 +45,14 @@ export default function PolishingPage() {
         description="根据论文阶段和现有问题，处理语言表达、章节逻辑、术语、标题摘要、图表结果、引用格式与返修说明，并通过修订痕迹和批注说明修改理由。"
         actions={
           <>
-            <Link
-              href="/consulting"
-              className="rounded-xl bg-amber-400 px-5 py-3 text-sm font-black text-blue-950 hover:bg-amber-300"
-            >
-              提交润色一对一定制需求
-            </Link>
+            {consultingEnabled && (
+              <Link
+                href="/consulting"
+                className="rounded-xl bg-amber-400 px-5 py-3 text-sm font-black text-blue-950 hover:bg-amber-300"
+              >
+                提交润色一对一定制需求
+              </Link>
+            )}
             <Link
               href="/disciplines/management"
               className="rounded-xl border border-blue-600 px-5 py-3 text-sm font-bold hover:bg-white/10"

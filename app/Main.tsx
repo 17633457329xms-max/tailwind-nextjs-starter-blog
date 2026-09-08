@@ -3,6 +3,7 @@ import Link from '@/components/Link'
 import KnowledgeCard from '@/components/knowledge/KnowledgeCard'
 import { homeFaq, services } from '@/data/knowledgeData'
 import { disciplines, publicDisciplineOrder } from '@/data/disciplines'
+import { consultingEnabled } from '@/data/siteFeatures'
 
 interface HomeProps {
   featured: Omit<Knowledge, '_id' | '_raw' | 'body'>[]
@@ -20,11 +21,13 @@ const beginnerPaths = [
     title: '从你的具体专业进入：问题、数据与实证逻辑一起看',
     href: '/disciplines/economics',
   },
-  {
+  ...(consultingEnabled
+    ? [{
     label: '03 / 咨询辅导',
     title: '尚未确定所属专业或研究阶段？先提交你的具体问题',
     href: '/consulting',
-  },
+      }]
+    : []),
 ]
 
 export default function Home({ featured, totalCount }: HomeProps) {
@@ -59,17 +62,19 @@ export default function Home({ featured, totalCount }: HomeProps) {
                 <span className="text-[#9b3425] dark:text-[#e89b8f]">拆清楚，再解决。</span>
               </h1>
               <p className="mt-8 max-w-3xl text-base leading-8 text-slate-700 sm:text-lg dark:text-slate-300">
-                从选题、文献、变量和数据，到实证方法、Stata、SPSS、Python、论文表达与格式规范，提供可检索的中文知识内容、论文润色优化一对一定制和咨询入口。
+                从选题、文献、变量和数据，到实证方法、Stata、SPSS、Python、论文表达与格式规范，提供可检索的中文知识内容。
               </p>
             </div>
 
             <div className="mt-10 flex flex-wrap items-center gap-3 border-t border-slate-950/20 pt-6 dark:border-white/20">
-              <Link
-                href="/consulting"
-                className="bg-[#9b3425] px-6 py-3.5 text-sm font-black text-white transition hover:bg-[#7f291e]"
-              >
-                提交论文问题
-              </Link>
+              {consultingEnabled && (
+                <Link
+                  href="/consulting"
+                  className="bg-[#9b3425] px-6 py-3.5 text-sm font-black text-white transition hover:bg-[#7f291e]"
+                >
+                  提交论文问题
+                </Link>
+              )}
               <Link
                 href="/disciplines/management"
                 className="border border-slate-950 px-6 py-3.5 text-sm font-bold transition hover:bg-slate-950 hover:text-white dark:border-white dark:hover:bg-white dark:hover:text-slate-950"
@@ -167,7 +172,7 @@ export default function Home({ featured, totalCount }: HomeProps) {
           </p>
         </div>
         <div className="grid border-y border-slate-300 lg:grid-cols-3 lg:divide-x lg:divide-slate-300 dark:border-slate-700 dark:lg:divide-slate-700">
-          {services.map((service) => (
+          {services.filter((service) => consultingEnabled || service.href !== '/consulting').map((service) => (
             <div key={service.title} className="py-7 lg:px-7 lg:first:pl-0">
               <h3 className="font-serif text-xl font-black">{service.title}</h3>
               <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-400">
@@ -204,7 +209,7 @@ export default function Home({ featured, totalCount }: HomeProps) {
         </div>
       </section>
 
-      <section className="grid gap-10 border-t-2 border-slate-950 py-12 lg:grid-cols-[0.75fr_1.25fr] dark:border-slate-200">
+      {consultingEnabled && <section className="grid gap-10 border-t-2 border-slate-950 py-12 lg:grid-cols-[0.75fr_1.25fr] dark:border-slate-200">
         <div>
           <p className="text-sm font-bold text-[#9b3425] dark:text-[#e89b8f]">常见问题</p>
           <h2 className="mt-2 font-serif text-3xl font-black">咨询前先了解这些</h2>
@@ -231,7 +236,7 @@ export default function Home({ featured, totalCount }: HomeProps) {
             </details>
           ))}
         </div>
-      </section>
+      </section>}
     </div>
   )
 }

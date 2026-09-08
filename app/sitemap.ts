@@ -6,6 +6,7 @@ import { isPublicDiscipline, publicDisciplineOrder } from '@/data/disciplines'
 import { isIndexableDisciplineArticle } from '@/data/contentQuality'
 import { disciplineSpecialties } from '@/data/specialties'
 import { disciplineLibraryPath } from '@/data/disciplineUrls'
+import { consultingEnabled } from '@/data/siteFeatures'
 
 export const dynamic = 'force-static'
 
@@ -24,7 +25,7 @@ const staticRoutes = [
   'stata',
   'writing',
   'polishing',
-  'consulting',
+  ...(consultingEnabled ? ['consulting'] : []),
   'service-standards',
   'contact',
   'about',

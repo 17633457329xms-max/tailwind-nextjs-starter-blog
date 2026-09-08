@@ -5,6 +5,7 @@ import { getKnowledgeStages, getKnowledgeTask } from '@/data/knowledgeArchitectu
 import { getSpecialtyLeafArticles } from '@/data/leafArticleViews'
 import DisciplineArticleExplorer from './discipline/DisciplineArticleExplorer'
 import KnowledgeSidebar from './discipline/KnowledgeSidebar'
+import { consultingEnabled } from '@/data/siteFeatures'
 
 export default function DisciplinePage({
   discipline,
@@ -86,7 +87,7 @@ export default function DisciplinePage({
           />
         </section>
       </div>
-      <section
+      {consultingEnabled && <section
         className="mt-10 grid gap-8 border p-8 lg:grid-cols-[1fr_auto] lg:items-center"
         style={{ borderColor: discipline.color }}
       >
@@ -107,7 +108,7 @@ export default function DisciplinePage({
         >
           微信、QQ咨询
         </Link>
-      </section>
+      </section>}
     </div>
   )
 }

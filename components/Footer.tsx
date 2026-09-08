@@ -5,6 +5,7 @@ import { disciplines, isDisciplineSlug, publicDisciplineOrder } from '@/data/dis
 import { getKnowledgeStages, getKnowledgeTask } from '@/data/knowledgeArchitecture'
 import { getDisciplineSpecialty } from '@/data/specialties'
 import { disciplineLibraryPath } from '@/data/disciplineUrls'
+import { consultingEnabled } from '@/data/siteFeatures'
 import Link from './Link'
 
 const disciplineLinks = publicDisciplineOrder.map((discipline) => [
@@ -14,9 +15,9 @@ const disciplineLinks = publicDisciplineOrder.map((discipline) => [
 
 const serviceLinks = [
   ['论文润色一对一定制', '/polishing'],
-  ['咨询辅导', '/consulting'],
+  ...(consultingEnabled ? [['咨询辅导', '/consulting']] : []),
   ['服务说明', '/service-standards'],
-  ['联系我', '/contact'],
+  ...(consultingEnabled ? [['联系我', '/contact']] : []),
 ]
 
 export default function Footer() {
@@ -98,7 +99,7 @@ export default function Footer() {
             <span className="text-lg font-black">谢老师讲论文</span>
           </div>
           <p className="max-w-md text-sm leading-7 text-slate-600 dark:text-slate-400">
-            面向国内学生，提供选题、方法、数据、论文写作与润色优化一对一定制的知识内容和咨询入口。
+            面向国内学生，提供选题、方法、数据、论文写作与润色优化相关的知识内容。
           </p>
         </div>
         <div>

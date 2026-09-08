@@ -2,6 +2,7 @@ import PageHero from '@/components/PageHero'
 import Link from '@/components/Link'
 import { genPageMetadata } from '@/app/seo'
 import { services } from '@/data/knowledgeData'
+import { consultingEnabled } from '@/data/siteFeatures'
 
 export const metadata = genPageMetadata({
   title: '研究辅导与论文润色一对一定制服务说明',
@@ -17,18 +18,20 @@ export default function ServiceStandardsPage() {
         title="咨询前，把适用阶段、材料和交付物说明清楚"
         description="网站提供问题诊断、方法教学、示范讲解、代码复核、润色优化、修改建议和阶段复盘。具体范围在确认服务前形成可核对的说明。"
         actions={
-          <Link
-            href="/consulting"
-            className="rounded-xl bg-amber-400 px-5 py-3 text-sm font-black text-blue-950 hover:bg-amber-300"
-          >
-            微信、QQ咨询
-          </Link>
+          consultingEnabled ? (
+            <Link
+              href="/consulting"
+              className="rounded-xl bg-amber-400 px-5 py-3 text-sm font-black text-blue-950 hover:bg-amber-300"
+            >
+              微信、QQ咨询
+            </Link>
+          ) : undefined
         }
       />
 
       <section className="py-12">
         <div className="grid gap-5 lg:grid-cols-3">
-          {services.map((service) => (
+          {services.filter((service) => consultingEnabled || service.href !== '/consulting').map((service) => (
             <article
               key={service.title}
               className="rounded-2xl border border-slate-200 bg-white p-7 dark:border-slate-800 dark:bg-slate-900"
