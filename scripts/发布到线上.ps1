@@ -90,8 +90,9 @@ echo '服务器应用健康检查通过。'
 "@
 
 执行步骤 '连接服务器并更新线上站点' {
-  # 通过标准输入传递多行命令，避免 Windows 与 Bash 的引号转义差异。
-  $远程命令 | ssh "$服务器用户@$服务器地址" 'bash -s'
+  # 远程命令编码后作为 SSH 参数传递，保留标准输入供首次登录输入密码。
+  $远程命令Base64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($远程命令))
+  ssh "$服务器用户@$服务器地址" "echo '$远程命令Base64' | base64 --decode | bash"
 }
 
 try {
