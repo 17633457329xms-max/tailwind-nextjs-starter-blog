@@ -107,8 +107,15 @@ $应用部署命令Base64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetB
 $远程命令 = @"
 set -euo pipefail
 echo '$应用部署命令Base64' | su - admin -s /bin/bash -c 'base64 --decode | bash -s'
-curl --fail --silent --show-error http://127.0.0.1:3000/ >/dev/null
-echo '服务器应用健康检查通过。'
+for attempt in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+  if curl --fail --silent --show-error http://127.0.0.1:3000/ >/dev/null; then
+    echo '服务器应用健康检查通过。'
+    exit 0
+  fi
+  sleep 2
+done
+echo 'PM2 已重启，但应用在 30 秒内未监听 3000 端口。' >&2
+exit 1
 "@
 
 执行步骤 '连接服务器并更新线上站点' {
