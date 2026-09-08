@@ -305,19 +305,21 @@ export default function DisciplineArticlePage({
                 外部资料用于核对法源、数据与研究背景；访问时请以发布机构最新页面为准。
               </p>
             </div>
-          {consultingEnabled && <section className="mt-12 border p-7" style={{ borderColor: discipline.color }}>
-              <h2 className="font-serif text-xl font-black">需要结合你的材料进一步判断？</h2>
-              <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
-                可提交研究阶段、题目、材料类型和当前卡点，确认适合选题诊断、方法辅导或论文润色优化一对一定制。
-              </p>
-              <Link
-                href="/consulting"
-                className="mt-4 inline-flex font-black hover:underline"
-                style={{ color: discipline.color }}
-              >
-                微信、QQ咨询 →
-              </Link>
-          </section>}
+            {consultingEnabled && (
+              <section className="mt-12 border p-7" style={{ borderColor: discipline.color }}>
+                <h2 className="font-serif text-xl font-black">需要结合你的材料进一步判断？</h2>
+                <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
+                  可提交研究阶段、题目、材料类型和当前卡点，确认适合选题诊断、方法辅导或论文润色优化一对一定制。
+                </p>
+                <Link
+                  href="/consulting"
+                  className="mt-4 inline-flex font-black hover:underline"
+                  style={{ color: discipline.color }}
+                >
+                  微信、QQ咨询 →
+                </Link>
+              </section>
+            )}
           </div>
         </div>
       </article>

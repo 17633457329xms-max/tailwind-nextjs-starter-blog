@@ -22,11 +22,13 @@ const beginnerPaths = [
     href: '/disciplines/economics',
   },
   ...(consultingEnabled
-    ? [{
-    label: '03 / 咨询辅导',
-    title: '尚未确定所属专业或研究阶段？先提交你的具体问题',
-    href: '/consulting',
-      }]
+    ? [
+        {
+          label: '03 / 咨询辅导',
+          title: '尚未确定所属专业或研究阶段？先提交你的具体问题',
+          href: '/consulting',
+        },
+      ]
     : []),
 ]
 
@@ -172,23 +174,25 @@ export default function Home({ featured, totalCount }: HomeProps) {
           </p>
         </div>
         <div className="grid border-y border-slate-300 lg:grid-cols-3 lg:divide-x lg:divide-slate-300 dark:border-slate-700 dark:lg:divide-slate-700">
-          {services.filter((service) => consultingEnabled || service.href !== '/consulting').map((service) => (
-            <div key={service.title} className="py-7 lg:px-7 lg:first:pl-0">
-              <h3 className="font-serif text-xl font-black">{service.title}</h3>
-              <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-400">
-                {service.description}
-              </p>
-              <p className="mt-5 border-t border-slate-300 pt-4 text-xs leading-6 text-slate-500 dark:border-slate-700 dark:text-slate-400">
-                交付：{service.deliverable}
-              </p>
-              <Link
-                href={service.href}
-                className="mt-5 inline-flex text-sm font-bold text-[#9b3425] hover:underline dark:text-[#e89b8f]"
-              >
-                查看服务说明 →
-              </Link>
-            </div>
-          ))}
+          {services
+            .filter((service) => consultingEnabled || service.href !== '/consulting')
+            .map((service) => (
+              <div key={service.title} className="py-7 lg:px-7 lg:first:pl-0">
+                <h3 className="font-serif text-xl font-black">{service.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-400">
+                  {service.description}
+                </p>
+                <p className="mt-5 border-t border-slate-300 pt-4 text-xs leading-6 text-slate-500 dark:border-slate-700 dark:text-slate-400">
+                  交付：{service.deliverable}
+                </p>
+                <Link
+                  href={service.href}
+                  className="mt-5 inline-flex text-sm font-bold text-[#9b3425] hover:underline dark:text-[#e89b8f]"
+                >
+                  查看服务说明 →
+                </Link>
+              </div>
+            ))}
         </div>
       </section>
 
@@ -209,34 +213,38 @@ export default function Home({ featured, totalCount }: HomeProps) {
         </div>
       </section>
 
-      {consultingEnabled && <section className="grid gap-10 border-t-2 border-slate-950 py-12 lg:grid-cols-[0.75fr_1.25fr] dark:border-slate-200">
-        <div>
-          <p className="text-sm font-bold text-[#9b3425] dark:text-[#e89b8f]">常见问题</p>
-          <h2 className="mt-2 font-serif text-3xl font-black">咨询前先了解这些</h2>
-          <p className="mt-4 text-sm leading-7 text-slate-600 dark:text-slate-400">
-            服务目录、材料准备、润色范围和隐私处理都会在确认前说明清楚。
-          </p>
-          <Link
-            href="/service-standards"
-            className="mt-6 inline-flex text-sm font-bold hover:underline"
-          >
-            查看完整服务标准 →
-          </Link>
-        </div>
-        <div className="divide-y divide-slate-300 dark:divide-slate-700">
-          {homeFaq.map(([question, answer]) => (
-            <details key={question} className="group py-5 first:pt-0 last:pb-0">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-slate-950 dark:text-white">
-                {question}
-                <span className="text-[#9b3425] transition group-open:rotate-45 dark:text-[#e89b8f]">
-                  ＋
-                </span>
-              </summary>
-              <p className="pt-3 text-sm leading-7 text-slate-600 dark:text-slate-400">{answer}</p>
-            </details>
-          ))}
-        </div>
-      </section>}
+      {consultingEnabled && (
+        <section className="grid gap-10 border-t-2 border-slate-950 py-12 lg:grid-cols-[0.75fr_1.25fr] dark:border-slate-200">
+          <div>
+            <p className="text-sm font-bold text-[#9b3425] dark:text-[#e89b8f]">常见问题</p>
+            <h2 className="mt-2 font-serif text-3xl font-black">咨询前先了解这些</h2>
+            <p className="mt-4 text-sm leading-7 text-slate-600 dark:text-slate-400">
+              服务目录、材料准备、润色范围和隐私处理都会在确认前说明清楚。
+            </p>
+            <Link
+              href="/service-standards"
+              className="mt-6 inline-flex text-sm font-bold hover:underline"
+            >
+              查看完整服务标准 →
+            </Link>
+          </div>
+          <div className="divide-y divide-slate-300 dark:divide-slate-700">
+            {homeFaq.map(([question, answer]) => (
+              <details key={question} className="group py-5 first:pt-0 last:pb-0">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-slate-950 dark:text-white">
+                  {question}
+                  <span className="text-[#9b3425] transition group-open:rotate-45 dark:text-[#e89b8f]">
+                    ＋
+                  </span>
+                </summary>
+                <p className="pt-3 text-sm leading-7 text-slate-600 dark:text-slate-400">
+                  {answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   )
 }

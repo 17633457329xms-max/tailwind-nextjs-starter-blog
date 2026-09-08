@@ -87,28 +87,30 @@ export default function DisciplinePage({
           />
         </section>
       </div>
-      {consultingEnabled && <section
-        className="mt-10 grid gap-8 border p-8 lg:grid-cols-[1fr_auto] lg:items-center"
-        style={{ borderColor: discipline.color }}
-      >
-        <div>
-          <h2 className="font-serif text-2xl font-black">
-            {activeTask ? `${activeTask.task.title}学习支持` : `${discipline.name}论文学习支持`}
-          </h2>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-300">
-            {activeTask
-              ? `如果你在“${activeTask.stage.title} · ${activeTask.task.title}”中遇到具体卡点，可通过微信或QQ说明你的研究方向、已有材料和希望解决的问题，再确认学习辅导或论文润色优化一对一定制的范围。`
-              : '通过微信或QQ简要说明培养层次、研究方向和当前卡点，再确认选题诊断、方法辅导、写作反馈或论文润色优化一对一定制的范围。'}
-          </p>
-        </div>
-        <Link
-          href={`/disciplines/${discipline.slug}/consulting`}
-          className="px-6 py-3 text-sm font-black text-white"
-          style={{ backgroundColor: discipline.color }}
+      {consultingEnabled && (
+        <section
+          className="mt-10 grid gap-8 border p-8 lg:grid-cols-[1fr_auto] lg:items-center"
+          style={{ borderColor: discipline.color }}
         >
-          微信、QQ咨询
-        </Link>
-      </section>}
+          <div>
+            <h2 className="font-serif text-2xl font-black">
+              {activeTask ? `${activeTask.task.title}学习支持` : `${discipline.name}论文学习支持`}
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-300">
+              {activeTask
+                ? `如果你在“${activeTask.stage.title} · ${activeTask.task.title}”中遇到具体卡点，可通过微信或QQ说明你的研究方向、已有材料和希望解决的问题，再确认学习辅导或论文润色优化一对一定制的范围。`
+                : '通过微信或QQ简要说明培养层次、研究方向和当前卡点，再确认选题诊断、方法辅导、写作反馈或论文润色优化一对一定制的范围。'}
+            </p>
+          </div>
+          <Link
+            href={`/disciplines/${discipline.slug}/consulting`}
+            className="px-6 py-3 text-sm font-black text-white"
+            style={{ backgroundColor: discipline.color }}
+          >
+            微信、QQ咨询
+          </Link>
+        </section>
+      )}
     </div>
   )
 }

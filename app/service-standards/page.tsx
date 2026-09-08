@@ -31,21 +31,23 @@ export default function ServiceStandardsPage() {
 
       <section className="py-12">
         <div className="grid gap-5 lg:grid-cols-3">
-          {services.filter((service) => consultingEnabled || service.href !== '/consulting').map((service) => (
-            <article
-              key={service.title}
-              className="rounded-2xl border border-slate-200 bg-white p-7 dark:border-slate-800 dark:bg-slate-900"
-            >
-              <h2 className="text-xl font-black">{service.title}</h2>
-              <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-400">
-                {service.description}
-              </p>
-              <div className="mt-5 rounded-xl bg-slate-50 p-4 text-sm leading-6 text-slate-700 dark:bg-slate-950 dark:text-slate-300">
-                <strong>交付：</strong>
-                {service.deliverable}
-              </div>
-            </article>
-          ))}
+          {services
+            .filter((service) => consultingEnabled || service.href !== '/consulting')
+            .map((service) => (
+              <article
+                key={service.title}
+                className="rounded-2xl border border-slate-200 bg-white p-7 dark:border-slate-800 dark:bg-slate-900"
+              >
+                <h2 className="text-xl font-black">{service.title}</h2>
+                <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-400">
+                  {service.description}
+                </p>
+                <div className="mt-5 rounded-xl bg-slate-50 p-4 text-sm leading-6 text-slate-700 dark:bg-slate-950 dark:text-slate-300">
+                  <strong>交付：</strong>
+                  {service.deliverable}
+                </div>
+              </article>
+            ))}
         </div>
       </section>
 
