@@ -21,7 +21,7 @@ $ErrorActionPreference = 'Stop'
 
 # 仅在这里维护服务器基本信息；不应填写密码、私钥或环境变量。
 $服务器地址 = '120.55.82.186'
-$服务器用户 = 'admin'
+$服务器用户 = 'root'
 $服务器项目目录 = '/home/admin/paper-site'
 $线上健康检查地址 = 'https://lunwenhub.com/'
 $PM2应用名称 = 'paper-site'
