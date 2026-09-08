@@ -75,6 +75,10 @@ if ($LASTEXITCODE -eq 0) {
 
 $应用部署命令 = @"
 set -euo pipefail
+export PATH="/home/admin/.nvm/versions/node/v24.20.0/bin:`$PATH"
+node --version
+yarn --version
+pm2 --version
 cd '$服务器项目目录'
 for attempt in 1 2 3; do
   if git -c http.version=HTTP/1.1 pull --ff-only origin '$分支'; then
