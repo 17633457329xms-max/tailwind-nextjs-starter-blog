@@ -77,8 +77,8 @@ $应用部署命令 = @"
 set -euo pipefail
 cd '$服务器项目目录'
 git pull --ff-only origin '$分支'
-corepack yarn install --immutable
-corepack yarn build
+yarn install --immutable
+yarn build
 if pm2 describe '$PM2应用名称' >/dev/null 2>&1; then
   pm2 reload '$PM2应用名称' --update-env
 else
