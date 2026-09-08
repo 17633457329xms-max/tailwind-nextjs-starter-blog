@@ -73,7 +73,7 @@ if ($LASTEXITCODE -eq 0) {
 
 执行步骤 '推送 main 分支到 GitHub' { git push origin $分支 }
 
-$远程命令 = @"
+$应用部署命令 = @"
 set -euo pipefail
 cd '$服务器项目目录'
 git pull --ff-only origin '$分支'
@@ -85,6 +85,14 @@ else
   pm2 start 'yarn start' --name '$PM2应用名称'
 fi
 pm2 save
+"@
+
+# 项目文件及既有 PM2 进程归 admin 所有。root 只用于 SSH 登录，避免 Git 安全检查和重复 PM2 进程。
+$应用部署命令Base64 = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($应用部署命令))
+
+$远程命令 = @"
+set -euo pipefail
+echo '$应用部署命令Base64' | su - admin -s /bin/bash -c 'base64 --decode | bash -s'
 curl --fail --silent --show-error http://127.0.0.1:3000/ >/dev/null
 echo '服务器应用健康检查通过。'
 "@
