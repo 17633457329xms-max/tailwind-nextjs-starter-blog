@@ -76,7 +76,17 @@ if ($LASTEXITCODE -eq 0) {
 $应用部署命令 = @"
 set -euo pipefail
 cd '$服务器项目目录'
-git pull --ff-only origin '$分支'
+for attempt in 1 2 3; do
+  if git -c http.version=HTTP/1.1 pull --ff-only origin '$分支'; then
+    break
+  fi
+  if [ "`$attempt" -eq 3 ]; then
+    echo '连续三次无法从 GitHub 拉取代码。' >&2
+    exit 1
+  fi
+  echo "GitHub 连接失败，5 秒后重试（第 `$(($attempt + 1)) 次）..." >&2
+  sleep 5
+done
 yarn install --immutable
 yarn build
 if pm2 describe '$PM2应用名称' >/dev/null 2>&1; then
