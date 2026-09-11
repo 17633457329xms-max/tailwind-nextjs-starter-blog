@@ -9,6 +9,7 @@ import { getKnowledgeTask } from '@/data/knowledgeArchitecture'
 import { getDisciplineSpecialty } from '@/data/specialties'
 import { disciplineLibraryPath } from '@/data/disciplineUrls'
 import { consultingEnabled } from '@/data/siteFeatures'
+import AuthorSocialLinks from './AuthorSocialLinks'
 
 function PublicDataChart({
   chart,
@@ -165,6 +166,7 @@ export default function DisciplineArticlePage({
             <span>约 {article.readingMinutes} 分钟阅读</span>
           </div>
         </header>
+        <AuthorSocialLinks />
         <div className="mx-auto grid max-w-6xl gap-12 py-12 xl:grid-cols-[13rem_minmax(0,48rem)]">
           <aside className="hidden xl:block">
             <nav
