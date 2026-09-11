@@ -3,7 +3,7 @@ import Image from 'next/image'
 const socialProfiles = [
   {
     name: 'B站',
-    href: 'https://space.bilibili.com/85604534/upload/video',
+    href: 'https://space.bilibili.com/85604534',
     icon: '/static/images/social/bilibili.webp',
   },
   {
