@@ -4,22 +4,22 @@ const socialProfiles = [
   {
     name: '小红书',
     href: 'https://www.xiaohongshu.com/user/profile/645759d6000000001f031343',
-    icon: '/images/social/xiaohongshu.webp',
+    icon: '/static/images/social/xiaohongshu.webp',
   },
   {
     name: '抖音',
     href: 'https://www.douyin.com/user/self',
-    icon: '/images/social/douyin.webp',
+    icon: '/static/images/social/douyin.webp',
   },
   {
     name: 'B站',
     href: 'https://space.bilibili.com/85604534/upload/video',
-    icon: '/images/social/bilibili.webp',
+    icon: '/static/images/social/bilibili.webp',
   },
   {
     name: '快手',
     href: 'https://www.kuaishou.com/profile/3xbb6c3efcvubrc',
-    icon: '/images/social/kuaishou.webp',
+    icon: '/static/images/social/kuaishou.webp',
   },
 ]
 
