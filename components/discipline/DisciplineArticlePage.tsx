@@ -160,13 +160,13 @@ export default function DisciplineArticlePage({
           <p className="mt-6 max-w-3xl text-lg leading-9 text-slate-600 dark:text-slate-300">
             {article.summary}
           </p>
-          <div className="mt-6 flex flex-wrap gap-5 text-sm text-slate-500">
-            <span>谢老师讲论文编辑部</span>
+          <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-500">
+            <span>谢老师讲论文 | 多篇核心期刊发表经验，提供各类型论文服务</span>
+            <AuthorSocialLinks />
             <time dateTime={article.date}>更新：{article.date}</time>
             <span>约 {article.readingMinutes} 分钟阅读</span>
           </div>
         </header>
-        <AuthorSocialLinks />
         <div className="mx-auto grid max-w-6xl gap-12 py-12 xl:grid-cols-[13rem_minmax(0,48rem)]">
           <aside className="hidden xl:block">
             <nav
