@@ -8,7 +8,7 @@ const socialProfiles = [
   },
   {
     name: '抖音',
-    href: 'https://www.douyin.com/user/self',
+    href: 'https://www.douyin.com/user/MS4wLjABAAAAQcOUyz9gPc-z-jOD25fiKaSzV7iYwpxkhKNM6F4t3Gaipjqi-h50mL_P7ewdxIgQ?from_tab_name=main&showSubTab=video&showTab=post',
     icon: '/static/images/social/douyin.webp',
   },
   {
