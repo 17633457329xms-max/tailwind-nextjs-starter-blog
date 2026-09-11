@@ -10,9 +10,11 @@ import { consultingEnabled } from '@/data/siteFeatures'
 export default function SpecialtyOverflowNav({
   discipline,
   selectedSpecialty,
+  isConsultingPage,
 }: {
   discipline: DisciplineSlug
-  selectedSpecialty: string
+  selectedSpecialty?: string
+  isConsultingPage: boolean
 }) {
   const viewportRef = useRef<HTMLDivElement>(null)
   const [canMoveLeft, setCanMoveLeft] = useState(false)
@@ -96,7 +98,12 @@ export default function SpecialtyOverflowNav({
       {consultingEnabled && (
         <Link
           href={`${baseHref}/consulting`}
-          className="shrink-0 px-2.5 py-2 text-sm font-semibold text-slate-700 hover:bg-white dark:text-slate-200 dark:hover:bg-slate-900"
+          aria-current={isConsultingPage ? 'page' : undefined}
+          className={`shrink-0 px-2.5 py-2 text-sm font-semibold transition ${
+            isConsultingPage
+              ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950'
+              : 'text-slate-700 hover:bg-white dark:text-slate-200 dark:hover:bg-slate-900'
+          }`}
         >
           咨询辅导
         </Link>

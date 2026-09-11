@@ -34,13 +34,19 @@ export default function HeaderNav() {
       pathSegments[3] === 'specialties' && pathSegments[4]
         ? decodeURIComponent(pathSegments[4])
         : null
+    const isConsultingPage = pathSegments[3] === 'consulting'
     return (
       <SpecialtyOverflowNav
         discipline={disciplineSlug}
         selectedSpecialty={
-          getDisciplineSpecialty(disciplineSlug, specialtyFromPath || searchParams.get('specialty'))
-            .name
+          isConsultingPage
+            ? undefined
+            : getDisciplineSpecialty(
+                disciplineSlug,
+                specialtyFromPath || searchParams.get('specialty')
+              ).name
         }
+        isConsultingPage={isConsultingPage}
       />
     )
   }
