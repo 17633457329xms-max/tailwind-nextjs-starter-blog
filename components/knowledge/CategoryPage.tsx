@@ -34,7 +34,7 @@ export default function CategoryPage({ category, items }: CategoryPageProps) {
         <div className="mb-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className={`text-sm font-bold ${category.theme.sectionLabel}`}>
-              国内学生常见检索问题
+              国内外学生常见检索问题
             </p>
             <h2 className="mt-2 font-serif text-3xl font-black text-slate-950 dark:text-white">
               从具体问题开始

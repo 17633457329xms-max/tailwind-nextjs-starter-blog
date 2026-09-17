@@ -103,7 +103,7 @@ export default function Footer() {
             <span className="text-lg font-black">谢老师讲论文</span>
           </div>
           <p className="max-w-md text-sm leading-7 text-slate-600 dark:text-slate-400">
-            面向国内学生，提供选题、方法、数据、论文写作与润色优化相关的知识内容。
+            面向国内外学生，提供选题、方法、数据、论文写作与润色优化相关的知识内容。
           </p>
         </div>
         <div>

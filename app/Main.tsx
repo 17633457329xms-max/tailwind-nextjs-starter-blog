@@ -56,7 +56,7 @@ export default function Home({ featured, totalCount }: HomeProps) {
           <div className="flex flex-col justify-between px-6 py-12 sm:px-10 sm:py-16 lg:px-16">
             <div>
               <p className="text-sm font-bold text-[#9b3425] dark:text-[#e89b8f]">
-                面向国内学生 · 从问题判断到表达优化
+                面向国内外学生 · 从问题判断到表达优化
               </p>
               <h1 className="mt-6 max-w-5xl font-serif text-5xl leading-[1.08] font-black tracking-tight sm:text-7xl lg:text-[5.4rem]">
                 把论文问题
