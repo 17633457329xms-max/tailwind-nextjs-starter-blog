@@ -161,7 +161,7 @@ export default function DisciplineArticlePage({
             {article.summary}
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-500">
-            <span>谢老师讲论文 | 多篇核心期刊发表经验，提供各类型论文服务</span>
+            <span>青衿学长讲论文 | 多篇核心期刊发表经验，提供各类型论文服务</span>
             <AuthorSocialLinks />
             <time dateTime={article.date}>更新：{article.date}</time>
             <span>约 {article.readingMinutes} 分钟阅读</span>

@@ -3,7 +3,7 @@ import { genPageMetadata } from '@/app/seo'
 
 export const metadata = genPageMetadata({
   title: '隐私说明',
-  description: '说明谢老师讲论文网站的匿名访问统计与微信、QQ直接联系入口的使用方式。',
+  description: '说明青衿学长讲论文网站的匿名访问统计与微信、QQ直接联系入口的使用方式。',
   robots: { index: true, follow: true },
 })
 

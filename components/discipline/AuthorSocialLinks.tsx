@@ -32,8 +32,8 @@ export default function AuthorSocialLinks() {
           href={profile.href}
           target="_blank"
           rel="noreferrer"
-          title={`谢老师讲论文的${profile.name}主页`}
-          aria-label={`在新窗口打开谢老师讲论文的${profile.name}主页`}
+          title={`青衿学长讲论文的${profile.name}主页`}
+          aria-label={`在新窗口打开青衿学长讲论文的${profile.name}主页`}
           className="inline-flex size-7 items-center justify-center rounded-full transition-transform hover:scale-110 focus-visible:scale-110"
         >
           <Image src={profile.icon} alt="" width={22} height={22} aria-hidden="true" />

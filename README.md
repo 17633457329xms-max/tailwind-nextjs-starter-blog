@@ -1,4 +1,4 @@
-# 谢老师讲论文
+# 青衿学长讲论文
 
 面向中国大陆经管学生的论文研究辅导与润色优化网站，基于 Next.js、Tailwind CSS、Contentlayer 和 MDX 构建。
 

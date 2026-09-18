@@ -97,10 +97,10 @@ export default function Footer() {
       >
         <div>
           <div className="mb-4 flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-950 font-black text-white">
-              谢
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#123f46] font-black text-white">
+              青
             </span>
-            <span className="text-lg font-black">谢老师讲论文</span>
+            <span className="text-lg font-black">青衿学长讲论文</span>
           </div>
           <p className="max-w-md text-sm leading-7 text-slate-600 dark:text-slate-400">
             面向国内外学生，提供选题、方法、数据、论文写作与润色优化相关的知识内容。
@@ -146,7 +146,7 @@ export default function Footer() {
         )}
       </div>
       <div className="mt-10 flex flex-col gap-2 border-t border-slate-200 pt-6 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800 dark:text-slate-500">
-        <p>© {new Date().getFullYear()} 谢老师讲论文</p>
+        <p>© {new Date().getFullYear()} 青衿学长讲论文</p>
         <p>内容持续核验与更新</p>
       </div>
     </footer>

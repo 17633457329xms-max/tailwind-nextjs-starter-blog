@@ -15,8 +15,8 @@ export default function Header() {
           aria-label={siteMetadata.headerTitle}
           className="flex shrink-0 items-center gap-3"
         >
-          <span className="flex h-10 w-10 items-center justify-center bg-[#9b3425] font-serif text-lg font-black text-white">
-            谢
+          <span className="flex h-10 w-10 items-center justify-center bg-[#123f46] font-serif text-lg font-black text-white">
+            青
           </span>
           <span className="hidden font-serif text-lg font-black tracking-tight text-slate-950 sm:block dark:text-white">
             {siteMetadata.headerTitle}

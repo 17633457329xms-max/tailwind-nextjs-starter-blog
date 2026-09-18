@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation'
 export const metadata = genPageMetadata({
   title: '微信与QQ联系方式',
   description:
-    '通过微信或QQ联系谢老师，咨询经管论文选题、实证方法、Stata代码、论文写作和润色优化问题。',
+    '通过微信或QQ联系青衿学长，咨询经管论文选题、实证方法、Stata代码、论文写作和润色优化问题。',
 })
 
 export default function ContactPage() {
