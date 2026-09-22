@@ -147,7 +147,24 @@ export default function Footer() {
       </div>
       <div className="mt-10 flex flex-col gap-2 border-t border-slate-200 pt-6 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800 dark:text-slate-500">
         <p>© {new Date().getFullYear()} 青衿学长讲论文</p>
-        <p>内容持续核验与更新</p>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <a
+            className="hover:text-blue-700 dark:hover:text-blue-300"
+            href="https://beian.miit.gov.cn/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            京ICP备2026060992号-1
+          </a>
+          <a
+            className="hover:text-blue-700 dark:hover:text-blue-300"
+            href="https://beian.mps.gov.cn/#/query/webSearch?code=44030002017360"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            粤公网安备44030002017360号
+          </a>
+        </div>
       </div>
     </footer>
   )
