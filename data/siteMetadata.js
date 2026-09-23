@@ -13,7 +13,7 @@ const siteMetadata = {
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || defaultSiteUrl,
   siteRepo: '',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.svg`,
-  socialBanner: `${process.env.BASE_PATH || ''}/static/images/social-card.svg`,
+  socialBanner: `${process.env.BASE_PATH || ''}/static/images/social-card.png`,
   email: '',
   locale: 'zh-CN',
   stickyNav: true,

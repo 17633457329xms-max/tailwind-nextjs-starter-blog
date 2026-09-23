@@ -1,5 +1,4 @@
 import { MetadataRoute } from 'next'
-import { allKnowledge } from 'contentlayer/generated'
 import siteMetadata from '@/data/siteMetadata'
 import { disciplineArticles } from '@/data/disciplineArticles'
 import { isPublicDiscipline, publicDisciplineOrder } from '@/data/disciplines'
@@ -16,20 +15,15 @@ const validDate = (value?: string | Date) => {
   return Number.isNaN(date.getTime()) ? undefined : date
 }
 
+// 仅保留 middleware 与 next.config.js 允许直接访问的静态页；
+// topics/methods/variables/literature/stata/writing/contact/consulting 已废弃并重定向到首页，不再提交。
 const staticRoutes = [
   '',
-  'topics',
-  'methods',
-  'variables',
-  'literature',
-  'stata',
-  'writing',
   'polishing',
-  ...(consultingEnabled ? ['consulting'] : []),
   'service-standards',
-  'contact',
   'about',
   'privacy',
+  ...(consultingEnabled ? ['consulting'] : []),
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -38,12 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${siteMetadata.siteUrl}${route ? `/${route}` : ''}`,
     lastModified: updated,
   }))
-  const knowledgePages = allKnowledge
-    .filter((item) => !item.draft)
-    .map((item) => ({
-      url: `${siteMetadata.siteUrl}/${item.path}`,
-      lastModified: validDate(item.lastmod || item.date),
-    }))
+  // 学科知识库为页面主入口：学科页、特化页与学科文章页。
   const disciplinePages = publicDisciplineOrder.map((discipline) => ({
     url: `${siteMetadata.siteUrl}/disciplines/${discipline}`,
     lastModified: updated,
@@ -63,11 +52,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: validDate(article.date),
     }))
 
-  return [
-    ...staticPages,
-    ...knowledgePages,
-    ...disciplinePages,
-    ...specialtyPages,
-    ...disciplineKnowledgePages,
-  ]
+  return [...staticPages, ...disciplinePages, ...specialtyPages, ...disciplineKnowledgePages]
 }

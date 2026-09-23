@@ -11,6 +11,7 @@ import { getDisciplineArticles } from '@/data/disciplineArticles'
 import { getKnowledgeTask } from '@/data/knowledgeArchitecture'
 import { getDisciplineSpecialty } from '@/data/specialties'
 import { disciplineLibraryPath } from '@/data/disciplineUrls'
+import { JsonLd, breadcrumbJsonLd } from '@/components/StructuredData'
 
 export const generateStaticParams = () =>
   publicDisciplineOrder.map((discipline) => ({ discipline }))
@@ -49,12 +50,20 @@ export default async function Page({
     )
   }
   return (
-    <DisciplinePage
-      discipline={disciplines[discipline]}
-      articles={getDisciplineArticles(discipline)}
-      specialty={selectedSpecialty.name}
-      stageKey={selectedTask?.stage.key}
-      taskKey={selectedTask?.task.key}
-    />
+    <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: '学科首页', path: '/' },
+          { name: disciplines[discipline].name, path: `/disciplines/${discipline}` },
+        ])}
+      />
+      <DisciplinePage
+        discipline={disciplines[discipline]}
+        articles={getDisciplineArticles(discipline)}
+        specialty={selectedSpecialty.name}
+        stageKey={selectedTask?.stage.key}
+        taskKey={selectedTask?.task.key}
+      />
+    </>
   )
 }

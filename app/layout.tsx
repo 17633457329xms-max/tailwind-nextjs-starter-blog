@@ -11,6 +11,7 @@ import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 import UmamiAnalytics from '@/components/UmamiAnalytics'
+import { organizationJsonLd } from '@/components/StructuredData'
 
 const verificationOther = Object.fromEntries(
   [
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
     description: siteMetadata.description,
     url: './',
     siteName: siteMetadata.title,
-    images: [siteMetadata.socialBanner],
+    images: [{ url: siteMetadata.socialBanner, width: 1200, height: 630, alt: siteMetadata.title }],
     locale: 'zh_CN',
     type: 'website',
   },
@@ -55,7 +56,7 @@ export const metadata: Metadata = {
   twitter: {
     title: siteMetadata.title,
     card: 'summary_large_image',
-    images: [siteMetadata.socialBanner],
+    images: [{ url: siteMetadata.socialBanner, width: 1200, height: 630, alt: siteMetadata.title }],
   },
   verification: Object.keys(verificationOther).length ? { other: verificationOther } : undefined,
 }
@@ -71,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     inLanguage: 'zh-CN',
     publisher: { '@type': 'Person', name: siteMetadata.author },
   }
+  const organizationData = organizationJsonLd()
 
   return (
     <html lang={siteMetadata.language} className="scroll-smooth" suppressHydrationWarning>
@@ -88,6 +90,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
         />
         <ThemeProviders>
           <UmamiAnalytics />

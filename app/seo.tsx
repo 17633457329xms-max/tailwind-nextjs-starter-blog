@@ -19,14 +19,18 @@ export function genPageMetadata({ title, description, image, ...rest }: PageSEOP
       description: description || siteMetadata.description,
       url: './',
       siteName: siteMetadata.title,
-      images: image ? [image] : [siteMetadata.socialBanner],
+      images: image
+        ? [image]
+        : [{ url: siteMetadata.socialBanner, width: 1200, height: 630, alt: siteMetadata.title }],
       locale: 'zh_CN',
       type: 'website',
     },
     twitter: {
       title: `${title} - ${siteMetadata.title}`,
       card: 'summary_large_image',
-      images: image ? [image] : [siteMetadata.socialBanner],
+      images: image
+        ? [image]
+        : [{ url: siteMetadata.socialBanner, width: 1200, height: 630, alt: siteMetadata.title }],
     },
     ...rest,
   }

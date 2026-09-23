@@ -5,6 +5,8 @@ import { getDisciplineArticles } from '@/data/disciplineArticles'
 import { disciplines, isDisciplineSlug, isPublicDiscipline } from '@/data/disciplines'
 import { getKnowledgeTask } from '@/data/knowledgeArchitecture'
 import { getDisciplineSpecialty } from '@/data/specialties'
+import { disciplineLibraryPath } from '@/data/disciplineUrls'
+import { JsonLd, breadcrumbJsonLd } from '@/components/StructuredData'
 
 type Params = { discipline: string; specialty: string; stage: string; task: string }
 
@@ -28,12 +30,32 @@ export default async function Page({ params }: { params: Promise<Params> }) {
   const selectedTask = getKnowledgeTask(discipline, stage, task)
   if (!selectedTask) notFound()
   return (
-    <DisciplinePage
-      discipline={disciplines[discipline]}
-      articles={getDisciplineArticles(discipline)}
-      specialty={selectedSpecialty.name}
-      stageKey={selectedTask.stage.key}
-      taskKey={selectedTask.task.key}
-    />
+    <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: '学科首页', path: '/' },
+          { name: disciplines[discipline].name, path: `/disciplines/${discipline}` },
+          // 特化与阶段没有独立路由，只作为层级名称出现，避免重复指向当前页。
+          { name: selectedSpecialty.name },
+          { name: selectedTask.stage.title },
+          {
+            name: selectedTask.task.title,
+            path: disciplineLibraryPath(
+              discipline,
+              selectedSpecialty.name,
+              selectedTask.stage.key,
+              selectedTask.task.key
+            ),
+          },
+        ])}
+      />
+      <DisciplinePage
+        discipline={disciplines[discipline]}
+        articles={getDisciplineArticles(discipline)}
+        specialty={selectedSpecialty.name}
+        stageKey={selectedTask.stage.key}
+        taskKey={selectedTask.task.key}
+      />
+    </>
   )
 }
